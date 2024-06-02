@@ -15,22 +15,28 @@ metodos -> si no es mozo atenderPedidos (cambiar estados del pedido dependiendo 
 class Empleado{
     public $id;
     public $nombre;
-    public $pendientes = [];
+    public $pendientes;
     public $tipo;
     public $ocupado;
-    public function __construct($nombre, $pendiente, $tipo)
+    public function __construct($nombre, $tipo)
     {
         $this->id = null;
         $this->nombre = $nombre;
-        $this->pendientes = $pendiente;
+        $this->pendientes = [];
         $this->tipo = $tipo;
         $this->ocupado = false;
     } 
-    public function atenderPedidos(){
+    private function agregarPedido($pedido){
+        $this->pendientes[]=$pedido;
+    }
+    public function atenderPedidos($idPedido){
         // en empleadocontroler debo dividir segun el tipo
         if($this->tipo != "mozo"){
             $this->actualizarEstadoEmpleado(true);
-            echo "tu pedido esta a cargo de ". $this->nombre ."<br>";
+            $elemento = array_rand($this->pendientes, 2);
+            $pedido = $this->pendientes[$elemento[0]];
+            echo "tu pedido de ".$pedido->nombrePedido."esta a cargo de ". $this->nombre ."<br>";
+            $this->guardarOperacion($pedido);
             $bd = AccesoDatos::obtenerInstancia();
             $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'en preparacion'");
             $consulta->execute();
@@ -48,6 +54,31 @@ class Empleado{
             echo "error. al mozo no le corresponde esta tarea<br>";
         }
     }
+    public static function calificarMozo(){
+        
+    }
+    public static function calificarCocinero(){
+
+    }
+    private function guardarOperacion($pedido,){
+        $nuevaOperacion=array(
+            "nombreEmpleado"=> $this->nombre,
+            "puesto" => $this->tipo,
+            "nombrePedido"=> $pedido->nombrePedido,
+            "tiempo"=> $pedido->tiempo,
+            "cantidad"=> $pedido->cantidad);
+        $archivo = file_get_contents("Operaciones.json");
+        $operacionesAnteriores = json_decode($archivo,true);
+        if(!empty($operacionesAnteriores)){
+            $operacionesAnteriores [] = $nuevaOperacion;
+        } 
+        else {
+            $operacionesAnteriores = $nuevaOperacion;
+        }
+        if(file_put_contents("Operaciones.json",json_encode($operacionesAnteriores,true,JSON_PRETTY_PRINT))){
+            echo " el arcvhivo Operaciones fue escrito";
+        }
+    }
     public function servir(){
         //entregar pedido cuando el estado sea listo para servir ( cambiar el estado de mesa a el cliente esta comiendo)
         if($this->tipo == "mozo"){
@@ -55,14 +86,13 @@ class Empleado{
             $consulta = $bd->prepararConsulta("SELECT * FROM pedido WHERE estado = 'listo para servir'");
             $consulta->execute();
             $pedidosListos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
-    
             foreach ($pedidosListos as $pedido) {
                 // Actualizar el estado de la mesa asociada al pedido a "el cliente está comiendo"
-                $consultaMesa = $bd->prepararConsulta("UPDATE mesas SET estado = 'el cliente está comiendo' WHERE id = :idMesa");
-                $consultaMesa->bindValue(':idMesa', $pedido->idMesa, PDO::PARAM_INT);
-                $consultaMesa->execute();
-                // cambiar estado del a mesa
+                Mesa::ActualizarEstadoMesa("el cliente esta comiendo");
                 echo "El pedido con ID " . $pedido->id . " ha sido entregado y la mesa .<br>";
+                sleep(15);
+                Mesa::ActualizarEstadoMesa("con cliente pagando");
+
             }
         } else {
             echo "error. esta tarea debe ser realizada unicamente por el mozo.<br>";
@@ -95,24 +125,14 @@ class Empleado{
         $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
         $consulta->execute();
     }
-    // este metodo debe estar en socio.p´hp
-    public function despedir() {
-        if ($this->id !== null) {
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("DELETE FROM empleados WHERE id = :id");
-            $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
-            $consulta->execute();
-            echo "Empleado despedido y eliminado de la base de datos.<br>";
-        } else {
-            echo "Error: El ID del empleado no es válido.<br>";
-        } 
-    }
+    /// este metodo debe llamarse primero
     public function atenderCliente($pedido){
         if($this->tipo == "mozo"){
-            $pedido = new Pedido("en preparacion",$this->nombre, $pedido);
+            $pedido = new Pedido("en preparacion",$this->nombre, $pedido,1);
             $pedido->guardar();
-            //asignar mesa 
-            $pedido->idPedido;
+            //asignar mesa retorna un objeto mesa
+            $mesa = Mesa::AsignarMesa();
+            $this->agregarPedido($pedido);
             // invocar cliente y pasado el estado cambiar a cliente comiendo (mesa) 
         }
         else{

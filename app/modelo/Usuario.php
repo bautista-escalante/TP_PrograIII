@@ -16,6 +16,7 @@ class Usuario
         $consulta->execute();
         return $objAccesoDatos->obtenerUltimoId();
     }
+    
 
     public static function obtenerTodos()
     {
@@ -29,7 +30,7 @@ class Usuario
     public static function obtenerUsuario($usuario)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, usuario, clave FROM usuarios WHERE usuario = :usuario");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT * FROM usuarios WHERE usuario = :usuario");
         $consulta->bindValue(':usuario', $usuario, PDO::PARAM_STR);
         $consulta->execute();
 

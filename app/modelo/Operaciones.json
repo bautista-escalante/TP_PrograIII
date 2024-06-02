@@ -1,0 +1,9 @@
+[
+    {
+        "nombreEmpleado": "pepe",
+        "puesto" : "cervecero",
+        "nombrePedido": "cerveza roja",
+        "tiempo" : 5,
+        "cantidad" : 1
+    }
+]

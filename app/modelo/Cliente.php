@@ -21,8 +21,7 @@ class Cliente {
     } 
     public function mostrarTiempoRestante() {
         $bd = AccesoDatos::obtenerInstancia();
-        $sql = "SELECT * FROM pedidos WHERE estado = 'en preparacion'";
-        $consulta = $bd->prepararConsulta($sql);
+        $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'en preparacion'");
         $consulta->execute();
         $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
         
@@ -32,7 +31,9 @@ class Cliente {
             }
         }
     }
-    public function calificar($calificacion) {
+    public function calificar($calificacionMesa, ) {
+        Mesa::CalificarMesa($this->idMesa,$calificacionMesa);
+        
         // llamar a todos los metodos de calificar y guardar en json los resultados e imprimir los promedios
     }
 }
