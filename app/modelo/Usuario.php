@@ -14,7 +14,6 @@ class Usuario
         $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
         $consulta->bindValue(':clave', $claveHash);
         $consulta->execute();
-
         return $objAccesoDatos->obtenerUltimoId();
     }
 
