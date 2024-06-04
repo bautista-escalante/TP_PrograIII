@@ -12,6 +12,8 @@ metodos -> si no es mozo atenderPedidos (cambiar estados del pedido dependiendo 
         -> si es mozo cambiarEstadoMesa(con cliente esperando pedido ,”con cliente comiendo”,
         “con cliente pagando”)
 */
+include_once "Pedido.php";
+include_once "Mesa.php";
 class Empleado{
     public $id;
     public $nombre;
@@ -33,8 +35,8 @@ class Empleado{
         // en empleadocontroler debo dividir segun el tipo
         if($this->tipo != "mozo"){
             $this->actualizarEstadoEmpleado(true);
-            $elemento = array_rand($this->pendientes, 2);
-            $pedido = $this->pendientes[$elemento[0]];
+            $elemento = array_rand($this->pendientes);
+            $pedido = $this->pendientes[$elemento];
             echo "tu pedido de ".$pedido->nombrePedido."esta a cargo de ". $this->nombre ."<br>";
             $this->guardarOperacion($pedido);
             $bd = AccesoDatos::obtenerInstancia();
@@ -54,11 +56,43 @@ class Empleado{
             echo "error. al mozo no le corresponde esta tarea<br>";
         }
     }
-    public static function calificarMozo(){
-        
+    public static function calificar($idMozo, $calificacion){
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = mozo");
+        $select->bindParam(':id', $idMozo, PDO::PARAM_STR);
+        $select->execute();
+        $result = $select->fetch(PDO::FETCH_ASSOC);
+        if ($result && !empty($result['puntuacion'])) {
+            $puntuaciones = json_decode($result['puntuacion'], true);
+            $puntuaciones[] = $calificacion;
+            $promedio = array_sum($puntuaciones) / count($puntuaciones);
+        } else {
+            $promedio = $calificacion;    
+        }
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = mozo");
+        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
+        $update->bindParam(':id', $idMozo, PDO::PARAM_INT);
+        $update->execute();
     }
-    public static function calificarCocinero(){
-
+    public static function calificarCocinero($idCocinero, $calificacion){
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = cocinero");
+        $select->bindParam(':id', $idCocinero, PDO::PARAM_STR);
+        $select->execute();
+        $result = $select->fetch(PDO::FETCH_ASSOC);
+        if ($result && !empty($result['puntuacion'])) {
+            $puntuaciones = json_decode($result['puntuacion'], true);
+            $puntuaciones[] = $calificacion;
+            $promedio = array_sum($puntuaciones) / count($puntuaciones);
+        } else {
+            $promedio = $calificacion;    
+        }
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = cocinero");
+        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
+        $update->bindParam(':id', $idCocinero, PDO::PARAM_INT);
+        $update->execute();
     }
     private function guardarOperacion($pedido,){
         $nuevaOperacion=array(
@@ -77,25 +111,6 @@ class Empleado{
         }
         if(file_put_contents("Operaciones.json",json_encode($operacionesAnteriores,true,JSON_PRETTY_PRINT))){
             echo " el arcvhivo Operaciones fue escrito";
-        }
-    }
-    public function servir(){
-        //entregar pedido cuando el estado sea listo para servir ( cambiar el estado de mesa a el cliente esta comiendo)
-        if($this->tipo == "mozo"){
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("SELECT * FROM pedido WHERE estado = 'listo para servir'");
-            $consulta->execute();
-            $pedidosListos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
-            foreach ($pedidosListos as $pedido) {
-                // Actualizar el estado de la mesa asociada al pedido a "el cliente está comiendo"
-                Mesa::ActualizarEstadoMesa("el cliente esta comiendo");
-                echo "El pedido con ID " . $pedido->id . " ha sido entregado y la mesa .<br>";
-                sleep(15);
-                Mesa::ActualizarEstadoMesa("con cliente pagando");
-
-            }
-        } else {
-            echo "error. esta tarea debe ser realizada unicamente por el mozo.<br>";
         }
     }
     public function guardar() { 
@@ -125,7 +140,7 @@ class Empleado{
         $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
         $consulta->execute();
     }
-    /// este metodo debe llamarse primero
+    // este metodo debe llamarse primero
     public function atenderCliente($pedido){
         if($this->tipo == "mozo"){
             $pedido = new Pedido("en preparacion",$this->nombre, $pedido,1);
@@ -137,6 +152,27 @@ class Empleado{
         }
         else{
             echo "esta tarea debe ser realizada unicamente por el mozo";
+        }
+    }
+    public static function obtenerEmpleadosPorPuesto($puesto){
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT * FROM empleados WHERE tipo = :puesto");
+        $select->bindParam(':puesto', $puesto, PDO::PARAM_STR);
+        $select->execute();
+        return $select->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function obtenerEncargado($comida){
+        $archivo = file_get_contents("modelo/menu.json");
+        $menu = json_decode($archivo,true);
+        $encontrado = false;
+        foreach($menu as $pedido){
+            if($pedido["nombre"] == $comida){
+                $encontrado = true;
+                return $pedido["encargado"];
+            }
+        }
+        if($encontrado == false){
+            echo("error no tenemos esa comida en el menu<br>");
         }
     }
 }

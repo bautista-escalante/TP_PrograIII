@@ -8,8 +8,16 @@
 -> VerProductoMasVendido
 -> VerProductoMenosVendido
 -> verCancelados
-
 metodos
+        -> verMesaMasUsada()
+        -> verMesaMenosUsada()
+        -> vermajorFactura()
+        -> vermenorFactura()->resultados finales
+        -> verMajorImporte()
+        -> vermenorImporte()
+        -> facturacionEntreFechas()
+        -> verMejorComentario()
+        -> verpeorComentario()
         -> verHorariosEmpleados
         -> VerPedidosFueraHorario
         -> verOperaciones()

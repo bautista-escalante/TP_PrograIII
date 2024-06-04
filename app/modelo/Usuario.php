@@ -11,10 +11,12 @@ class Usuario
     {
         // retorna el id 
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave) VALUES (:usuario, :clave)");
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave, puesto) VALUES (:usuario, :clave, :puesto)");
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
         $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
         $consulta->bindValue(':clave', $claveHash);
+        $consulta->bindValue(':puesto', $this->puesto);
+        
         $consulta->execute();
         return $objAccesoDatos->obtenerUltimoId();
     }
@@ -46,7 +48,6 @@ class Usuario
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
         $consulta->execute();
     }
-
     public static function borrarUsuario($id)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();

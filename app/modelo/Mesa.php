@@ -21,13 +21,13 @@ class Mesa{
     }
     public static function AsignarMesa(){
         try{
-
             $db = AccesoDatos::obtenerInstancia();
             $consulta=$db->prepararConsulta("SELECT * FROM mesas  WHERE estado = 'cerrada'");
             $consulta->execute();
             $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
             if (!empty($resultado)) {
-                $mesa = $resultado[array_rand($resultado)];
+                $mesa = $resultado[rand(0,count($resultado)-1)];
+                
                 return $mesa;
             } else {
                 echo "no hay mesas disponibles";
@@ -48,16 +48,6 @@ class Mesa{
         $consulta->execute();
         $this->id = $bd->obtenerUltimoId();
     }
-    public function puntuarMesa($puntuacion){
-        if($this->estado == "cerrada"){
-            $this->puntuacion = $puntuacion;
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE id = :id");
-            $consulta->bindValue(':puntuacion', $this->puntuacion, PDO::PARAM_STR);
-            $consulta->bindValue(':id', $this->id, PDO::PARAM_STR);
-            $consulta->execute();
-        }
-    }
     public static function ActualizarEstadoMesa($nuevoEstado){
         self::$estado = $nuevoEstado;
         $bd = AccesoDatos::obtenerInstancia();
@@ -68,7 +58,6 @@ class Mesa{
     }
     public static function CalificarMesa($idmesa, $calificacion){
         if($idmesa == self::$idMesa && self::$estado = "cerrada"){
-
             $bd = AccesoDatos::obtenerInstancia();
             $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE idmesa = :idmesa");
             $consulta->bindParam(':idmesa', $idmesa, PDO::PARAM_STR);
