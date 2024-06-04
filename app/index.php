@@ -47,13 +47,6 @@ $app->post("/servir",function(Request $request, Response $response, $args){
         return $response;
 });
 
-/* $app->post("/cocinar",function(Request $request, Response $response, $args){
-    include "controlador/CocineroControler.php";
-    
-    $response->getBody()->write("error ingresa tu pedido.<br>");
-    return $response;
-}); */
-
 $app->post("/contratar",function(Request $request, Response $response, $args){
     include "modelo/Socio.php";
     $parametros = $request->getParsedBody();

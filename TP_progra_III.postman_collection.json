@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "44553085-a2e9-46aa-b1a0-d3854fafe1fc",
+		"name": "TP_progra_III",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34176657"
+	},
+	"item": [
+		{
+			"name": "ingresar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "pepe",
+							"type": "text"
+						},
+						{
+							"key": "clave",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:100/ingresar"
+			},
+			"response": []
+		},
+		{
+			"name": "atender",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pedido",
+							"value": "cerveza roja",
+							"type": "text"
+						},
+						{
+							"key": "nombre",
+							"value": "pepe",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:100/atender"
+			},
+			"response": []
+		},
+		{
+			"name": "contratar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nombre",
+							"value": "franco",
+							"type": "text"
+						},
+						{
+							"key": "puesto",
+							"value": "bartender",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:100/contratar"
+			},
+			"response": []
+		},
+		{
+			"name": "despedir",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:100/despedir/1"
+			},
+			"response": []
+		},
+		{
+			"name": "suspender",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "id",
+						"value": "4"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "5",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:100/suspender/5"
+			},
+			"response": []
+		},
+		{
+			"name": "pedidosCancelados",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:100/ver/pedidosCancelados"
+			},
+			"response": []
+		},
+		{
+			"name": "menosVendidos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:100/ver/producto/menosVendido"
+			},
+			"response": []
+		},
+		{
+			"name": "masVendido",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:100/ver/producto/masVendido"
+			},
+			"response": []
+		},
+		{
+			"name": "verOperaciones",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:100/ver/operaciones?puesto=mozo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "100",
+					"path": [
+						"ver",
+						"operaciones"
+					],
+					"query": [
+						{
+							"key": "puesto",
+							"value": "mozo"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

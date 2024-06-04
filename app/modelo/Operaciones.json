@@ -1,31 +1,57 @@
 [
     {
-        "idEmpleado":1,
+        "idEmpleado": 1,
         "nombreEmpleado": "pepe",
-        "puesto" : "cervecero",
+        "puesto": "cervecero",
         "idPedido": null,
         "nombrePedido": "cerveza roja",
-        "tiempo" : 5,
-        "cantidad" : 1,
+        "tiempo": 5,
+        "cantidad": 1,
         "mesa": null,
         "nombreMozo": null
     },
     {
-        "idEmpleado":1,
+        "idEmpleado": 4,
         "nombreEmpleado": "eduardo",
-        "puesto" : "cervecero",
+        "puesto": "mozo",
+        "idPedido": 17,
         "nombrePedido": "cerveza roja",
-        "tiempo" : 5,
-        "cantidad" : 1,
-        "mesa": null
+        "tiempo": 1,
+        "cantidad": 1,
+        "mesa": null,
+        "nombreMozo": null
     },
     {
-        "idEmpleado":1,
-        "nombreEmpleado": "yas",
-        "puesto" : "bartender",
-        "nombrePedido": "margarita",
-        "tiempo" : 5,
-        "cantidad" : 1,
-        "mesa": null
+        "idEmpleado": 4,
+        "nombreEmpleado": "eduardo",
+        "puesto": "mozo",
+        "idPedido": 18,
+        "nombrePedido": "cerveza roja",
+        "tiempo": 1,
+        "cantidad": 1,
+        "mesa": null,
+        "nombreMozo": null
+    },
+    {
+        "idEmpleado": 4,
+        "nombreEmpleado": "eduardo",
+        "puesto": "mozo",
+        "idPedido": 19,
+        "nombrePedido": "cerveza roja",
+        "tiempo": 6,
+        "cantidad": 1,
+        "mesa": null,
+        "nombreMozo": null
+    },
+    {
+        "idEmpleado": 4,
+        "nombreEmpleado": "eduardo",
+        "puesto": "mozo",
+        "idPedido": 20,
+        "nombrePedido": "cerveza roja",
+        "tiempo": 11,
+        "cantidad": 1,
+        "mesa": null,
+        "nombreMozo": null
     }
 ]
