@@ -47,12 +47,13 @@ class Pedido {
         $bd = AccesoDatos::obtenerInstancia();
         $resultado = $this->verificar();
         if($resultado){
-            $sql = "INSERT INTO pedido (estado, idPedido, tiempo, NombreEmpleadoEncargado, cancelado, cantidad) 
-            VALUES (:estado, :idPedido, :tiempo, :NombreEmpleadoEncargado, :cancelado, :cantidad)";
+            $sql = "INSERT INTO pedido (estado, idPedido, tiempo, nombreCliente, NombreEmpleadoEncargado, cancelado, cantidad) 
+            VALUES (:estado, :idPedido, :tiempo, :nombreCliente, :NombreEmpleadoEncargado, :cancelado, :cantidad)";
             $consulta = $bd->prepararConsulta($sql);
             $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
             $consulta->bindValue(':idPedido', $this->idPedido, PDO::PARAM_STR);
             $consulta->bindValue(':tiempo', $this->tiempo, PDO::PARAM_INT);
+            $consulta->bindValue(':nombreCliente', $this->nombrePedido, PDO::PARAM_STR);
             $consulta->bindValue(':NombreEmpleadoEncargado', $this->NombreEmpleadoEncargado, PDO::PARAM_STR);
             $consulta->bindValue(':cancelado', $this->cancelado, PDO::PARAM_BOOL);
             $consulta->bindValue(':cantidad', $this->cantidad, PDO::PARAM_INT);

@@ -8,10 +8,11 @@ el mozo debe encargarse de atender a los clientes esto con lleva
 include_once "db/AccesoDatos.php";
 include_once "modelo/Empleado.php";
 function atender($pedido,$nombreCliente){
-    $mozos = Empleado::obtenerEmpleadosPorPuesto("mozo");
+    $mozos = Empleado::obtenerEmpleadosPorPuesto("mozo"); 
     if(count($mozos) !=0){
         $i = rand(0,count($mozos)-1);
         $mozo = new Empleado($mozos[$i]["nombre"],$mozos[$i]["tipo"]);
+        // el mozo atiende al cliente (asignar mesa -  ) 
         $mozo->atenderCliente($pedido,$nombreCliente);
     }
     else{

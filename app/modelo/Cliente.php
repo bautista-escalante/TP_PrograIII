@@ -8,16 +8,18 @@ metodos -> MostrartiempoRestante(segun el numpedido e idmesa)
 
 class Cliente {
     public $nombre;
-    public $mesa;
+    public $idMozo;
+    public $idCocinero;
     public $numPedido;
-    public $foto;
     public $idMesa;
-    public function __construct($nombre, $mesa, $numPedido, $foto, $idMesa) {
+    public $foto;
+    public function __construct($nombre, $numPedido, $foto, $idMesa,$idMozo, $idCocinero) {
         $this->nombre = $nombre;
-        $this->mesa = $mesa;
         $this->numPedido = $numPedido;
         $this->foto = $foto;
         $this->idMesa = $idMesa;
+        $this->idMozo = $idMozo;
+        $this->idCocinero = $idCocinero;
     } 
     public function mostrarTiempoRestante() {
         $bd = AccesoDatos::obtenerInstancia();
@@ -31,10 +33,19 @@ class Cliente {
             }
         }
     }
-    public function calificar($calificacionMesa, ) {
+    public function calificar($calificacionMesa,$calificacionCocinero,$calificacionMozo ) {
         Mesa::CalificarMesa($this->idMesa,$calificacionMesa);
-        
-        // llamar a todos los metodos de calificar y guardar en json los resultados e imprimir los promedios
+        Empleado::calificarCocinero($calificacionCocinero,$this->idCocinero);
+        Empleado::calificarMozo($calificacionMozo,$this->idMozo);
+    }
+    public function actualizarOperacion($mesa, $nombreMozo){
+        $archivo = file_get_contents("Operaciones.json");
+        $operaciones = json_decode($archivo);
+        foreach($operaciones as &$operacion){
+            $operacion["mesa"] = $mesa;
+            $operacion["nombreMozo"] = $nombreMozo;
+        } 
+        file_put_contents("Operaciones.json",json_encode($operaciones,true,JSON_PRETTY_PRINT));
     }
 }
 

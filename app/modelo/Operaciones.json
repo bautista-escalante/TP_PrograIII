@@ -3,10 +3,12 @@
         "idEmpleado":1,
         "nombreEmpleado": "pepe",
         "puesto" : "cervecero",
+        "idPedido": null,
         "nombrePedido": "cerveza roja",
         "tiempo" : 5,
         "cantidad" : 1,
-        "mesa": null
+        "mesa": null,
+        "nombreMozo": null
     },
     {
         "idEmpleado":1,

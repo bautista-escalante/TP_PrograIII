@@ -7,6 +7,8 @@ put -> actualizar/modificar
 post -> crear
 get -> leer
 delete -> borrar
+
+ingresar - atender - cocinar - servir - calificar
 */
 require_once '../vendor/autoload.php';
 //php -S localhost:100 -t app
@@ -27,12 +29,10 @@ $app->post('/ingresar', function (Request $request, Response $response, $args) {
 // revisar
 $app->post("/atender",function(Request $request, Response $response, $args){
     include "controlador/MozoControler.php";
-    include "controlador/CocineroControler.php";
     $parametros = $request->getParsedBody();
     if(isset($parametros["pedido"]) && !empty($parametros["pedido"])&&
     isset($parametros["nombre"]) && !empty($parametros["nombre"])){
         atender($parametros["pedido"],$parametros["nombre"]);
-        //cocinar($parametros["pedido"]);
     }
     else{
         $response->getBody()->write("error ingresa tu pedido.<br>");
@@ -47,12 +47,12 @@ $app->post("/servir",function(Request $request, Response $response, $args){
         return $response;
 });
 
-$app->post("/cocinar",function(Request $request, Response $response, $args){
+/* $app->post("/cocinar",function(Request $request, Response $response, $args){
     include "controlador/CocineroControler.php";
     
     $response->getBody()->write("error ingresa tu pedido.<br>");
     return $response;
-});
+}); */
 
 $app->post("/contratar",function(Request $request, Response $response, $args){
     include "modelo/Socio.php";
@@ -78,17 +78,18 @@ $app->delete("/despedir/{id}", function (Request $request, Response $response, $
     }
     return $response;
 });
-//revisar
-$app->post("/suspender",function(Request $request, Response $response, $args){
+
+$app->put("/suspender/{id}",function(Request $request, Response $response, $args){
     try{
         include "controlador/SocioControler.php";
         $parametros = $request->getParsedBody();
-        if(isset($parametros["id"]) && !empty($parametros["id"])){
-            suspender(intval($parametros["id"]));
+        $id = $args['id'];
+        if(isset($id) && !empty($id)){
+            Socio::suspenderEmpleado(intval($id));
             $response->getBody()->write("Empleado suspendido.<br>");
         }
         else{
-            $response->getBody()->write("error coloca los parameros para despedir al empleado.<br>");
+            $response->getBody()->write("error coloca los parameros para suspender al empleado.<br>");
         }
     }catch(PDOException){
         $response->getBody()->write("error.<br>");    

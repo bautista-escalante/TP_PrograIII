@@ -28,41 +28,40 @@ class Empleado{
         $this->tipo = $tipo;
         $this->ocupado = false;
     } 
-    private function agregarPedido($pedido){
+    public function agregarPedido($pedido){
         $this->pendientes[]=$pedido;
-    }
+    } 
     public function atenderPedidos($idPedido){
         // en empleadocontroler debo dividir segun el tipo
         if($this->tipo != "mozo"){
             $this->actualizarEstadoEmpleado(true);
             $elemento = array_rand($this->pendientes);
             $pedido = $this->pendientes[$elemento];
-            echo "tu pedido de ".$pedido->nombrePedido."esta a cargo de ". $this->nombre ."<br>";
+            echo "el pedido de ".$pedido->nombrePedido."esta a cargo de ". $this->nombre ."<br>";
             $this->guardarOperacion($pedido);
             $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'en preparacion'");
+            $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'en preparacion' AND idPedido = :idpedido");
+            $consulta->bindValue(":id",$idPedido,PDO::PARAM_STR);
             $consulta->execute();
-            $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
-            foreach ($pedidos as $pedido) {
-                if (time() - $pedido->timestamp >= $pedido->tiempo){
-                    $pedido->actualizarEstadoPedido("listo para servir");
-                    $this->actualizarEstadoEmpleado(false);
-                    echo "tu pedido esta listo<br>";
-                }
-                echo "tu pedido todabia esta en preparacion";
+            $pedido = $consulta->fetchObject("Pedido");
+            if(time() - $pedido->timestamp >= $pedido->tiempo){
+                $pedido->actualizarEstadoPedido("listo para servir");
+                $this->actualizarEstadoEmpleado(false);
+                echo "tu pedido esta listo<br>";
             }
+            echo "tu pedido todabia esta en preparacion";
         }
         else{
             echo "error. al mozo no le corresponde esta tarea<br>";
         }
     }
-    public static function calificar($idMozo, $calificacion){
+    public static function calificarMozo($idMozo, $calificacion){
         $bd = AccesoDatos::obtenerInstancia();
         $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = mozo");
         $select->bindParam(':id', $idMozo, PDO::PARAM_STR);
         $select->execute();
         $result = $select->fetch(PDO::FETCH_ASSOC);
-        if ($result && !empty($result['puntuacion'])) {
+        if ($result && !empty($result['puntuacion'])){
             $puntuaciones = json_decode($result['puntuacion'], true);
             $puntuaciones[] = $calificacion;
             $promedio = array_sum($puntuaciones) / count($puntuaciones);
@@ -99,8 +98,11 @@ class Empleado{
             "nombreEmpleado"=> $this->nombre,
             "puesto" => $this->tipo,
             "nombrePedido"=> $pedido->nombrePedido,
+            "idPedido"=> $pedido->idPedido,
             "tiempo"=> $pedido->tiempo,
-            "cantidad"=> $pedido->cantidad);
+            "cantidad"=> $pedido->cantidad,
+            "mesa"=>null,
+            "nombreMozo"=> null); 
         $archivo = file_get_contents("Operaciones.json");
         $operacionesAnteriores = json_decode($archivo,true);
         if(!empty($operacionesAnteriores)){
@@ -141,25 +143,47 @@ class Empleado{
         $consulta->execute();
     }
     // este metodo debe llamarse primero
-    public function atenderCliente($pedido){
+    public function atenderCliente($pedido,$nombre,$foto=null){
         if($this->tipo == "mozo"){
-            $pedido = new Pedido("en preparacion",$this->nombre, $pedido,1);
-            $pedido->guardar();
-            //asignar mesa retorna un objeto mesa
-            $mesa = Mesa::AsignarMesa();
-            $this->agregarPedido($pedido);
-            // invocar cliente y pasado el estado cambiar a cliente comiendo (mesa) 
+            // consigo el puesto para el segun la comida
+            $encargado = Empleado::obtenerEncargado($pedido);
+            if($encargado != false){
+
+                echo("levantar el pedido<br>");
+                $encargo = new Pedido("en preparacion",$nombre, $pedido,1);
+                $encargo->guardar();
+                
+                echo("asignar mesa al cliente<br>");
+                $mesa = new Mesa();
+
+                echo("entrego el pedido a los empleados correspondientes ");
+                //encuentro todos los empleados de ese rubro y eligo uno de manea aleatoria
+                $empleadosEncontrados = Empleado::obtenerEmpleadosPorPuesto($encargado);
+                $empleadoEncontrado = array_rand($empleadosEncontrados);
+                
+                $empleado = new Empleado($empleadoEncontrado["nombre"],$empleadoEncontrado["tipo"]);
+                $empleado->agregarPedido($encargo);
+                $empleado->atenderPedidos($encargo->idPedido);
+
+                $cliente = new Cliente($nombre,$encargo->idPedido,$foto,$mesa->idMesa, $empleadoEncontrado["id"],$this->id);
+                $cliente->actualizarOperacion($mesa->idMesa, $this->nombre);
+            }
         }
         else{
             echo "esta tarea debe ser realizada unicamente por el mozo";
         }
     }
     public static function obtenerEmpleadosPorPuesto($puesto){
-        $bd = AccesoDatos::obtenerInstancia();
-        $select = $bd->prepararConsulta("SELECT * FROM empleados WHERE tipo = :puesto");
-        $select->bindParam(':puesto', $puesto, PDO::PARAM_STR);
-        $select->execute();
-        return $select->fetchAll(PDO::FETCH_ASSOC);
+            try {
+                $bd = AccesoDatos::obtenerInstancia();
+                $query = "SELECT * FROM empleados WHERE tipo = :puesto AND deleted_at IS NULL";
+                $select = $bd->prepararConsulta($query);
+                $select->bindParam(':puesto', $puesto, PDO::PARAM_STR);
+                $select->execute();
+                return $select->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
     }
     public static function obtenerEncargado($comida){
         $archivo = file_get_contents("modelo/menu.json");
@@ -173,6 +197,7 @@ class Empleado{
         }
         if($encontrado == false){
             echo("error no tenemos esa comida en el menu<br>");
+            return false;
         }
     }
 }

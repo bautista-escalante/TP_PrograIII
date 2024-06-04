@@ -25,16 +25,5 @@ los socios pueden ver
 */
 include_once "modelo/Socio.php";
 include_once "modelo/Empleado.php";
+include_once "db/AccesoDatos.php";
 
-function suspender($id){
-    $db = AccesoDatos::obtenerInstancia();
-    $select = $db->prepararConsulta("SELECT * FROM empleados WHERE id= :id");
-    $select->bindValue(":id",$id,PDO::PARAM_INT);
-    $select->execute();
-    $empleado = $select->fetch(PDO::FETCH_ASSOC);
-    if($empleado !=null){
-        Socio::suspenderEmpleado($empleado);
-    } else{
-        echo "error";
-    }
-}
