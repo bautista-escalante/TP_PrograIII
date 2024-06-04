@@ -1,9 +1,29 @@
 [
     {
+        "idEmpleado":1,
         "nombreEmpleado": "pepe",
         "puesto" : "cervecero",
         "nombrePedido": "cerveza roja",
         "tiempo" : 5,
-        "cantidad" : 1
+        "cantidad" : 1,
+        "mesa": null
+    },
+    {
+        "idEmpleado":1,
+        "nombreEmpleado": "eduardo",
+        "puesto" : "cervecero",
+        "nombrePedido": "cerveza roja",
+        "tiempo" : 5,
+        "cantidad" : 1,
+        "mesa": null
+    },
+    {
+        "idEmpleado":1,
+        "nombreEmpleado": "yas",
+        "puesto" : "bartender",
+        "nombrePedido": "margarita",
+        "tiempo" : 5,
+        "cantidad" : 1,
+        "mesa": null
     }
 ]

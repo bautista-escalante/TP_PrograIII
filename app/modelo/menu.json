@@ -10,30 +10,14 @@
         "encargado": "bartender"
     },
     {
-        "nombre": "Margarita",
-        "precio": 7.00,
-        "encargado": "bartender"
-    },
-    {
         "nombre": "Malbec",
         "precio": 12.00,
-        "encargado": "bartender"
-    },
-    {
-        "nombre": "Cabernet Sauvignon",
-        "precio": 14.00,
         "encargado": "bartender"
     },
     {
         "nombre": "Empanadas",
         "descripcion": "Empanadas argentinas de carne o jamón y queso",
         "precio": 3.00,
-        "encargado": "cocina"
-    },
-    {
-        "nombre": "Provoleta",
-        "descripcion": "Queso provolone a la parrilla con especias",
-        "precio": 5.00,
         "encargado": "cocina"
     },
     {
@@ -46,12 +30,6 @@
         "nombre": "Milanesa",
         "descripcion": "Milanesa de ternera con papas fritas",
         "precio": 10.00,
-        "encargado": "cocina"
-    },
-    {
-        "nombre": "Choripán",
-        "descripcion": "Chorizo argentino en pan baguette con chimichurri",
-        "precio": 8.00,
         "encargado": "cocina"
     },
     {
@@ -82,12 +60,6 @@
         "nombre": "Quilmes",
         "tipo": "Lager",
         "precio": 4.00,
-        "encargado": "cervecero"
-    },
-    {
-        "nombre": "Patagonia",
-        "tipo": "Amber Lager",
-        "precio": 4.50,
         "encargado": "cervecero"
     }
 ]

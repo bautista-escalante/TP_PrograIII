@@ -19,7 +19,7 @@ class Mesa{
     private function generarIdMesa() {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
     }
-    public static function AsignarMesa(){
+    public function AsignarMesa(){
         try{
             $db = AccesoDatos::obtenerInstancia();
             $consulta=$db->prepararConsulta("SELECT * FROM mesas  WHERE estado = 'cerrada'");
@@ -27,8 +27,7 @@ class Mesa{
             $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
             if (!empty($resultado)) {
                 $mesa = $resultado[rand(0,count($resultado)-1)];
-                
-                return $mesa;
+                return $mesa->idMesa;
             } else {
                 echo "no hay mesas disponibles";
                 return null;
