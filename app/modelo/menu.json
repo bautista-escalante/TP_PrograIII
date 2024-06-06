@@ -16,49 +16,41 @@
     },
     {
         "nombre": "Empanadas",
-        "descripcion": "Empanadas argentinas de carne o jamón y queso",
         "precio": 3.00,
         "encargado": "cocina"
     },
     {
         "nombre": "Asado",
-        "descripcion": "Parrillada argentina con varios cortes de carne",
         "precio": 20.00,
         "encargado": "cocina"
     },
     {
         "nombre": "Milanesa",
-        "descripcion": "Milanesa de ternera con papas fritas",
         "precio": 10.00,
         "encargado": "cocina"
     },
     {
         "nombre": "flan",
-        "descripcion": "con Dulce de leche casero",
         "precio": 4.00,
         "encargado": "cocina"
     },
     {
         "nombre": "Helado",
-        "descripcion": "Helado artesanal de varios sabores",
         "precio": 3.50,
         "encargado": "cocina"
     },
     {
         "nombre": "cerveza ipa",
-        "cervecería": "Patagonia",
         "precio": 6.00,
         "encargado": "cervecero"
     },
     {
         "nombre": "cerveza roja",
-        "cervecería": "Antares",
         "precio": 6.50,
         "encargado": "cervecero"
     },
     {
         "nombre": "Quilmes",
-        "tipo": "Lager",
         "precio": 4.00,
         "encargado": "cervecero"
     }

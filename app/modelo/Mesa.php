@@ -4,6 +4,7 @@
     debe tener acceso a los tiempos  restanters para eso debo crear algun tipo de timer
     puntuacion
 */
+include_once "db/AccesoDatos.php";
 class Mesa{
     public $id;
     public $idMesa;
@@ -39,13 +40,31 @@ class Mesa{
     }
     public function guardar() {
         $bd = AccesoDatos::obtenerInstancia();
-        $sql = "INSERT INTO mesas (estado, puntuacion, idMesa) VALUES (:estado, :puntuacion, :idMesa)";
+        $sql = "INSERT INTO mesas (estado, puntuacion, codigoMesa) VALUES (:estado, :puntuacion, :codigoMesa)";
         $consulta = $bd->prepararConsulta($sql);
+        echo ($this->puntuacion);
         $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
         $consulta->bindValue(':puntuacion', $this->puntuacion, PDO::PARAM_INT);
-        $consulta->bindValue(':idMesa', $this->idMesa, PDO::PARAM_STR);
+        $consulta->bindValue(':codigoMesa', $this->idMesa, PDO::PARAM_STR);
         $consulta->execute();
         $this->id = $bd->obtenerUltimoId();
+        }
+    public static function modificarMesa($id, $puntos){
+        $bd = AccesoDatos::obtenerInstancia();
+        $consulta = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE id = :id");
+        $consulta->bindValue(':puntuacion', $puntos, PDO::PARAM_INT);
+        $consulta->bindValue(':id',$id, PDO::PARAM_INT);
+        $consulta->execute();
+    }
+
+    public static function borrarMesa($id)
+    {
+        $objAccesoDato = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuarios SET fechaBaja = :fechaBaja WHERE id = :id");
+        $fecha = new DateTime(date("d-m-Y"));
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
+        $consulta->execute();
     }
     public static function ActualizarEstadoMesa($nuevoEstado){
         self::$estado = $nuevoEstado;

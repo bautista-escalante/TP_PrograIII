@@ -7,8 +7,7 @@ class AccesoDatos
     private function __construct()
     {
         try {
-            $this->objetoPDO = new PDO('mysql:host=localhost;dbname='.'tp_prograiii'.';charset=utf8',
-            "root", "",
+            $this->objetoPDO = new PDO('mysql:host=localhost;dbname='.'tp_prograiii'.';charset=utf8',"root", "",
             array(PDO::ATTR_EMULATE_PREPARES => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $this->objetoPDO->exec("SET CHARACTER SET utf8");
         } catch (PDOException $e) {
@@ -25,7 +24,11 @@ class AccesoDatos
     }
     public function prepararConsulta($sql)
     {
-        return $this->objetoPDO->prepare($sql);
+        try{
+            return $this->objetoPDO->prepare($sql);
+        }catch(PDOException){
+            echo " error en prepar la consulta";
+        }
     }
     public function obtenerUltimoId()
     {

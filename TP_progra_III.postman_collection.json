@@ -7,172 +7,267 @@
 	},
 	"item": [
 		{
-			"name": "ingresar",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "pepe",
-							"type": "text"
+			"name": "empleados",
+			"item": [
+				{
+					"name": "contratar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "franco",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "bartender",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "clave",
-							"value": "1234",
-							"type": "text"
-						}
-					]
+						"url": "http://localhost:100/contratar"
+					},
+					"response": []
 				},
-				"url": "http://localhost:100/ingresar"
-			},
-			"response": []
-		},
-		{
-			"name": "atender",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "pedido",
-							"value": "cerveza roja",
-							"type": "text"
+				{
+					"name": "despedir",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "nombre",
-							"value": "pepe",
-							"type": "text"
-						}
-					]
+						"url": "http://localhost:100/despedir/1"
+					},
+					"response": []
 				},
-				"url": "http://localhost:100/atender"
-			},
-			"response": []
-		},
-		{
-			"name": "contratar",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "nombre",
-							"value": "franco",
-							"type": "text"
+				{
+					"name": "suspender",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "id",
+								"value": "4"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "5",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "puesto",
-							"value": "bartender",
-							"type": "text"
-						}
-					]
-				},
-				"url": "http://localhost:100/contratar"
-			},
-			"response": []
-		},
-		{
-			"name": "despedir",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "id",
-							"value": "1",
-							"type": "text"
-						}
-					]
-				},
-				"url": "http://localhost:100/despedir/1"
-			},
-			"response": []
-		},
-		{
-			"name": "suspender",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "id",
-						"value": "4"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "id",
-							"value": "5",
-							"type": "text"
-						}
-					]
-				},
-				"url": "http://localhost:100/suspender/5"
-			},
-			"response": []
-		},
-		{
-			"name": "pedidosCancelados",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "http://localhost:100/ver/pedidosCancelados"
-			},
-			"response": []
-		},
-		{
-			"name": "menosVendidos",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "http://localhost:100/ver/producto/menosVendido"
-			},
-			"response": []
-		},
-		{
-			"name": "masVendido",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "http://localhost:100/ver/producto/masVendido"
-			},
-			"response": []
-		},
-		{
-			"name": "verOperaciones",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:100/ver/operaciones?puesto=mozo",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "100",
-					"path": [
-						"ver",
-						"operaciones"
-					],
-					"query": [
-						{
-							"key": "puesto",
-							"value": "mozo"
-						}
-					]
+						"url": "http://localhost:100/suspender/5"
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "mesas",
+			"item": [
+				{
+					"name": "agregarMesa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:100/agregarMesa"
+					},
+					"response": []
+				},
+				{
+					"name": "borrarMesa",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:100/borrarMesa/1"
+					},
+					"response": []
+				},
+				{
+					"name": "modificarMesa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:100/modificarMesa/1/5"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "usuarios",
+			"item": [
+				{
+					"name": "ingresar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "pepe",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:100/ingresar"
+					},
+					"response": []
+				},
+				{
+					"name": "crearCuenta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "yass",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "1wy54",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "mozo",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:100/crearCuenta?nombre=eduardo&puesto=mozo&clave=34rt5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "100",
+							"path": [
+								"crearCuenta"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "eduardo"
+								},
+								{
+									"key": "puesto",
+									"value": "mozo"
+								},
+								{
+									"key": "clave",
+									"value": "34rt5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminarUsuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://localhost:100/eliminarUsuario/1"
+					},
+					"response": []
+				},
+				{
+					"name": "ModificarUsuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "nombre",
+									"value": "eduardo",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "4567",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:100/ModificarUsuario/5/eduardo/4678"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "productos",
+			"item": [
+				{
+					"name": "agregarProducto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://localhost:100/agregarProducto"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "modificarProducto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": ""
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

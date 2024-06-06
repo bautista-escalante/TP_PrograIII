@@ -1,5 +1,5 @@
 <?php
-
+include_once "db/AccesoDatos.php";
 class Usuario
 {
     public $id;
@@ -7,18 +7,22 @@ class Usuario
     public $clave;
     public $puesto;
 
+    public function __construct($usuario,$puesto,$clave)
+    {
+        $this->usuario = $usuario;
+        $this->puesto = $puesto;
+        $this->clave = $clave;
+    }
     public function crearUsuario()
     {
         // retorna el id 
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave, puesto) VALUES (:usuario, :clave, :puesto)");
-        $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
         $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
-        $consulta->bindValue(':clave', $claveHash);
+        $consulta->bindValue(':clave', $this->clave);
         $consulta->bindValue(':puesto', $this->puesto);
-        
         $consulta->execute();
-        return $objAccesoDatos->obtenerUltimoId();
+        return $this->id =  $objAccesoDatos->obtenerUltimoId();
     }
     
     public static function obtenerTodos()

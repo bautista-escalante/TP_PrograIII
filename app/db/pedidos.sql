@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2024 a las 23:56:38
+-- Tiempo de generación: 06-06-2024 a las 23:56:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -24,38 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `mesas`
+-- Estructura de tabla para la tabla `pedidos`
 --
 
-CREATE TABLE `mesas` (
+CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
-  `estado` varchar(60) NOT NULL,
-  `puntuacion` int(11) DEFAULT NULL,
-  `codigoMesa` varchar(5) DEFAULT NULL,
-  `fechaBaja` date DEFAULT NULL
+  `idProducto` int(11) DEFAULT NULL,
+  `codigoAlfa` varchar(5) NOT NULL,
+  `idMesa` int(11) DEFAULT NULL,
+  `idCocinero` int(11) DEFAULT NULL,
+  `idMozo` int(11) DEFAULT NULL,
+  `tiempo` int(11) NOT NULL,
+  `cancelado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `mesas`
---
-
-INSERT INTO `mesas` (`id`, `estado`, `puntuacion`, `codigoMesa`, `fechaBaja`) VALUES
-(1, 'cerrada', 5, '45typ', NULL),
-(2, 'cerrada', NULL, '55tew', NULL),
-(3, 'cerrada', NULL, '34rtg', NULL),
-(4, 'cerrada', NULL, '5y7qd', NULL),
-(5, 'cerrada', NULL, 'bFo1r', NULL),
-(6, 'cerrada', NULL, '14YLH', NULL),
-(7, 'cerrada', NULL, 'sb48S', NULL);
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `mesas`
+-- Indices de la tabla `pedidos`
 --
-ALTER TABLE `mesas`
+ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -63,10 +53,10 @@ ALTER TABLE `mesas`
 --
 
 --
--- AUTO_INCREMENT de la tabla `mesas`
+-- AUTO_INCREMENT de la tabla `pedidos`
 --
-ALTER TABLE `mesas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `pedidos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

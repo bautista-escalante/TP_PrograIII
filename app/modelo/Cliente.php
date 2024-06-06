@@ -8,18 +8,15 @@ metodos -> MostrartiempoRestante(segun el numpedido e idmesa)
 
 class Cliente {
     public $nombre;
-    public $idMozo;
-    public $idCocinero;
+    public $idPedido;
     public $numPedido;
-    public $idMesa;
     public $foto;
-    public function __construct($nombre, $numPedido, $foto, $idMesa,$idMozo, $idCocinero) {
+    public $fechaBaja;
+    public function __construct($nombre, $numPedido, $foto, $idPedido) {
         $this->nombre = $nombre;
         $this->numPedido = $numPedido;
         $this->foto = $foto;
-        $this->idMesa = $idMesa;
-        $this->idMozo = $idMozo;
-        $this->idCocinero = $idCocinero;
+        $this->idPedido = $idPedido;
     } 
     public function mostrarTiempoRestante() {
         $bd = AccesoDatos::obtenerInstancia();
@@ -34,9 +31,9 @@ class Cliente {
         }
     }
     public function calificar($calificacionMesa,$calificacionCocinero,$calificacionMozo ) {
-        Mesa::CalificarMesa($this->idMesa,$calificacionMesa);
+        /* Mesa::CalificarMesa($calificacionMesa);
         Empleado::calificarCocinero($calificacionCocinero,$this->idCocinero);
-        Empleado::calificarMozo($calificacionMozo,$this->idMozo);
+        Empleado::calificarMozo($calificacionMozo,$this->idMozo); */
     }
     public function actualizarOperacion($mesa, $nombreMozo){
         $archivo = file_get_contents("Operaciones.json");

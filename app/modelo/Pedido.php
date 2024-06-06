@@ -1,99 +1,62 @@
 <?php
-/* 
-id - estado - idPedido(5valores alfanumericos) - tiempo - nombre - NombreEmpleadoEncargado
-
-metodos -> calcularTiempo (genera un numeo ramdom de 1 a 60) para calcular segundos
-        -> guardar
-        -> actualizar estado();
+/*
+    una vez intanciado recojer el id para darselo al cliente
 */
-class Pedido {
-    public $id;
-    public $estado;
-    public $idPedido;
+include_once "db/AccesoDatos.php";
+class Pedido{
+    public $id; 
+    public $idProducto; 
+    public $codigoAlfa;
+    public $idMesa; 
+    public $idMozo; 
+    public $idCocinero;
     public $tiempo;
-    public $NombreEmpleadoEncargado;
-    public $nombrePedido;
     public $cancelado;
-    public $cantidad;
-    
-    public function __construct($estasdo, $NombreEmpleadoEncargado, $nombre, $cantidad) {
-        $this->id =null;
-        $this->estado = $estasdo;
-        $this->idPedido = $this->generarIdPedido();
-        $this->tiempo = $this->calcularTiempo();
-        $this->NombreEmpleadoEncargado = $NombreEmpleadoEncargado;
-        $this->nombrePedido = $nombre;
+
+    public function __construct (){
+        $this->id = null;
+        $this->idProducto = null;
+        $this->idMesa = null;
+        $this->idMozo = null;
+        $this->idCocinero = null;
         $this->cancelado = false;
-        $this->cantidad = $cantidad;
+        $this->codigoAlfa = $this->generarCodigo();
+        $this->tiempo = rand(1, 15);
+        $this->guardar();
     }
-    private function generarIdPedido() {
+    private function generarCodigo() {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
     }
-    public function calcularTiempo() {
-        return rand(1, 15);
-    }
-    private function verificar(){
-        $db = AccesoDatos::obtenerInstancia();
-        $consuta = $db->prepararConsulta("SELECT * FROM pedido");
-        $pedidos = $consuta->fetchAll(PDO::FETCH_CLASS, "Pedido");
-        foreach($pedidos as $pedido){
-            if($pedido->nombrePedido == $this->nombrePedido){
-                return $pedido->idPedido;
-            }
-        }
-        return true;
-    }
-    public function guardar() {
+    private function guardar() {
         $bd = AccesoDatos::obtenerInstancia();
-        $resultado = $this->verificar();
-        if($resultado){
-            $sql = "INSERT INTO pedido (estado, idPedido, tiempo, nombreCliente, NombreEmpleadoEncargado, cancelado, cantidad) 
-            VALUES (:estado, :idPedido, :tiempo, :nombreCliente, :NombreEmpleadoEncargado, :cancelado, :cantidad)";
-            $consulta = $bd->prepararConsulta($sql);
-            $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
-            $consulta->bindValue(':idPedido', $this->idPedido, PDO::PARAM_STR);
-            $consulta->bindValue(':tiempo', $this->tiempo, PDO::PARAM_INT);
-            $consulta->bindValue(':nombreCliente', $this->nombrePedido, PDO::PARAM_STR);
-            $consulta->bindValue(':NombreEmpleadoEncargado', $this->NombreEmpleadoEncargado, PDO::PARAM_STR);
-            $consulta->bindValue(':cancelado', $this->cancelado, PDO::PARAM_BOOL);
-            $consulta->bindValue(':cantidad', $this->cantidad, PDO::PARAM_INT);
-            $consulta->execute();
-            $this->id = $bd->obtenerUltimoId();
-        }
-        else{
-            $consulta = $bd->prepararConsulta("UPDATE pedido SET cantidad = :cantidad WHERE idPedido = :idPedido");
-            $consulta->bindValue(':cantidad', $this->cantidad, PDO::PARAM_STR);
-            $consulta->bindValue(':idPedido', $this->idPedido, PDO::PARAM_STR);
-            $consulta->execute();
-        }
-}
-    public function actualizarEstadoPedido($nuevoEstado) {
-        $this->estado = $nuevoEstado;
-        $bd = AccesoDatos::obtenerInstancia();
-        $consulta = $bd->prepararConsulta("UPDATE pedido SET estado = :estado WHERE idPedido = :idPedido");
-        $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
-        $consulta->bindValue(':idPedido', $this->idPedido, PDO::PARAM_STR);
-        $consulta->execute();
-    }
-    public function cancelar() {
-        $this->cancelado = true;
-        $bd = AccesoDatos::obtenerInstancia();
-        $consulta = $bd->prepararConsulta("UPDATE pedido SET cancelado = :cancelado WHERE idPedido = :idPedido");
+        $sql = "INSERT INTO pedido (idProducto, codigoAlfa, idMesa, idMozo, idCocinero, tiempo, cancelado) 
+                VALUES (:idProducto, :codigoAlfa, :idMesa, :idMozo, :idCocinero, :tiempo, :cancelado)";
+        $consulta = $bd->prepararConsulta($sql);
+        $consulta->bindValue(':idProducto', $this->idProducto, PDO::PARAM_INT);
+        $consulta->bindValue(':codigoAlfa', $this->codigoAlfa, PDO::PARAM_STR);
+        $consulta->bindValue(':idMesa', $this->idMesa, PDO::PARAM_INT);
+        $consulta->bindValue(':idMozo', $this->idMozo, PDO::PARAM_INT);
+        $consulta->bindValue(':idCocinero', $this->idCocinero, PDO::PARAM_INT);
+        $consulta->bindValue(':tiempo', $this->tiempo, PDO::PARAM_INT);
         $consulta->bindValue(':cancelado', $this->cancelado, PDO::PARAM_BOOL);
-        $consulta->bindValue(':idPedido', $this->idPedido, PDO::PARAM_STR);
         $consulta->execute();
+        $this->id = $bd->obtenerUltimoId();
     }
-    public function eliminarPedido(){
-        if ($this->id !== null) {
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("DELETE FROM pedido WHERE id = :id");
-            $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
-            $consulta->execute();
-            echo "pedido eliminado de la base de datos.<br>";
-        } else {
-            echo "Error: El ID del pedido no es válido.<br>";
-        } 
+    public function actualizarPedido($id, $idProducto=null, $idMesa=null, $idMozo=null, $idCocinero=null, $cancelado=false){
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE pedidos SET idProducto = :idProducto, idMesa = :idMesa, idMozo = :idMozo, idCocinero = :idCocinero, cancelado = :cancelado WHERE id = :id");
+        $update->bindValue(":id",$id,PDO::PARAM_INT);
+        $update->bindValue(":idProducto",$idProducto,PDO::PARAM_INT);
+        $update->bindValue(":idMesa",$idMesa,PDO::PARAM_INT);
+        $update->bindValue(":idMozo",$idMozo,PDO::PARAM_INT);
+        $update->bindValue(":idCocinero",$idCocinero,PDO::PARAM_INT);
+        $update->bindValue(":cancelado",$cancelado,PDO::PARAM_BOOL);
     }
+    public static function cancelarPedido($id){
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE pedidos SET cancelado = :cancelado WHERE id = :id");
+        $update->bindValue(":id",$id,PDO::PARAM_INT);
+        $update->bindValue(":cancelado",true,PDO::PARAM_BOOL);
+    }
+    
 }
-
-
