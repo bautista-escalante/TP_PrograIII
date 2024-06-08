@@ -151,7 +151,7 @@ class Empleado{
 
                 echo("levantar el pedido<br>");
                 $encargo = new Pedido("en preparacion",$nombre, $pedido,1);
-                $encargo->guardar();
+                //$encargo->guardar();
                 
                 echo("asignar mesa al cliente<br>");
                 $mesa = new Mesa();
@@ -163,10 +163,10 @@ class Empleado{
                 
                 $empleado = new Empleado($empleadoEncontrado["nombre"],$empleadoEncontrado["tipo"]);
                 $empleado->agregarPedido($encargo);
-                $empleado->atenderPedidos($encargo->idPedido);
+                //$empleado->atenderPedidos($encargo->idPedido);
 
-                $cliente = new Cliente($nombre,$encargo->idPedido,$foto,$mesa->idMesa, $empleadoEncontrado["id"],$this->id);
-                $cliente->actualizarOperacion($mesa->idMesa, $this->nombre);
+                //$cliente = new Cliente($nombre,$encargo->idPedido,$foto,$mesa->idMesa, $empleadoEncontrado["id"],$this->id);
+                //$cliente->actualizarOperacion($mesa->idMesa, $this->nombre);
             }
         }
         else{

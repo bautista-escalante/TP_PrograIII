@@ -75,6 +75,42 @@
 						"url": "http://localhost:100/suspender/5"
 					},
 					"response": []
+				},
+				{
+					"name": "listarCocineros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarEmpleados/cocinero"
+					},
+					"response": []
+				},
+				{
+					"name": "listarBartender",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarEmpleados/bartender"
+					},
+					"response": []
+				},
+				{
+					"name": "listarMozo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarEmpleados/mozo"
+					},
+					"response": []
+				},
+				{
+					"name": "listarCerveceros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarEmpleados/cervecero"
+					},
+					"response": []
 				}
 			]
 		},
@@ -105,6 +141,15 @@
 						"method": "PUT",
 						"header": [],
 						"url": "http://localhost:100/modificarMesa/1/5"
+					},
+					"response": []
+				},
+				{
+					"name": "listarMesas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarMesas"
 					},
 					"response": []
 				}
@@ -231,6 +276,15 @@
 						"url": "http://localhost:100/ModificarUsuario/5/eduardo/4678"
 					},
 					"response": []
+				},
+				{
+					"name": "listarUsuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarUsuarios"
+					},
+					"response": []
 				}
 			]
 		},
@@ -244,7 +298,23 @@
 						"header": [],
 						"body": {
 							"mode": "formdata",
-							"formdata": []
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "quilmes",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "cervecero",
+									"type": "text"
+								},
+								{
+									"key": "precio",
+									"value": "400",
+									"type": "text"
+								}
+							]
 						},
 						"url": "http://localhost:100/agregarProducto"
 					},
@@ -254,7 +324,12 @@
 					"name": "New Request",
 					"request": {
 						"method": "DELETE",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://localhost:100/borrarProducto/1"
 					},
 					"response": []
 				},
@@ -263,7 +338,16 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
-						"url": ""
+						"url": "http://localhost:100/modificarProducto/1/400"
+					},
+					"response": []
+				},
+				{
+					"name": "listarProductos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/listarProductos"
 					},
 					"response": []
 				}

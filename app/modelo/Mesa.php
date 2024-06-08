@@ -95,5 +95,10 @@ class Mesa{
             $update->execute();
         }
     }
-    
+    public static function MostarMesas(){
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT * FROM mesas");
+        $select->execute();
+        return $select->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

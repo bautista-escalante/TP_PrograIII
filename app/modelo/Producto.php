@@ -58,4 +58,10 @@ class Producto {
             echo "error actualizando los datos <br>";
         }
     }
+    public static function mostrarProductos(){
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT * FROM producto");
+        $select->execute();
+        return $select->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

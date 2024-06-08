@@ -2,13 +2,19 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
-
+/* 
+2do Sprint ( Entrega 11 de Junio)
+❖ ----Usar MiddleWare de usuarios/perfiles----
+❖ ----Verificar usuarios para las tareas de abm----
+❖ Manejo del estado del pedido */
 require_once '../vendor/autoload.php';
+require_once "controlador/UsuarioControler.php";
+include_once "middleware/AuthMiddleware.php";
 //php -S localhost:100 -t app
 $app = AppFactory::create();
 
 $app->post('/ingresar', function (Request $request, Response $response, $args) {
-    include "controlador/UsuarioControler.php";
+    require_once "controlador/UsuarioControler.php";
     $parametros = $request->getParsedBody();
     if(isset($parametros["nombre"]) && isset($parametros["clave"])){
         if(registrarIngreso($parametros["nombre"],$parametros["clave"])){
@@ -19,6 +25,7 @@ $app->post('/ingresar', function (Request $request, Response $response, $args) {
     }
     return $response;
 });
+
 // alta empleado
 $app->post("/contratar",function(Request $request, Response $response, $args){
     include "modelo/Socio.php";
@@ -31,7 +38,7 @@ $app->post("/contratar",function(Request $request, Response $response, $args){
         $response->getBody()->write("error coloca los parameros para contratar empleados.<br>");
     }
     return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // baja empleado
 $app->delete("/despedir/{id}", function (Request $request, Response $response, $args) {
     require_once "modelo/Socio.php";
@@ -43,7 +50,7 @@ $app->delete("/despedir/{id}", function (Request $request, Response $response, $
         $response->getBody()->write("Error: coloca los parámetros para despedir al empleado.<br>");
     }
     return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // modificacion empleado
 $app->put("/suspender/{id}",function(Request $request, Response $response, $args){
     try{
@@ -62,7 +69,16 @@ $app->put("/suspender/{id}",function(Request $request, Response $response, $args
     }finally{
         return $response;
     }
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
+$app->get("/listarEmpleados/{cocinero}",function(Request $request, Response $response, $args){
+    include "modelo/Empleado.php";
+    $empleados = Empleado::obtenerEmpleadosPorPuesto($args["cocinero"]);
+    foreach($empleados as $empleado){
+        $response->getBody()->write("nombre: ".$empleado["nombre"].".<br>");
+    }
+    return $response;
 });
+
 // alta usuario
 $app->post("/crearCuenta",function(Request $request, Response $response, $args){
     include "modelo\Usuario.php";
@@ -77,7 +93,7 @@ $app->post("/crearCuenta",function(Request $request, Response $response, $args){
         $response->getBody()->write("error coloca los parameros para crear una cuenta.<br>");
     }
     return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // baja usuario
 $app->delete("/eliminarUsuario/{id}", function (Request $request, Response $response, $args) {
     require_once "modelo/Usuario.php";
@@ -89,7 +105,7 @@ $app->delete("/eliminarUsuario/{id}", function (Request $request, Response $resp
         $response->getBody()->write("Error: coloca los parámetros para eliminar la cuenta .<br>");
     }
     return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // modificacion usuario
 $app->put("/ModificarUsuario/{id}/{nombre}/{clave}",function(Request $request, Response $response, $args){
     try{
@@ -106,6 +122,14 @@ $app->put("/ModificarUsuario/{id}/{nombre}/{clave}",function(Request $request, R
     }finally{
         return $response;
     }
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
+$app->get("/listarUsuarios",function(Request $request, Response $response, $args){
+    include "modelo/Usuario.php";
+    $usuarios = Usuario::obtenerTodos();
+    foreach($usuarios as $usuario){
+        $response->getBody()->write("nombre: ".$usuario["usuario"]."<br>puesto: ".$usuario["puesto"].".<br>");
+    }
+    return $response;
 });
 
 // alta mesa
@@ -115,7 +139,7 @@ $app->post("/agregarMesa",function(Request $request, Response $response, $args){
     $mesa->guardar();
     $response->getBody()->write("mesa agregada correctamente.<br>");
     return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // baja mesa
 $app->delete("/borrarMesa/{id}", function (Request $request, Response $response, $args) {
     require_once "modelo/Mesa.php";
@@ -127,7 +151,7 @@ $app->delete("/borrarMesa/{id}", function (Request $request, Response $response,
         $response->getBody()->write("Error: coloca los parámetros para borrar la mesa.<br>");
     }
 return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // modificacion mesa
 $app->put("/modificarMesa/{id}/{puntos}",function(Request $request, Response $response, $args){
     require_once "modelo/Mesa.php";
@@ -145,7 +169,16 @@ $app->put("/modificarMesa/{id}/{puntos}",function(Request $request, Response $re
     }finally{
         return $response;
     }
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
+$app->get("/listarMesas",function(Request $request, Response $response, $args){
+    include "modelo/Mesa.php";
+    $mesas = Mesa::MostarMesas();
+    foreach($mesas as $mesa){
+        $response->getBody()->write("codigo: ".$mesa["codigoMesa"]."<br>estado: ".$mesa["estado"].".<br>");
+    }
+    return $response;
 });
+
 // alta producto
 $app->post("/agregarProducto",function(Request $request, Response $response, $args){
     include "modelo/Producto.php";
@@ -159,7 +192,7 @@ $app->post("/agregarProducto",function(Request $request, Response $response, $ar
     } else{
         $response->getBody()->write("agrega los atributos para dar el alta<br>.<br>");
     }
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // baja producto
 $app->delete("/borrarProducto/{id}", function (Request $request, Response $response, $args) {
     require_once "modelo/Producto.php";
@@ -168,10 +201,10 @@ $app->delete("/borrarProducto/{id}", function (Request $request, Response $respo
         Producto::eliminarProducto($id);
         $response->getBody()->write("mesa borrada correctamente.<br>");
         } else {
-            $response->getBody()->write("Error: coloca los parámetros para borrar la mesa.<br>");
+            $response->getBody()->write("Error: coloca los parámetros para borrar la mesa.<br><br>");
     }
 return $response;
-});
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
 // modificacion producto
 $app->put("/modificarProducto/{id}/{precio}",function(Request $request, Response $response, $args){
     require_once "modelo/Producto.php";
@@ -188,9 +221,14 @@ $app->put("/modificarProducto/{id}/{precio}",function(Request $request, Response
     }finally{
         return $response;
     }
+})->add(new AuthMiddleware(obtenerUltimoInicio()));
+$app->get("/listarProductos",function(Request $request, Response $response, $args){
+    include "modelo/Producto.php";
+    $productos = Producto::mostrarProductos();
+    foreach($productos as $producto){
+        $response->getBody()->write("nombre: ".$producto["nombre"]."<br>precio: ".$producto["precio"].".<br><br>");
+    }
+    return $response;
 });
-
-
-
 
 $app->run();
