@@ -6,20 +6,21 @@ use Slim\Psr7\Response;
 class AuthMiddleware
 {
     private $sectorRequerido;
-    public function __construct(string $sectorRequerido)
+    private $sectorRecibido;
+    public function __construct(string $sectorRequerido, string $sectorRecibido)
     {
         $this->sectorRequerido = $sectorRequerido;
+        $this->sectorRecibido = $sectorRecibido;
     }
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        if ($this->sectorRequerido === 'socio') {
+        if ($this->sectorRequerido === $this->sectorRecibido) {
             $response = $handler->handle($request);
         } else {
             $response = new Response();
-            $payload = json_encode(array("mensaje" => "no tenesa permiso"));
+            $payload = json_encode(array("mensaje" => "no tenes permiso, debe ser realizado por un ".$this->sectorRequerido));
             $response->getBody()->write($payload);
         }
-
         return $response->withHeader('Content-Type', 'application/json');
     }
 }

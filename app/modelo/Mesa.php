@@ -20,15 +20,15 @@ class Mesa{
     private function generarIdMesa() {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
     }
-    public function AsignarMesa(){
+    public static function AsignarMesa(){
         try{
             $db = AccesoDatos::obtenerInstancia();
-            $consulta=$db->prepararConsulta("SELECT * FROM mesas  WHERE estado = 'cerrada'");
+            $consulta=$db->prepararConsulta("SELECT * FROM mesas  WHERE estado = 'cerrada' AND fechaBaja IS NULL");
             $consulta->execute();
             $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
-            if (!empty($resultado)) {
+            if (!empty($resultado)){
                 $mesa = $resultado[rand(0,count($resultado)-1)];
-                return $mesa->idMesa;
+                return $mesa["id"];
             } else {
                 echo "no hay mesas disponibles";
                 return null;
@@ -66,12 +66,11 @@ class Mesa{
         $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
         $consulta->execute();
     }
-    public static function ActualizarEstadoMesa($nuevoEstado){
-        self::$estado = $nuevoEstado;
+    public static function ActualizarEstadoMesa($id,$nuevoEstado){
         $bd = AccesoDatos::obtenerInstancia();
         $consulta = $bd->prepararConsulta("UPDATE mesas SET estado = :estado WHERE id = :id");
-        $consulta->bindValue(':estado', self::$estado, PDO::PARAM_STR);
-        $consulta->bindValue(':id', self::$id, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', $nuevoEstado, PDO::PARAM_STR);
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
         $consulta->execute();
     }
     public static function CalificarMesa($idmesa, $calificacion){

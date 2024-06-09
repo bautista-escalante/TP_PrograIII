@@ -51,7 +51,7 @@ class Producto {
             $bd = AccesoDatos::obtenerInstancia();
             $consulta = $bd->prepararConsulta("UPDATE producto SET precio = :precio WHERE id = :id");
             $consulta->bindValue(':id', $id, PDO::PARAM_INT);
-            $consulta->bindValue(':precio', $nuevoPrecio, PDO::PARAM_INT);
+            $consulta->bindValue(':precio', $nuevoPrecio, PDO::PARAM_STR);
             $consulta->execute();
             echo "datos actializados correctamente <br>";
         }catch(PDOException){
@@ -60,8 +60,26 @@ class Producto {
     }
     public static function mostrarProductos(){
         $db = AccesoDatos::obtenerInstancia();
-        $select = $db->prepararConsulta("SELECT * FROM producto");
+        $select = $db->prepararConsulta("SELECT * FROM producto WHERE fechaBaja IS NULL");
         $select->execute();
         return $select->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function obtenerProducto($comida){
+        $producto = Producto::buscarProducto($comida);
+        if($producto!=false){
+            return $producto;
+        }
+        else{
+            echo "error no tenemos esa comida en nuestro menu";
+        }
+    }
+    public static function buscarProducto($productoNombre) {
+        $productos = Producto::mostrarProductos();
+        foreach($productos as $producto){
+            if($producto["nombre"] == $productoNombre){
+                return $producto;
+            }
+        }
+        return false;
     }
 }

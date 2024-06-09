@@ -24,7 +24,6 @@ class Usuario
         $consulta->execute();
         return $this->id =  $objAccesoDatos->obtenerUltimoId();
     }
-    
     public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
@@ -33,7 +32,6 @@ class Usuario
 
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public static function obtenerUsuario($usuario)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
@@ -42,7 +40,6 @@ class Usuario
         $consulta->execute();
         return $consulta->fetch(PDO::FETCH_ASSOC);
     }
-
     public static function modificarUsuario($id, $clave, $usuario)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();

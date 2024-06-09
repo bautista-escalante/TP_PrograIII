@@ -26,8 +26,8 @@ class AccesoDatos
     {
         try{
             return $this->objetoPDO->prepare($sql);
-        }catch(PDOException){
-            echo " error en prepar la consulta";
+        }catch(PDOException $e){
+            echo " error en prepar la consulta <br>". $e->getMessage();
         }
     }
     public function obtenerUltimoId()

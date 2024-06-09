@@ -31,10 +31,17 @@ function esSocio($nombre){
     echo "no es socio";
     return false;
 }
-
 function obtenerUltimoInicio(){
     $archivo = file_get_contents("modelo/Registro.json");
     $ingresos = json_decode($archivo, true);
     $ultimoIngreso = end($ingresos);
-    return $ultimoIngreso["puesto"];
+    return $ultimoIngreso;
+}
+function obtenerUltimoPuesto(){
+    $ingreso = obtenerUltimoInicio();
+    return $ingreso["puesto"];
+}
+function obtenerUltimoId(){
+    $ingreso = obtenerUltimoInicio();
+    return $ingreso["id"];
 }
