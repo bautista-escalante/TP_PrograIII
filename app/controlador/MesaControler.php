@@ -1,0 +1,48 @@
+<?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+include_once "modelo/Mesa.php";
+
+class MesaControler {
+    public function agregarMesa(Request $request, Response $response, $args) {
+        $mesa = new Mesa();
+        $mesa->guardar();
+        $response->getBody()->write("Mesa agregada correctamente.<br>");
+        return $response->withStatus(201);
+    }
+    public function borrarMesa(Request $request, Response $response, $args) {
+        $id = $args['id'];
+        if (!empty($id)) {
+            Mesa::borrarMesa($id);
+            $response->getBody()->write("Mesa borrada correctamente.<br>");
+            return $response->withStatus(200); 
+        } else {
+            $response->getBody()->write("Error: coloca los parámetros para borrar la mesa.<br>");
+            return $response->withStatus(400);
+        }
+    }
+    public function modificarMesa(Request $request, Response $response, $args) {
+        try {
+            $id = $args['id'];
+            $puntos = $args['puntos'];
+            if (isset($id) && !empty($id) && isset($puntos) && !empty($puntos)) {
+                Mesa::modificarMesa($id, $puntos);
+                $response->getBody()->write("Mesa modificada.<br>");
+                return $response->withStatus(200);
+            } else {
+                $response->getBody()->write("Error: coloca los parámetros para modificar la mesa.<br>");
+                return $response->withStatus(400);
+            }
+        } catch (PDOException $e) {
+            $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
+            return $response->withStatus(500);
+        }
+    }
+    public function listarMesas(Request $request, Response $response, $args) {
+        $mesas = Mesa::MostarMesas();
+        foreach ($mesas as $mesa) {
+            $response->getBody()->write("Código: " . $mesa["codigoMesa"] . "<br>Estado: " . $mesa["estado"] . ".<br>");
+        }
+        return $response->withStatus(200);
+    }
+}

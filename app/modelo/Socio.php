@@ -36,8 +36,8 @@ class Socio{
                 $consulta->bindValue(":id",$id, PDO::PARAM_INT);
                 $consulta->execute();
         }
-        public static function cerrarMesa(){
-                Mesa::ActualizarEstadoMesa("cerrada");
+        public static function cerrarMesa($id){
+                Mesa::ActualizarEstadoMesa($id,"cerrada");
         }
         public static function VerHorariosEmpleados(){
                 
@@ -106,13 +106,13 @@ class Socio{
         public static function contratarEmpleado($nombre, $tipo) {
                 $empleado = new Empleado($nombre, $tipo);
                 $empleado->guardar();
-                echo "$nombre fue contrata para trabajar de $tipo <br>";
+                echo "$nombre fue contratado/a para trabajar de $tipo <br>";
         }
         public static function suspenderEmpleado($id) {
                 $bd = AccesoDatos::obtenerInstancia();
                 $consulta = $bd->prepararConsulta("UPDATE empleados SET ocupado = :ocupado WHERE id = :id");
                 $consulta->bindValue(':ocupado', true, PDO::PARAM_BOOL);
-                $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+                $consulta->bindValue(':id', $id, PDO::PARAM_INT); 
                 $consulta->execute();
                 echo "el empleado fue suspendido<br>";
         }

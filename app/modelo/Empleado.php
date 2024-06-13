@@ -36,13 +36,13 @@ class Empleado{
         return $select->fetchAll(PDO::FETCH_ASSOC);
     }
     // deberia obtener este id del json de registro, segun quien ingreso la ultima vez es quier tiene el pedido
-    // verificar usarndo mw que el usuario  no sea mozo ni socio
+    // verificar usarndo mw que el usuario  no sea mozo ni socio 
     public static function atenderPedidos($idEmpleado){
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
         $pedidos = Empleado::obtenerPedidos($idEmpleado);
         if(!empty($pedidos)){
             foreach($pedidos as $pedido){
-                Pedido::ActualizarEstadoPedido("listo para retirar",$pedido["id"]);
+                Pedido::ActualizarEstadoPedido("listo para servir",$pedido["id"]);
             }
         }
         else{
@@ -89,7 +89,7 @@ class Empleado{
     }
     public function guardar() { 
         $bd = AccesoDatos::obtenerInstancia();
-        $sql = "INSERT INTO empleados (nombre, pendientes, tipo, ocupado)
+        $sql = "INSERT INTO empleados (nombre, tipo, ocupado)
                 VALUES (:nombre, :tipo, :ocupado)";
         $consulta = $bd->prepararConsulta($sql);
         $consulta->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
@@ -105,12 +105,12 @@ class Empleado{
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
         $consulta->execute();
     }
-    public function rotarPersonal($nuevoPuesto){
+    public static function rotarPersonal($id, $nuevoPuesto){
         $bd = AccesoDatos::obtenerInstancia();
         $sql = "UPDATE empleados SET tipo = :tipo WHERE id = :id";
         $consulta = $bd->prepararConsulta($sql);
         $consulta->bindValue(':tipo', $nuevoPuesto, PDO::PARAM_STR);
-        $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
         $consulta->execute();
     }
     public static function atenderCliente($pedido,$nombre,$foto=null){

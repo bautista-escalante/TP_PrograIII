@@ -28,5 +28,11 @@
         "nombre": "tomas",
         "puesto": "cocinero",
         "fecha": "24-06-09 06:06:27"
+    },
+    {
+        "id": 8,
+        "nombre": "alejandro",
+        "puesto": "socio",
+        "fecha": "24-06-09 06:06:48"
     }
 ]
