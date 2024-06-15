@@ -1,8 +1,10 @@
 <?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 include_once "db/AccesoDatos.php";
 include_once "modelo/Empleado.php";
 class MozoControler{
-    public function atender($pedido,$nombreCliente){
+    public function atender($pedido,$nombreCliente,Request $request, Response $response){
         $mozos = Empleado::obtenerEmpleadosPorPuesto("mozo"); 
         if(count($mozos) !=0){
             $i = rand(0,count($mozos)-1);
@@ -13,11 +15,12 @@ class MozoControler{
         else{
             echo "no hay mozo disponible";
         }
+        return $response;
     }
-    public function servir(){
+    public function servir(Request $request, Response $response){
     //entregar pedido cuando el estado sea listo para servir ( cambiar el estado de mesa a el cliente esta comiendo)
         $bd = AccesoDatos::obtenerInstancia();
-        $consulta = $bd->prepararConsulta("SELECT * FROM pedido WHERE estado = 'listo para servir'");
+        $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'listo para servir'");
         $consulta->execute();
         $pedidosListos = $consulta->fetchAll(PDO::FETCH_ASSOC);
         if(count($pedidosListos) == 0){
@@ -28,5 +31,6 @@ class MozoControler{
             Mesa::ActualizarEstadoMesa($pedido["idMesa"],"el cliente esta comiendo");
             echo "El pedido con ID " . $pedido["id"] . " ha sido entregado.<br>";
         }
+        return $response;
     }
 }

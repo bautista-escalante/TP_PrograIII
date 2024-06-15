@@ -6,8 +6,10 @@ include_once "modelo/Empleado.php";
 class SocioControler {
     public function contratar(Request $request, Response $response, $args) {
         $parametros = $request->getParsedBody();
-        if(isset($parametros["nombre"]) && !empty($parametros["nombre"]) && isset($parametros["puesto"]) && !empty($parametros["puesto"])){
+        if(isset($parametros["nombre"],$parametros["puesto"],$parametros["clave"]) && !empty($parametros["nombre"]) && !empty($parametros["puesto"])){
             Socio::contratarEmpleado($parametros["nombre"], $parametros["puesto"]);
+            $nuevoUsuario = new Usuario($parametros["nombre"], $parametros["puesto"], $parametros["clave"]);
+            $nuevoUsuario->crearUsuario();
         } else {
             $response->getBody()->write("Error: coloca los parámetros para contratar empleados.<br>");
         }
