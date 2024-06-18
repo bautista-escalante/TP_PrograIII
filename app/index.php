@@ -47,11 +47,13 @@ $app->group("/abmProducto", function (RouteCollectorProxy $grupo) {
 });
 
 $app->group("/laComanda",function (RouteCollectorProxy $grupo) {
-    $grupo->post("/atender", ComandaControler::class.":atender")->add(new AuthMiddleware("mozo"));
+    $grupo->post("/atender", MozoControler::class.":atender")->add(new AuthMiddleware("mozo"));
     $grupo->post("/servir", MozoControler::class.":servir")->add(new AuthMiddleware("mozo"));
     $grupo->post("/cocinar", ComandaControler::class.":Cocinar")->add(new AuthMiddleware("cocinero"));
     $grupo->post("/prepararTrago", ComandaControler::class.":prepararTrago")->add(new AuthMiddleware("bartender"));
     $grupo->post("/servirCerveza", ComandaControler::class.":servirCerveza")->add(new AuthMiddleware("cervecero"));
+    $grupo->put("/cerrarMesa/{id}", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
+    $grupo->put("/cobrarMesa/{id}", ComandaControler::class.":cobrar")->add(new AuthMiddleware("socio"));
 });
 
 $app->run();

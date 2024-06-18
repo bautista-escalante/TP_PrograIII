@@ -28,7 +28,7 @@ class Empleado{
         $this->tipo = $tipo;
         $this->ocupado = false;
     }
-    public static function obtenerPedidos($id){
+    private static function obtenerPedidos($id){
         $bd = AccesoDatos::obtenerInstancia();
         $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE idCocinero = :id AND estado = 'en preparacion'");
         $select->bindValue(":id", $id, PDO::PARAM_INT);
@@ -114,28 +114,32 @@ class Empleado{
         $consulta->execute();
     }
     public static function atenderCliente($pedido,$nombre,$foto=null){
-        // consigo el puesto segun la comida ej: "ferenet con coca -> bartender"
-        $encargado = Empleado::obtenerEncargado($pedido);
-        // obtengo todos los empleados que puede ejecutar el pedido
-        $empleadosEncontrados = Empleado::obtenerEmpleadosPorPuesto($encargado);
-        $i = array_rand($empleadosEncontrados);
-        $empleadoEncontrado = $empleadosEncontrados[$i];
-        if($empleadoEncontrado != false){
+        // Consigo el puesto según la comida, ej: "fernet con coca -> bartender"
+        $encargado = self::obtenerEncargado($pedido);                
+                // Obtengo todos los empleados que pueden ejecutar el pedido
+        $empleadosEncontrados = self::obtenerEmpleadosPorPuesto($encargado);        
+        if (count($empleadosEncontrados) > 0) {
+            $i = array_rand($empleadosEncontrados);
+            $empleadoEncontrado = $empleadosEncontrados[$i];   
             $dataProducto = Producto::obtenerProducto($pedido);
-            $mozos = Empleado::obtenerEmpleadosPorPuesto("mozo");
-            $i = array_rand($mozos);
-            $mozo = $mozos[$i];
-            echo ("mi nombre es ".$mozo["nombre"]. " y sere su mozo esta noche<br>");
-            $mesa = Mesa::AsignarMesa();
-            Mesa::ActualizarEstadoMesa($mesa,"con cliente esperando pedido");
-            echo($mozo["nombre"]." le asigna la mesa ".$mesa." al cliente ".$nombre."<br>");
-            echo("el pedido esta a cargo de ".$empleadoEncontrado["nombre"]." <br>");
-            $encargo = new Pedido();
-            $encargo->guardar();
-            //idProducto, idMesa; idMozo; idCocinero; cancelado; foto
-            Pedido::actualizarPedido($encargo->id,$dataProducto["id"], $mesa, $mozo["id"],$empleadoEncontrado["id"],false,$foto);
-        }else{
-            echo "no hay empleados que raro no?<br>";
+            $mozos = self::obtenerEmpleadosPorPuesto("mozo");                    
+            if (count($mozos) > 0) {
+                $i = array_rand($mozos);
+                $mozo = $mozos[$i];
+                echo ("Mi nombre es " . $mozo["nombre"] . " y seré su mozo esta noche<br>");
+                $mesa = Mesa::AsignarMesa();
+                Mesa::ActualizarEstadoMesa($mesa, "con cliente esperando pedido");
+                echo($mozo["nombre"] . " le asigna la mesa " . $mesa . " al cliente " . $nombre . "<br>");
+                echo("El pedido está a cargo de " . $empleadoEncontrado["nombre"] . "<br>");                        
+                $encargo = new Pedido();
+                $encargo->guardar();
+                // idProducto, idMesa, idMozo, idCocinero, cancelado, foto
+                Pedido::actualizarPedido($encargo->id, $dataProducto["id"], $mesa, $mozo["id"], $empleadoEncontrado["id"], false, $foto);
+            } else {
+                echo "No hay mozos disponibles<br>";                
+            }
+        } else {
+            echo "No hay empleados que puedan realizar el pedido<br>";
         }
     }
     public static function obtenerEmpleadosPorPuesto($puesto){

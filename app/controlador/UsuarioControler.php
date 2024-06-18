@@ -57,7 +57,7 @@ class UsuarioControler {
         $parametros = $request->getParsedBody();
         if(isset($parametros["nombre"]) && isset($parametros["clave"])){
             $token = $this->registrarIngreso($parametros["nombre"],$parametros["clave"]);
-            if($token){
+            if($token != false){
                 $response = $response->withHeader('Authorization', 'Bearer ' . $token)
                 ->withHeader('Content-Type', 'application/json');
                 $response->getBody()->write("Ingreso registrado correctamente.");
@@ -67,11 +67,16 @@ class UsuarioControler {
             $response->getBody()->write("error debes colocar el usuario y contraseña<br>");
             return $response->withStatus(400);
         }
+        return $response;
     }
     private function registrarIngreso($nombre, $clave){
         $usuario = Usuario::obtenerUsuario($nombre);
-        if($usuario["clave"] != $clave){
+        if(empty($usuario)){
+            echo "usuario inexistente o despedido<br>";
+        }
+        else if($usuario["clave"] != $clave){
             echo "clave incorreta";
+            return false;
         }
         if(!empty($usuario)){
             return AuthMiddleware::generarToken($usuario["puesto"],$usuario["id"]);

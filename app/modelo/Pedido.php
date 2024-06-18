@@ -73,5 +73,24 @@ class Pedido{
         $update->bindValue(":id",$id,PDO::PARAM_INT);
         $update->bindValue(":cancelado",true,PDO::PARAM_BOOL);
     }
-    
+    public static function VerPrecio($idMesa){
+        // obtener pedidos de la misma mesa
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos WHERE idMesa = :idMesa");
+        $select->bindValue(":idMesa",$idMesa, PDO::PARAM_INT);
+        $select->execute();
+        $productos = $select->fetchAll(PDO::FETCH_ASSOC);
+        $precioFinal = 0;
+        foreach($productos as $producto){
+            //obtener el precio del producto individual
+            $bd = AccesoDatos::obtenerInstancia();
+            $select = $bd->prepararConsulta("SELECT precio FROM producto WHERE id = :id");
+            $select->bindValue(":id",$producto["idProducto"],PDO::PARAM_STR);
+            $select->execute();
+            $precio = $select->fetch(PDO::FETCH_ASSOC);
+            $precioFinal += intval($precio['precio']);
+        }
+        var_dump($precioFinal);
+        return $precioFinal;
+    }
 }

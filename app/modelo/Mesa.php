@@ -74,30 +74,35 @@ class Mesa{
         $consulta->execute();
     }
     public static function CalificarMesa($idmesa, $calificacion){
-        if($idmesa == self::$idMesa && self::$estado = "cerrada"){
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE idmesa = :idmesa");
-            $consulta->bindParam(':idmesa', $idmesa, PDO::PARAM_STR);
-            $consulta->execute();
-            $result = $consulta->fetch(PDO::FETCH_ASSOC);
-            if ($result && !empty($result['puntuacion'])) {
-                $puntuaciones = json_decode($result['puntuacion'], true);
-                $puntuaciones[] = $calificacion;
-                $promedio = array_sum($puntuaciones) / count($puntuaciones);
-            } else {
-                $promedio = $calificacion;    
-            }
-            $bd = AccesoDatos::obtenerInstancia();
-            $update = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE idmesa = :idmesa");
-            $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
-            $update->bindParam(':idmesa', $idmesa, PDO::PARAM_INT);
-            $update->execute();
+        $bd = AccesoDatos::obtenerInstancia();
+        $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE idmesa = :idmesa AND estado = 'cerrada'");
+        $consulta->bindParam(':idmesa', $idmesa, PDO::PARAM_STR);
+        $consulta->execute();
+        $result = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($result && !empty($result['puntuacion'])) {
+            $puntuaciones = json_decode($result['puntuacion'], true);
+            $puntuaciones[] = $calificacion;
+            $promedio = array_sum($puntuaciones) / count($puntuaciones);
+        } else {
+            $promedio = $calificacion;    
         }
+        $bd = AccesoDatos::obtenerInstancia();            
+        $update = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE idmesa = :idmesa");
+        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
+        $update->bindParam(':idmesa', $idmesa, PDO::PARAM_INT);
+        $update->execute();
     }
     public static function MostarMesas(){
         $db = AccesoDatos::obtenerInstancia();
         $select = $db->prepararConsulta("SELECT * FROM mesas");
         $select->execute();
         return $select->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function MostarMesa($id){
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT * FROM mesas WHERE id = :id");
+        $select->bindValue(":id",$id, PDO::PARAM_INT);
+        $select->execute();
+        return $select->fetch(PDO::FETCH_ASSOC);
     }
 }
