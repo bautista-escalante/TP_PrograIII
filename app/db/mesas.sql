@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2024 a las 23:56:38
+-- Tiempo de generación: 18-06-2024 a las 16:29:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -41,12 +41,13 @@ CREATE TABLE `mesas` (
 
 INSERT INTO `mesas` (`id`, `estado`, `puntuacion`, `codigoMesa`, `fechaBaja`) VALUES
 (1, 'cerrada', 5, '45typ', NULL),
-(2, 'cerrada', NULL, '55tew', NULL),
-(3, 'cerrada', NULL, '34rtg', NULL),
+(2, 'con cliente esperando pedido', NULL, '55tew', NULL),
+(3, 'con cliente pagando', 5, '34rtg', NULL),
 (4, 'cerrada', NULL, '5y7qd', NULL),
-(5, 'cerrada', NULL, 'bFo1r', NULL),
-(6, 'cerrada', NULL, '14YLH', NULL),
-(7, 'cerrada', NULL, 'sb48S', NULL);
+(5, 'con cliente pagando', NULL, 'bFo1r', NULL),
+(6, 'con cliente esperando pedido', NULL, '14YLH', NULL),
+(7, 'con cliente esperando pedido', NULL, 'sb48S', NULL),
+(8, 'con cliente pagando', NULL, 'fJzZV', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -66,7 +67,7 @@ ALTER TABLE `mesas`
 -- AUTO_INCREMENT de la tabla `mesas`
 --
 ALTER TABLE `mesas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

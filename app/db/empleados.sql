@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2024 a las 23:56:27
+-- Tiempo de generación: 18-06-2024 a las 16:29:32
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -30,10 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `empleados` (
   `id` int(11) NOT NULL,
   `nombre` varchar(20) NOT NULL,
-  `pendientes` varchar(60) NOT NULL,
   `tipo` varchar(20) NOT NULL,
   `ocupado` tinyint(1) NOT NULL,
-  `puntuacion` int(11) DEFAULT NULL,
+  `puntuacion` float DEFAULT NULL,
   `deleted_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -41,13 +40,17 @@ CREATE TABLE `empleados` (
 -- Volcado de datos para la tabla `empleados`
 --
 
-INSERT INTO `empleados` (`id`, `nombre`, `pendientes`, `tipo`, `ocupado`, `puntuacion`, `deleted_at`) VALUES
-(1, 'pepe', '', 'mozo', 0, NULL, '2024-06-04'),
-(4, 'eduardo', '', 'mozo', 1, NULL, NULL),
-(5, 'ricardo', '', 'cervecero', 1, NULL, NULL),
-(6, 'franco', '', 'bartender', 0, NULL, NULL),
-(7, 'pablo', '', 'cocinero', 0, NULL, NULL),
-(8, 'pablo', '', 'cocinero', 0, NULL, NULL);
+INSERT INTO `empleados` (`id`, `nombre`, `tipo`, `ocupado`, `puntuacion`, `deleted_at`) VALUES
+(1, 'pepe', 'mozo', 0, NULL, '2024-06-04'),
+(4, 'eduardo', 'mozo', 1, 4.5, NULL),
+(5, 'ricardo', 'cervecero', 1, NULL, NULL),
+(7, 'luis', 'socio', 0, NULL, NULL),
+(8, 'alejandro', 'socio', 0, NULL, NULL),
+(9, 'isabel', 'socio', 0, NULL, NULL),
+(10, 'pablo', 'cocinero', 0, NULL, NULL),
+(11, 'tomas', 'cocinero', 1, 4.5, NULL),
+(13, 'ana', 'bartender', 0, NULL, NULL),
+(14, 'micaela', 'bartender', 0, NULL, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -67,7 +70,7 @@ ALTER TABLE `empleados`
 -- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

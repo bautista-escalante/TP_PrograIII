@@ -16,7 +16,40 @@ class ProductoControler {
             return $response->withStatus(400); 
         }
     }
-
+    public function agregarProductos(Request $request, Response $response, $args) {
+        $archivoSubido = $request->getUploadedFiles();
+        $primeraLinea = false;
+        if (isset($archivoSubido['productoscsv'])) {
+            $csvFile = $archivoSubido['productoscsv'];
+            if ($csvFile->getError() === UPLOAD_ERR_OK) {      
+                $tempFilePath = $csvFile->getFilePath();
+                $fileHandle = fopen($tempFilePath, 'r');
+                if ($fileHandle !== FALSE) {
+                    while (($data = fgetcsv($fileHandle, 1000, ",")) !== FALSE) {
+                        if (empty($data[0]) || empty($data[1]) || empty($data[2])) {
+                            $response->getBody()->write("Error: los campos nombre, puesto encargado y precio son obligatorios\n");
+                        } else {
+                            if($primeraLinea){
+                                $nuevoProducto = new Producto($data[0], $data[1], $data[2]);
+                                $nuevoProducto->guardar();
+                                $response->getBody()->write("los datos ya forman parte del menu");
+                            }
+                            $primeraLinea = true;
+                        }
+                    }
+                    fclose($fileHandle);
+                } else {
+                    $response->getBody()->write("Error al abrir el archivo csv\n");
+                }
+            } else {
+                $response->getBody()->write("Error subiendo el archivo csv\n");
+            }
+        } else {
+            $response->getBody()->write("No se ha subido ningún archivo\n");
+        }
+        return $response;
+    }
+    
     public function borrarProducto(Request $request, Response $response, $args) {
         $id = $args['id'];
         if (!empty($id)) {

@@ -12,6 +12,12 @@
 				{
 					"name": "contratar",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -19,23 +25,34 @@
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "franco",
+									"value": "matin",
 									"type": "text"
 								},
 								{
 									"key": "puesto",
-									"value": "bartender",
+									"value": "cocinero",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "m4r51",
 									"type": "text"
 								}
 							]
 						},
-						"url": "http://localhost:100/contratar"
+						"url": "http://localhost:100/abmEmpleado/contratar"
 					},
 					"response": []
 				},
 				{
 					"name": "despedir",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -48,13 +65,19 @@
 								}
 							]
 						},
-						"url": "http://localhost:100/despedir/1"
+						"url": "http://localhost:100/abmEmpleado/despedir/1"
 					},
 					"response": []
 				},
 				{
 					"name": "suspender",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -72,7 +95,7 @@
 								}
 							]
 						},
-						"url": "http://localhost:100/suspender/5"
+						"url": "http://localhost:100/abmEmpleado/suspender/2"
 					},
 					"response": []
 				},
@@ -81,7 +104,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarEmpleados/cocinero"
+						"url": "http://localhost:100/abmEmpleado/listarEmpleados/cocinero"
 					},
 					"response": []
 				},
@@ -90,7 +113,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarEmpleados/bartender"
+						"url": "http://localhost:100/abmEmpleado/listarEmpleados/bartender"
 					},
 					"response": []
 				},
@@ -99,7 +122,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarEmpleados/mozo"
+						"url": "http://localhost:100/abmEmpleado/listarEmpleados/mozo"
 					},
 					"response": []
 				},
@@ -108,7 +131,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarEmpleados/cervecero"
+						"url": "http://localhost:100/abmEmpleado/listarEmpleados/cervecero"
 					},
 					"response": []
 				}
@@ -120,27 +143,45 @@
 				{
 					"name": "agregarMesa",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "POST",
 						"header": [],
-						"url": "http://localhost:100/agregarMesa"
+						"url": "http://localhost:100/abmMesa/agregarMesa"
 					},
 					"response": []
 				},
 				{
 					"name": "borrarMesa",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:100/borrarMesa/1"
+						"url": "http://localhost:100/abmMesa/borrarMesa/1"
 					},
 					"response": []
 				},
 				{
 					"name": "modificarMesa",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:100/modificarMesa/1/5"
+						"url": "http://localhost:100/abmMesa/modificarMesa/1/6"
 					},
 					"response": []
 				},
@@ -149,7 +190,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarMesas"
+						"url": "http://localhost:100/abmMesa/listarMesas"
 					},
 					"response": []
 				}
@@ -160,61 +201,98 @@
 			"item": [
 				{
 					"name": "ingresar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "pepe",
+									"value": "luis",
 									"type": "text"
 								},
 								{
 									"key": "clave",
-									"value": "1234",
+									"value": "lu1s",
 									"type": "text"
 								}
 							]
 						},
-						"url": "http://localhost:100/ingresar"
+						"url": "http://localhost:100/abmUsuario/ingresar"
 					},
 					"response": []
 				},
 				{
 					"name": "crearCuenta",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
 									"key": "nombre",
-									"value": "yass",
+									"value": "tomas",
 									"type": "text"
 								},
 								{
 									"key": "clave",
-									"value": "1wy54",
+									"value": "tre989",
 									"type": "text"
 								},
 								{
 									"key": "puesto",
-									"value": "mozo",
+									"value": "cocinero",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:100/crearCuenta?nombre=eduardo&puesto=mozo&clave=34rt5",
+							"raw": "http://localhost:100/abmUsuario/crearCuenta?nombre=eduardo&puesto=mozo&clave=34rt5",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "100",
 							"path": [
+								"abmUsuario",
 								"crearCuenta"
 							],
 							"query": [
@@ -238,19 +316,31 @@
 				{
 					"name": "eliminarUsuario",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "formdata",
 							"formdata": []
 						},
-						"url": "http://localhost:100/eliminarUsuario/1"
+						"url": "http://localhost:100/abmUsuario/eliminarUsuario/1"
 					},
 					"response": []
 				},
 				{
 					"name": "ModificarUsuario",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -273,7 +363,7 @@
 								}
 							]
 						},
-						"url": "http://localhost:100/ModificarUsuario/5/eduardo/4678"
+						"url": "http://localhost:100/abmUsuario/ModificarUsuario/5/eduardo/4678"
 					},
 					"response": []
 				},
@@ -282,7 +372,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarUsuarios"
+						"url": "http://localhost:100/abmUsuario/listarUsuarios"
 					},
 					"response": []
 				}
@@ -294,6 +384,12 @@
 				{
 					"name": "agregarProducto",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -316,38 +412,265 @@
 								}
 							]
 						},
-						"url": "http://localhost:100/agregarProducto"
+						"url": "http://localhost:100/abmProducto/agregarProducto"
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "borrarProducto",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "formdata",
 							"formdata": []
 						},
-						"url": "http://localhost:100/borrarProducto/1"
+						"url": "http://localhost:100/abmProducto/borrarProducto/1"
 					},
 					"response": []
 				},
 				{
 					"name": "modificarProducto",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
 						"method": "PUT",
 						"header": [],
-						"url": "http://localhost:100/modificarProducto/1/400"
+						"url": "http://localhost:100/abmProducto/modificarProducto/1/400"
 					},
 					"response": []
 				},
 				{
-					"name": "listarProductos",
+					"name": "verMenu",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:100/listarProductos"
+						"url": "http://localhost:100/abmProducto/listarProductos"
+					},
+					"response": []
+				},
+				{
+					"name": "agregarProductos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productoscsv",
+									"type": "file",
+									"src": "/C:/Users/B4U71S74/Downloads/nuevoMenu.csv"
+								}
+							]
+						},
+						"url": "http://localhost:100/abmProducto/agregarProductos"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "la comanda",
+			"item": [
+				{
+					"name": "atender cliente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "juan",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "pedido",
+									"value": "Caipirinha",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:100/laComanda/atender"
+					},
+					"response": []
+				},
+				{
+					"name": "servir",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:100/laComanda/servir"
+					},
+					"response": []
+				},
+				{
+					"name": "cocinar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:100/laComanda/cocinar"
+					},
+					"response": []
+				},
+				{
+					"name": "prepararTrago",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://localhost:100/laComanda/prepararTrago"
+					},
+					"response": []
+				},
+				{
+					"name": "servirCerveza",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:100/laComanda/servirCerveza"
+					},
+					"response": []
+				},
+				{
+					"name": "cerrarMesa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": "http://localhost:100/laComanda/cerrarMesa/4"
+					},
+					"response": []
+				},
+				{
+					"name": "cobrarMesa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "http://localhost:100/laComanda/cobrarMesa/8"
+					},
+					"response": []
+				},
+				{
+					"name": "puntuar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "idMesa",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "calificacionMozo",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "calificacionCocinero",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "calificacionMesa",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:100/laComanda/puntuar"
 					},
 					"response": []
 				}

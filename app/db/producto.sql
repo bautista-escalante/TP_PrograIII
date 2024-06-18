@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-06-2024 a las 23:56:51
+-- Tiempo de generación: 18-06-2024 a las 16:29:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -50,7 +50,16 @@ INSERT INTO `producto` (`id`, `nombre`, `puestoResponsable`, `precio`, `fechaBaj
 (8, 'Malbec', 'bartender', '1200', NULL),
 (9, 'cerveza ipa', 'cervecero', '600', NULL),
 (10, 'cerveza roja', 'cervecero', '650', NULL),
-(11, 'quilmes', 'cervecero', '400', NULL);
+(11, 'quilmes', 'cervecero', '400', NULL),
+(13, 'nombre', 'puestoResponsable', 'precio', NULL),
+(14, 'Spaghetti ', 'cocinero', '1250', NULL),
+(15, 'canelones', 'cocinero', '1475', NULL),
+(16, 'Lasagna', 'cocinero', '1525', NULL),
+(17, 'Ravioles ', 'cocinero', '1600', NULL),
+(18, 'Margarita', 'bartender', '850', NULL),
+(19, 'Piña Colada', 'bartender', '925', NULL),
+(20, 'Mojito', 'bartender', '900', NULL),
+(21, 'Daiquiri', 'bartender', '875', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -70,7 +79,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

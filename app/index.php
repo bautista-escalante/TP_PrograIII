@@ -42,6 +42,7 @@ $app->group("/abmMesa", function (RouteCollectorProxy $grupo) {
 
 $app->group("/abmProducto", function (RouteCollectorProxy $grupo) {
     $grupo->post("/agregarProducto", ProductoControler::class . ":agregarProducto")->add(new AuthMiddleware("socio"));
+    $grupo->post("/agregarProductos", ProductoControler::class . ":agregarProductos")->add(new AuthMiddleware("socio"));
     $grupo->delete("/borrarProducto/{id}", ProductoControler::class . ":borrarProducto")->add(new AuthMiddleware("socio"));
     $grupo->put("/modificarProducto/{id}/{precio}", ProductoControler::class . ":modificarProducto")->add(new AuthMiddleware("socio"));
     $grupo->get("/listarProductos", ProductoControler::class . ":listarProductos");

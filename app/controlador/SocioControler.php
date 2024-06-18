@@ -51,7 +51,7 @@ class SocioControler {
         $response->getBody()->write(stream_get_contents($csv));
         fclose($csv);
         return $response->withHeader('Content-Type', 'text/csv')
-                        ->withHeader('Content-Disposition', 'attachment; filename="empleados.csv"');
+                        ->withHeader('Content-Disposition', 'attachment; filename="'.$puesto.'.csv"');
     }
     public function rotar(Request $request, Response $response, $args){
         try{
