@@ -46,12 +46,18 @@ class UsuarioControler {
             return $response->withStatus(500);
         }
     }
-    public function listarUsuarios(Request $request, Response $response, $args) {
+    public function listarUsuarios(Request $request, Response $response, $args){
         $usuarios = Usuario::obtenerTodos();
-        foreach ($usuarios as $usuario) {
-            $response->getBody()->write("Nombre: " . $usuario["usuario"] . "<br>Puesto: " . $usuario["puesto"] . ".<br>");
+        $csv = fopen('php://temp', 'w+');
+        fputcsv($csv, ['Nombre', 'puesto']);
+        foreach ($usuarios as $usuario){
+            fputcsv($csv, [$usuario["usuario"], $usuario["puesto"]]);
         }
-        return $response->withStatus(200);
+        rewind($csv);
+        $response->getBody()->write(stream_get_contents($csv));
+        fclose($csv);
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="usuarios.csv"');
     }
     public function ingresar(Request $request, Response $response, $args){
         $parametros = $request->getParsedBody();

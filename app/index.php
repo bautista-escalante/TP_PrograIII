@@ -29,8 +29,8 @@ $app->group("/abmUsuario", function (RouteCollectorProxy $grupo) {
     $grupo->post("/crearCuenta", UsuarioControler::class . ":crearCuenta")->add(new AuthMiddleware("socio"));
     $grupo->delete("/eliminarUsuario/{id}", UsuarioControler::class . ":eliminarUsuario")->add(new AuthMiddleware("socio"));
     $grupo->put("/modificarUsuario/{id}/{nombre}/{clave}", UsuarioControler::class . ":modificarUsuario")->add(new AuthMiddleware("socio"));
-    $grupo->get("/listarUsuarios", UsuarioControler::class . ":listarUsuarios");
     $grupo->post("/ingresar", UsuarioControler::class.":ingresar");
+    $grupo->get("/listarUsuarios", UsuarioControler::class . ":listarUsuarios");
 });
 
 $app->group("/abmMesa", function (RouteCollectorProxy $grupo) {

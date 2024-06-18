@@ -49,10 +49,16 @@ class ProductoControler {
 
     public function listarProductos(Request $request, Response $response, $args) {
         $productos = Producto::mostrarProductos();
-        foreach ($productos as $producto) {
-            $response->getBody()->write("Nombre: " . $producto["nombre"] . "<br>Precio: " . $producto["precio"] . ".<br><br>");
+        $csv = fopen('php://temp', 'w+');
+        fputcsv($csv, ['Nombre',  'puesto_responsable','precio']);
+        foreach ($productos as $producto){
+            fputcsv($csv, [$producto["nombre"], $producto['puestoResponsable'],$producto["precio"]]);
         }
-        return $response->withStatus(200);
+        rewind($csv);
+        $response->getBody()->write(stream_get_contents($csv));
+        fclose($csv);
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="menu.csv"');
     }
 }
 

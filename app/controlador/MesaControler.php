@@ -38,11 +38,17 @@ class MesaControler {
             return $response->withStatus(500);
         }
     }
-    public function listarMesas(Request $request, Response $response, $args) {
+    public function listarMesas(Request $request, Response $response, $args){
         $mesas = Mesa::MostarMesas();
-        foreach ($mesas as $mesa) {
-            $response->getBody()->write("Código: " . $mesa["codigoMesa"] . "<br>Estado: " . $mesa["estado"] . ".<br>");
+        $csv = fopen('php://temp', 'w+');
+        fputcsv($csv, ['mesa', 'estado']);
+        foreach ($mesas as $mesa){
+            fputcsv($csv, [$mesa["id"], $mesa["estado"]]);
         }
-        return $response->withStatus(200);
+        rewind($csv);
+        $response->getBody()->write(stream_get_contents($csv));
+        fclose($csv);
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="mesas.csv"');
     }
 }

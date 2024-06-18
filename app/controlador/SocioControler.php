@@ -42,10 +42,16 @@ class SocioControler {
     public function listarEmpleados(Request $request, Response $response, $args) {
         $puesto = $args["puesto"];
         $empleados = Empleado::obtenerEmpleadosPorPuesto($puesto);
-        foreach ($empleados as $empleado) {
-            $response->getBody()->write("Nombre: " . $empleado["nombre"] . ".<br>");
+        $csv = fopen('php://temp', 'w+');
+        fputcsv($csv, ['Nombre', 'tipo', 'puntuacion']);
+        foreach ($empleados as $empleado){
+            fputcsv($csv, [$empleado["nombre"], $empleado["tipo"], $empleado["puntuacion"]]);
         }
-        return $response;
+        rewind($csv);
+        $response->getBody()->write(stream_get_contents($csv));
+        fclose($csv);
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="empleados.csv"');
     }
     public function rotar(Request $request, Response $response, $args){
         try{
