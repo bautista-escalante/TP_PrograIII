@@ -49,42 +49,25 @@ class Empleado{
             echo "no hay pedidos pendientes";
         }
     }
-    public static function calificarMozo($idMozo, $calificacion){
+    public static function calificarEmpleado($idEmpleado, $calificacion, $tipo) {
         $bd = AccesoDatos::obtenerInstancia();
-        $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = mozo");
-        $select->bindParam(':id', $idMozo, PDO::PARAM_STR);
+        $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = :tipo");
+        $select->bindParam(':id', $idEmpleado, PDO::PARAM_INT);
+        $select->bindParam(':tipo', $tipo, PDO::PARAM_STR);
         $select->execute();
         $result = $select->fetch(PDO::FETCH_ASSOC);
-        if ($result && !empty($result['puntuacion'])){
-            $puntuaciones = json_decode($result['puntuacion'], true);
-            $puntuaciones[] = $calificacion;
-            $promedio = array_sum($puntuaciones) / count($puntuaciones);
-        } else {
-            $promedio = $calificacion;    
+        $puntuaciones = [];
+        if(!empty($result)){
+            foreach($result as $punto){
+                $puntuaciones[] = intval($punto);
+            }
         }
-        $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = mozo");
-        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
-        $update->bindParam(':id', $idMozo, PDO::PARAM_INT);
-        $update->execute();
-    }
-    public static function calificarCocinero($idCocinero, $calificacion){
-        $bd = AccesoDatos::obtenerInstancia();
-        $select = $bd->prepararConsulta("SELECT puntuacion FROM empleados WHERE id = :id AND tipo = cocinero");
-        $select->bindParam(':id', $idCocinero, PDO::PARAM_STR);
-        $select->execute();
-        $result = $select->fetch(PDO::FETCH_ASSOC);
-        if ($result && !empty($result['puntuacion'])) {
-            $puntuaciones = json_decode($result['puntuacion'], true);
-            $puntuaciones[] = $calificacion;
-            $promedio = array_sum($puntuaciones) / count($puntuaciones);
-        } else {
-            $promedio = $calificacion;    
-        }
-        $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = cocinero");
-        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
-        $update->bindParam(':id', $idCocinero, PDO::PARAM_INT);
+        $puntuaciones[] = $calificacion;
+        $promedio = array_sum($puntuaciones) / count($puntuaciones);
+        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = :tipo");
+        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR); 
+        $update->bindParam(':id', $idEmpleado, PDO::PARAM_INT);
+        $update->bindParam(':tipo', $tipo, PDO::PARAM_STR);
         $update->execute();
     }
     public function guardar() { 

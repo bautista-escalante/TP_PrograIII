@@ -15,6 +15,7 @@ include_once "middleware/AuthMiddleware.php";
 $app = AppFactory::create();
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+$app->addBodyParsingMiddleware();
 
 $app->group("/abmEmpleado", function (RouteCollectorProxy $grupo) {
     $grupo->post("/contratar", SocioControler::class . ":contratar")->add(new AuthMiddleware("socio" ));
@@ -54,6 +55,7 @@ $app->group("/laComanda",function (RouteCollectorProxy $grupo) {
     $grupo->post("/servirCerveza", ComandaControler::class.":servirCerveza")->add(new AuthMiddleware("cervecero"));
     $grupo->put("/cerrarMesa/{id}", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
     $grupo->put("/cobrarMesa/{id}", ComandaControler::class.":cobrar")->add(new AuthMiddleware("socio"));
+    $grupo->put("/puntuar", ComandaControler::class.":puntuar");
 });
 
 $app->run();

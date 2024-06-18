@@ -75,8 +75,8 @@ class Mesa{
     }
     public static function CalificarMesa($idmesa, $calificacion){
         $bd = AccesoDatos::obtenerInstancia();
-        $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE idmesa = :idmesa AND estado = 'cerrada'");
-        $consulta->bindParam(':idmesa', $idmesa, PDO::PARAM_STR);
+        $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE id = :id AND estado = 'cerrada'");
+        $consulta->bindParam(':id', $idmesa, PDO::PARAM_STR);
         $consulta->execute();
         $result = $consulta->fetch(PDO::FETCH_ASSOC);
         if ($result && !empty($result['puntuacion'])) {
@@ -87,9 +87,9 @@ class Mesa{
             $promedio = $calificacion;    
         }
         $bd = AccesoDatos::obtenerInstancia();            
-        $update = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE idmesa = :idmesa");
+        $update = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE id = :id");
         $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);
-        $update->bindParam(':idmesa', $idmesa, PDO::PARAM_INT);
+        $update->bindParam(':id', $idmesa, PDO::PARAM_INT);
         $update->execute();
     }
     public static function MostarMesas(){

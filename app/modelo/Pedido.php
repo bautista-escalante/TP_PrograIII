@@ -93,4 +93,13 @@ class Pedido{
         var_dump($precioFinal);
         return $precioFinal;
     }
+    public static function obtenerPedido($idMesa){
+        if(!empty($idMesa)){
+            $bd = AccesoDatos::obtenerInstancia();
+            $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE idMesa = :idMesa");
+            $select->bindValue(":idMesa",$idMesa, PDO::PARAM_INT);
+            $select->execute();
+            return $select->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
 }

@@ -77,8 +77,41 @@ class ComandaControler{
                     return $response->withStatus(400);
                 }
             } else {
-                $response->getBody()->write("Error: coloca los parámetros para cerrar la mesa.<br>");
+                $response->getBody()->write("Error: coloca los parámetros para cobrar el pedido.<br>");
                 return $response->withStatus(400);
+            }
+        } catch (PDOException $e) {
+            $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
+            return $response->withStatus(500);
+        }
+    }
+    public function puntuar(Request $request, Response $response){
+        try {
+            $params = $request->getParsedBody();
+            $idMesa = $params['idMesa'];
+            $pedidos = Pedido::obtenerPedido($idMesa);
+            foreach($pedidos as $pedido){
+                $calificacionMozo = $params['calificacionMozo'];
+                $calificacionMesa = $params['calificacionMesa'];
+                $calificacionCocinero = $params['calificacionCocinero'];
+                $idCocinero = $pedido["idCocinero"];
+                $idMozo  = $pedido["idMozo"];
+                if (isset($idMesa, $idCocinero, $idMozo) && !empty($idMesa)&& !empty($idMozo)&& !empty($idCocinero)) {
+                    $mesa = Mesa::MostarMesa($idMesa);
+                    if($mesa['estado'] === "con cliente pagando"){
+                        Mesa::CalificarMesa($idMesa,$calificacionMesa);
+                        Empleado::calificarEmpleado($idMozo, $calificacionMozo, "mozo");
+                        Empleado::calificarEmpleado($idCocinero, $calificacionCocinero, "cocinero");
+                        $response->getBody()->write("su calificacion fue enviada.<br>");
+                        return $response->withStatus(200);
+                    }else{
+                        $response->getBody()->write("Error: para puntuar el pedido ebe estar pagado.<br>");
+                        return $response->withStatus(400);
+                    }
+                } else {
+                    $response->getBody()->write("Error: coloca los parámetros para cobrar el pedido.<br>");
+                    return $response->withStatus(400);
+                }
             }
         } catch (PDOException $e) {
             $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
