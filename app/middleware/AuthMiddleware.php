@@ -24,20 +24,6 @@ class AuthMiddleware
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
-    public static function generarToken($sector, $idEmpleado)
-    {
-        try{
-            $payload = [
-                'iat' => time(), 
-                'exp' => time() + 1800, // 30 min
-                'sector' => $sector,
-                'idEmpleado'=> $idEmpleado];
-            return JWT::encode($payload, $_ENV["secretKey"], 'HS256');
-        }catch (Exception){
-            echo "error al crear el token";
-        }
-        return false;
-    }
     private function verificarToken(Request $request){
         $authHeader = $request->getHeaderLine('Authorization');
         $token = str_replace('Bearer ', '', $authHeader);

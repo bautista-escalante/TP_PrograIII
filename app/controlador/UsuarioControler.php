@@ -1,6 +1,8 @@
 <?php
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 include_once "modelo/Usuario.php";
 include_once "db/AccesoDatos.php";
 class UsuarioControler {
@@ -64,10 +66,8 @@ class UsuarioControler {
         if(isset($parametros["nombre"]) && isset($parametros["clave"])){
             $token = $this->registrarIngreso($parametros["nombre"],$parametros["clave"]);
             if($token != false){
-                $response = $response->withHeader('Authorization', 'Bearer ' . $token)
-                ->withHeader('Content-Type', 'application/json');
-                $response->getBody()->write("Ingreso registrado correctamente.");
-                return $response->withStatus(200);
+                $response->getBody()->write(json_encode(["JWT"=>$token]));
+                return $response->withHeader('Content-Type', 'application/json');
             }
         }else{
             $response->getBody()->write("error debes colocar el usuario y contraseña<br>");
@@ -80,12 +80,21 @@ class UsuarioControler {
         if(empty($usuario)){
             echo "usuario inexistente o despedido<br>";
         }
-        else if($usuario["clave"] != $clave){
+        else if(!password_verify($clave, $usuario["clave"])){
             echo "clave incorreta";
             return false;
         }
         if(!empty($usuario)){
-            return AuthMiddleware::generarToken($usuario["puesto"],$usuario["id"]);
+            try{
+                $payload = [
+                    'iat' => time(), 
+                    'exp' => time() + 1800, // 30 min
+                    'sector' => $usuario["puesto"],
+                    'idEmpleado'=> $usuario["id"]];
+                return JWT::encode($payload, $_ENV["secretKey"], 'HS256');
+            }catch (Exception){
+                echo "error al crear el token";
+            }
         }
         else{
             echo "error no tienes cuenta dentro del sistema";

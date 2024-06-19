@@ -18,26 +18,39 @@ class ProductoControler {
     }
     public function agregarProductos(Request $request, Response $response, $args) {
         $archivoSubido = $request->getUploadedFiles();
+        $productosExistentes = Producto::mostrarProductos();
         $primeraLinea = false;
-        if (isset($archivoSubido['productoscsv'])) {
+        if (isset($archivoSubido['productoscsv'])){
             $csvFile = $archivoSubido['productoscsv'];
-            if ($csvFile->getError() === UPLOAD_ERR_OK) {      
-                $tempFilePath = $csvFile->getFilePath();
-                $fileHandle = fopen($tempFilePath, 'r');
-                if ($fileHandle !== FALSE) {
-                    while (($data = fgetcsv($fileHandle, 1000, ",")) !== FALSE) {
+            if ($csvFile->getError() === UPLOAD_ERR_OK){
+                $rutaTemp = $csvFile->getFilePath();
+                $archivo = fopen($rutaTemp, 'r');
+                if ($archivo !== FALSE) {
+                    while (($data = fgetcsv($archivo, 100, ",")) !== FALSE) {
                         if (empty($data[0]) || empty($data[1]) || empty($data[2])) {
                             $response->getBody()->write("Error: los campos nombre, puesto encargado y precio son obligatorios\n");
+                            break;
                         } else {
-                            if($primeraLinea){
-                                $nuevoProducto = new Producto($data[0], $data[1], $data[2]);
-                                $nuevoProducto->guardar();
-                                $response->getBody()->write("los datos ya forman parte del menu");
+                            if ($primeraLinea) {
+                                $productoExiste = false;
+                                foreach ($productosExistentes as $producto) {
+                                    if ($producto['nombre'] === $data[0]) {
+                                        $productoExiste = true;
+                                        Producto::modificarPrecioProducto($producto["id"],$data[2]);
+                                        $response->getBody()->write("precio actualizado<br>");
+                                        break;
+                                    }
+                                }
+                                if (!$productoExiste){
+                                    $nuevoProducto = new Producto($data[0], $data[1], $data[2]);
+                                    $nuevoProducto->guardar();
+                                    $response->getBody()->write("el Producto agregado al menu <br>");
+                                }
                             }
                             $primeraLinea = true;
                         }
                     }
-                    fclose($fileHandle);
+                    fclose($archivo);
                 } else {
                     $response->getBody()->write("Error al abrir el archivo csv\n");
                 }
@@ -50,7 +63,7 @@ class ProductoControler {
         return $response;
     }
     
-    public function borrarProducto(Request $request, Response $response, $args) {
+    public function borrarProducto(Request $request, Response $response, $args){
         $id = $args['id'];
         if (!empty($id)) {
             Producto::eliminarProducto($id);
@@ -61,7 +74,6 @@ class ProductoControler {
             return $response->withStatus(400);
         }
     }
-
     public function modificarProducto(Request $request, Response $response, $args) {
         try {
             $id = $args['id'];
@@ -79,7 +91,6 @@ class ProductoControler {
             return $response->withStatus(500);
         }
     }
-
     public function listarProductos(Request $request, Response $response, $args) {
         $productos = Producto::mostrarProductos();
         $csv = fopen('php://temp', 'w+');

@@ -118,4 +118,20 @@ class ComandaControler{
             return $response->withStatus(500);
         }
     }
+    public function verEstadisticas(Request $request, Response $response){
+        //generar estadisticas para mesas, proucto mas vendidos
+            $params = $request->getQueryParams();
+            $name = $params['name'] ?? 'Invitado';
+            
+            $pdf = new FPDF();
+            $pdf->AddPage();
+            $pdf->SetFont('Arial', 'B', 16);
+            $pdf->Cell(40, 10, '¡Hola, ' . $name . '!');
+
+            $pdf->Output('F', 'php://output');
+        
+            $response = $response->withHeader('Content-Type', 'application/pdf')
+                                 ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"');
+            return $response;
+    }
 }
