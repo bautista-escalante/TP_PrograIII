@@ -33,16 +33,20 @@ class Empleado{
         $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE idCocinero = :id AND estado = 'en preparacion'");
         $select->bindValue(":id", $id, PDO::PARAM_INT);
         $select->execute();
-        return $select->fetchAll(PDO::FETCH_ASSOC);
+        $pedidos = $select->fetchAll(PDO::FETCH_ASSOC);
+        foreach($pedidos as $pedido){
+            Pedido::calcularTiempo($pedido["id"]);
+        }
+        return $pedidos;
     }
-    // deberia obtener este id del json de registro, segun quien ingreso la ultima vez es quier tiene el pedido
-    // verificar usarndo mw que el usuario  no sea mozo ni socio 
     public static function atenderPedidos($idEmpleado){
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
         $pedidos = Empleado::obtenerPedidos($idEmpleado);
         if(!empty($pedidos)){
             foreach($pedidos as $pedido){
+                // aca debo actualizar el tiempo de entrega del pedido
                 Pedido::ActualizarEstadoPedido("listo para servir",$pedido["id"]);
+                Pedido::actualizarFechaEntrega($pedido["id"]);
             }
         }
         else{

@@ -82,4 +82,19 @@ class Producto {
         }
         return false;
     }
+    public static function generarEstadisticaProductos(){
+        // la probabilidad de que se venda 	Caipirinha  es de ... %
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos");
+        $select->execute();
+        $productos = $select->fetchAll(PDO::FETCH_ASSOC);
+
+        $p = 0;
+        foreach($productos as $producto){
+            if(intval($producto["idProducto"]) === 7){
+                $p++;
+            }
+        }
+        return ($p / count($productos));
+    }
 }

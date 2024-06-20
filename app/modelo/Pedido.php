@@ -14,6 +14,8 @@ class Pedido{
     public $foto;
     public $cancelado;
     public $estado;
+    public $fechaInicio;
+    public $fechaEntrega;
 
     public function __construct (){
         $this->id = null;
@@ -25,7 +27,17 @@ class Pedido{
         $this->cancelado = false;
         $this->estado = "en preparacion";
         $this->codigoAlfa = $this->generarCodigo();
-        $this->tiempo = rand(1, 15);
+        $this->fechaInicio = date('Y-m-d H:i:s');
+        $this->tiempo = null;
+        $this->fechaEntrega = null;
+    }
+    public static function calcularTiempo($id){
+        $tiempo = rand(1, 15); //segundos
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE pedidos SET tiempo = :tiempo WHERE id = :id");
+        $update->bindValue(":id", $id, PDO::PARAM_INT);
+        $update->bindValue(":tiempo", $tiempo, PDO::PARAM_STR);
+        $update->execute();
     }
     private function generarCodigo() {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
@@ -40,8 +52,8 @@ class Pedido{
     }
     public function guardar() {
         $bd = AccesoDatos::obtenerInstancia();
-        $sql = "INSERT INTO pedidos (idProducto, codigoAlfa, idMesa, idMozo, idCocinero, tiempo, cancelado, foto, estado) 
-                VALUES (:idProducto, :codigoAlfa, :idMesa, :idMozo, :idCocinero, :tiempo, :cancelado, :foto, :estado)";
+        $sql = "INSERT INTO pedidos (idProducto, codigoAlfa, idMesa, idMozo, idCocinero, tiempo, cancelado, foto, estado, fechaInicio, fechaEntrega) 
+                VALUES (:idProducto, :codigoAlfa, :idMesa, :idMozo, :idCocinero, :tiempo, :cancelado, :foto, :estado, :fechaInicio, :fechaEntrega)";
         $consulta = $bd->prepararConsulta($sql);
         $consulta->bindValue(':idProducto', $this->idProducto, PDO::PARAM_INT);
         $consulta->bindValue(':codigoAlfa', $this->codigoAlfa, PDO::PARAM_STR);
@@ -52,9 +64,18 @@ class Pedido{
         $consulta->bindValue(':cancelado', $this->cancelado, PDO::PARAM_BOOL);
         $consulta->bindValue(':foto', $this->foto, PDO::PARAM_NULL);
         $consulta->bindValue(':estado', $this->estado, PDO::PARAM_STR);
+        $consulta->bindValue(':fechaInicio', $this->fechaInicio, PDO::PARAM_STR); 
+        $consulta->bindValue(':fechaEntrega', $this->fechaEntrega, PDO::PARAM_STR);
         $consulta->execute();
         $this->id = $bd->obtenerUltimoId();
     }
+    public static function actualizarFechaEntrega($idPedido){
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE pedidos SET fechaEntrega = :fechaEntrega WHERE id = :id");
+        $update->bindValue(':id', $idPedido, PDO::PARAM_INT);
+        $update->bindValue(":fechaEntrega", date("Y/m/d H:i:s"),PDO::PARAM_STR);
+        $update->execute();
+    } 
     public static function actualizarPedido($id, $idProducto=null, $idMesa=null, $idMozo=null, $idCocinero=null, $cancelado=false,$foto=null){
         $bd = AccesoDatos::obtenerInstancia();
         $update = $bd->prepararConsulta("UPDATE pedidos SET idProducto = :idProducto, idMesa = :idMesa, idMozo = :idMozo, idCocinero = :idCocinero, cancelado = :cancelado, foto= :foto WHERE id = :id");
@@ -75,6 +96,7 @@ class Pedido{
     }
     public static function VerPrecio($idMesa){
         // obtener pedidos de la misma mesa
+        // mejorar esto para que no solo tome en cuenta laa mesa sino el pedido
         $bd = AccesoDatos::obtenerInstancia();
         $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos WHERE idMesa = :idMesa");
         $select->bindValue(":idMesa",$idMesa, PDO::PARAM_INT);
@@ -101,5 +123,36 @@ class Pedido{
             $select->execute();
             return $select->fetchAll(PDO::FETCH_ASSOC);
         }
+    }
+    public static function estaATiempo($idPedido) {
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT * FROM pedidos WHERE id = :id");
+        $select->bindValue(":id", $idPedido, PDO::PARAM_INT);
+        $select->execute();
+        $pedido = $select->fetch(PDO::FETCH_ASSOC);
+        if ($pedido) {
+            $fechaInicio = strtotime($pedido["fechaInicio"]);
+            $fechaEntrega = strtotime($pedido["fechaEntrega"]);
+            $tiempo = intval($pedido["tiempo"]);
+    
+            if (($fechaEntrega - $fechaInicio) <= $tiempo) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static function GenerarEstadisticasPedido(){
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT id FROM pedidos");
+        $select->execute();
+        $ids = $select->fetchAll(PDO::FETCH_ASSOC);
+        $ATiempo = 0;
+        foreach($ids as $id){
+            if(Pedido::estaATiempo($id["id"])){
+                $ATiempo ++;
+            }
+        }
+        // probabilidad de que el tiempo se cumpla con el tiempo
+        return $ATiempo/ count($ids); 
     }
 }
