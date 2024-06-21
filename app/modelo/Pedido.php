@@ -143,12 +143,18 @@ class Pedido{
     }
     public static function GenerarEstadisticasPedido(){
         $db = AccesoDatos::obtenerInstancia();
-        $select = $db->prepararConsulta("SELECT id FROM pedidos");
+        $fecha30DiasAtras = date("Y-m-d H:i:s", strtotime("-30 days"));
+        $select = $db->prepararConsulta("SELECT id FROM pedidos WHERE fechaInicio > :fecha");
+        $select->bindValue(":fecha", $fecha30DiasAtras, PDO::PARAM_STR);
         $select->execute();
         $ids = $select->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($ids) === 0) {
+            return 0;
+        }
         $ATiempo = 0;
         foreach($ids as $id){
-            if(Pedido::estaATiempo($id["id"])){
+            if(self::estaATiempo($id["id"])){
                 $ATiempo ++;
             }
         }

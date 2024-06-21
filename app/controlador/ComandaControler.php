@@ -27,7 +27,6 @@ class ComandaControler{
             $jwt = JWT::decode($token, new Key($_ENV["secretKey"], 'HS256'));
             $data = (array) $jwt;
             if (isset($data['idEmpleado'])){
-                echo $data['idEmpleado'];
                 return $data['idEmpleado'];
             }
             else{
@@ -66,11 +65,14 @@ class ComandaControler{
     public function cobrar(Request $request, Response $response, $args){
         try {
             $id = $args['id'];
-            if (isset($id) && !empty($id)) {
+            if (isset($id) && !empty($id)){
                 $mesa = Mesa::MostarMesa($id);
                 if($mesa['estado'] === "el cliente esta comiendo"){
+                    $precio = Pedido::VerPrecio($id);
+                    $log = new registrador();
+                    $log->registarActividad("el mozo cobra la suma de $ {$precio} de la mesa {$id}");
                     Mesa::ActualizarEstadoMesa($id, "con cliente pagando");
-                    $response->getBody()->write("cliente pagando<br> el cliente pago $".Pedido::VerPrecio($id).".<br>");
+                    $response->getBody()->write("cliente pagando<br> el cliente pago $".$precio.".<br>");
                     return $response->withStatus(200);
                 }else{
                     $response->getBody()->write("Error: para cobrar el pedido debio ser entregado.<br>");
@@ -120,16 +122,22 @@ class ComandaControler{
     }
     public function verEstadisticas(Request $request, Response $response){
         //generar estadisticas para mesas, proucto mas vendidos
-        // la probabilidad de que el asado se venda es de ...%
-        $probabilidad = Producto::generarEstadisticaProductos();
+        $params = $request->getQueryParams();
+        $probabilidad = Producto::generarEstadisticaProductos($params["producto"]);
+        $probabilidadTiempo = Pedido::GenerarEstadisticasPedido();
         $pdf = new FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(0, 10, 'La probabilidad de se venda Caipirinha es de ' . number_format($probabilidad * 100, 2) . '%', 0, 1);
+        $pdf->Cell(0, 10, 'La probabilidad de que el pedido se entrege a tiempo es de ' . number_format($probabilidadTiempo * 100, 2) . '%', 0, 1);
+        if($probabilidad != -1){
+            $pdf->Cell(0, 10, 'La probabilidad de que se venda '.$params["producto"].' es de ' . number_format($probabilidad * 100, 2) . '%', 0, 1);
+        }
+        else{
+            $pdf->Cell(0, 10, "Error: el producto no esta dentro del menu");
+        }
         $pdf->Output('F', 'php://output');
-        
         $response = $response->withHeader('Content-Type', 'application/pdf')
-                            ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"');
+        ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"');
         return $response;
     }
 }

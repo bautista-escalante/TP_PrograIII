@@ -40,14 +40,23 @@ class Empleado{
         return $pedidos;
     }
     public static function atenderPedidos($idEmpleado){
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT usuario FROM usuarios WHERE id = :id");
+        $select->bindValue(":id", $idEmpleado, PDO::PARAM_INT);
+        $select->execute();
+        $nombre = $select->fetchAll(PDO::FETCH_ASSOC);
+
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
         $pedidos = Empleado::obtenerPedidos($idEmpleado);
-        if(!empty($pedidos)){
+        if(!empty($pedidos) && !empty($nombre)){
+            $log = new registrador();
             foreach($pedidos as $pedido){
-                // aca debo actualizar el tiempo de entrega del pedido
+                $log->registarActividad("{$nombre} esta preparando el pedido");
                 Pedido::ActualizarEstadoPedido("listo para servir",$pedido["id"]);
+                $log->registarActividad("{$nombre} ya termino el pedido");
                 Pedido::actualizarFechaEntrega($pedido["id"]);
             }
+            Empleado::actualizarEstadoEmpleado(false, $idEmpleado);
         }
         else{
             echo "no hay pedidos pendientes";
@@ -103,25 +112,34 @@ class Empleado{
     public static function atenderCliente($pedido,$nombre,$foto=null){
         // Consigo el puesto según la comida, ej: "fernet con coca -> bartender"
         $encargado = self::obtenerEncargado($pedido);                
-                // Obtengo todos los empleados que pueden ejecutar el pedido
+        $log = new registrador();
+        // Obtengo todos los empleados que pueden ejecutar el pedido
         $empleadosEncontrados = self::obtenerEmpleadosPorPuesto($encargado);        
         if (count($empleadosEncontrados) > 0) {
             $i = array_rand($empleadosEncontrados);
-            $empleadoEncontrado = $empleadosEncontrados[$i];   
             $dataProducto = Producto::obtenerProducto($pedido);
             $mozos = self::obtenerEmpleadosPorPuesto("mozo");                    
-            if (count($mozos) > 0) {
-                $i = array_rand($mozos);
-                $mozo = $mozos[$i];
-                echo ("Mi nombre es " . $mozo["nombre"] . " y seré su mozo esta noche<br>");
+            if (count($mozos) > 0){
                 $mesa = Mesa::AsignarMesa();
-                Mesa::ActualizarEstadoMesa($mesa, "con cliente esperando pedido");
-                echo($mozo["nombre"] . " le asigna la mesa " . $mesa . " al cliente " . $nombre . "<br>");
-                echo("El pedido está a cargo de " . $empleadoEncontrado["nombre"] . "<br>");                        
-                $encargo = new Pedido();
-                $encargo->guardar();
-                // idProducto, idMesa, idMozo, idCocinero, cancelado, foto
-                Pedido::actualizarPedido($encargo->id, $dataProducto["id"], $mesa, $mozo["id"], $empleadoEncontrado["id"], false, $foto);
+                if($mesa != null){
+                    $i = array_rand($mozos);
+                    $nombreMozo = $mozos[$i]["nombre"];
+                    $nombreEncargado = $empleadosEncontrados[$i]["nombre"];
+                    echo ("Mi nombre es " . $nombreMozo . " y seré su mozo esta noche<br>");
+
+                    $log->registarActividad("{$nombreMozo} atiende a los clientes");
+                    $log->registarActividad("{$nombreMozo} le asigno la mesa {$mesa}");
+                    Mesa::ActualizarEstadoMesa($mesa, "con cliente esperando pedido");
+                    echo($nombreMozo . " le asigna la mesa " . $mesa . " al cliente " . $nombre . "<br>");
+                    echo("El pedido está a cargo de " . $nombreEncargado . "<br>");                        
+                    $encargo = new Pedido();
+                    $encargo->guardar();
+                    // idProducto, idMesa, idMozo, idCocinero, cancelado, foto
+                    Pedido::actualizarPedido($encargo->id, $dataProducto["id"], $mesa, $mozos[$i]["id"], $nombreEncargado[$i]["id"], false, $foto);
+                    $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
+                }else{
+                    echo "no hay mesa disponible<br>";
+                }
             } else {
                 echo "No hay mozos disponibles<br>";                
             }

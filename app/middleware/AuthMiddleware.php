@@ -5,7 +5,7 @@ use Firebase\JWT\ExpiredException;
 use Slim\Psr7\Response;
 use Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
-require_once '../vendor/autoload.php';
+include_once "modelo/Registador.php";
 class AuthMiddleware
 {
     private $sectorRequerido;
@@ -20,7 +20,11 @@ class AuthMiddleware
         } else {
             $response = new Response();
             $payload = json_encode(array("mensaje" => "no tenes permiso, debe ser realizado por un ".$this->sectorRequerido));
-            $response->getBody()->write($payload);
+            if($this->sectorRequerido == "socio"){
+                $log = new registrador();
+                $log->registrarError("el empleado no tiene permiso de realizar esta accion");
+            }
+                $response->getBody()->write($payload);
         }
         return $response->withHeader('Content-Type', 'application/json');
     }

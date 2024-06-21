@@ -35,6 +35,8 @@ class MozoControler{
             $update = $bd->prepararConsulta("UPDATE pedidos SET estado = 'servido' WHERE id = :id");
             $update->bindValue(":id", $pedido["id"],PDO::PARAM_INT);
             $update->execute();
+            $log = new registrador();
+            $log->registarActividad(" el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'");
             Mesa::ActualizarEstadoMesa($pedido["idMesa"],"el cliente esta comiendo");
             echo "El pedido con id " . $pedido["id"] . " ha sido entregado en la mesa ".$pedido["idMesa"]."<br>";
         }

@@ -2,9 +2,11 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Firebase\JWT\JWT;
-use \Firebase\JWT\Key;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 include_once "modelo/Usuario.php";
 include_once "db/AccesoDatos.php";
+include_once "modelo/Registador.php";
 class UsuarioControler {
     public function crearCuenta(Request $request, Response $response, $args) {
         $param = $request->getParsedBody();
@@ -86,10 +88,16 @@ class UsuarioControler {
         }
         if(!empty($usuario)){
             try{
+                //registar accion
+                $puesto = $usuario["puesto"];
+                if ($puesto != "socio"){
+                    $log = new registrador();
+                    $log->registarActividad("{$nombre} inicio sesion como {$puesto}");
+                }
                 $payload = [
                     'iat' => time(), 
                     'exp' => time() + 1800, // 30 min
-                    'sector' => $usuario["puesto"],
+                    'sector' => $puesto,
                     'idEmpleado'=> $usuario["id"]];
                 return JWT::encode($payload, $_ENV["secretKey"], 'HS256');
             }catch (Exception){
@@ -102,4 +110,3 @@ class UsuarioControler {
         return false;
     }
 }
-
