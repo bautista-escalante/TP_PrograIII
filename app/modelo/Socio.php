@@ -9,30 +9,12 @@ class Socio{
                 $consulta->execute();
                 return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
-        public static function verEstadoPedido($id){
+        public static function verTiempoPedido($id){
                 $db = AccesoDatos::obtenerInstancia();
-                $consulta = $db->prepararConsulta("SELECT estado FROM pedidos WHERE id = :id");
+                $consulta = $db->prepararConsulta("SELECT tiempo FROM pedidos WHERE id = :id");
                 $consulta->bindValue(":id", $id);
                 $consulta->execute();
                 return $consulta->fetch(PDO::FETCH_ASSOC);
-        }
-        public static function cerrarMesa($id){
-                Mesa::ActualizarEstadoMesa($id,"cerrada");
-        }
-        public static function verOperaciones($tipo){
-                $archivo = file_get_contents("modelo/Operaciones.json");
-                $datos = json_decode($archivo,true);
-                $encontrado = false;
-                foreach($datos as $operacion){
-                        if($operacion["puesto"] == $tipo){
-                                echo("el pedido de ".$operacion["cantidad"]." ".$operacion["nombrePedido"]." esta a cargo de ".$operacion["nombreEmpleado"].
-                                " y tardara ".$operacion["tiempo"]." segundos<br>");
-                                $encontrado = true;
-                        }
-                }
-                if(!$encontrado){
-                        echo "no hay peidos de ese rubro";
-                }
         }
         public static function VerProductoMasVendido(){
                 $db = AccesoDatos::obtenerInstancia();
@@ -66,12 +48,12 @@ class Socio{
                 $consulta = $db->prepararConsulta("SELECT * FROM pedidos WHERE cancelado = :cancelado");
                 $consulta->bindValue(":cancelado",true,PDO::PARAM_BOOL);
                 $consulta->execute();
-                $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
-                if(count($pedidos) != 0){
-                        echo "estos son los pedidos cancelados: <br>";
+                $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+                if(count($pedidos) > 0){
                         foreach($pedidos as $pedido){
-                                return "pedido de ". $pedido->tipo."<br>".
-                                "a cargo de: ". $pedido->NombreEmpleadoEncargado;
+                                $empleado = Empleado::ObtenerEmpleado($pedido["idCocinero"]);
+                                return "pedido de mesa ". $pedido["idMesa"].
+                                " a cargo de: ". $empleado["nombre"];
                         }
                 }else{
                         return "no hay pedidos cancelados";

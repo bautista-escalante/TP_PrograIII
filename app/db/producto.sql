@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2024 a las 16:29:27
+-- Tiempo de generación: 25-06-2024 a las 19:48:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id`, `nombre`, `puestoResponsable`, `precio`, `fechaBaja`) VALUES
-(1, 'Empanadas', 'cocinero', '400', '2024-06-06'),
+(1, 'Empanadas', 'cocinero', '500', '2024-06-06'),
 (2, 'asado', 'cocinero', '2000', NULL),
 (3, 'milanesa', 'cocinero', '1000', NULL),
 (4, 'flan', 'cocinero', '400', NULL),
@@ -51,7 +51,6 @@ INSERT INTO `producto` (`id`, `nombre`, `puestoResponsable`, `precio`, `fechaBaj
 (9, 'cerveza ipa', 'cervecero', '600', NULL),
 (10, 'cerveza roja', 'cervecero', '650', NULL),
 (11, 'quilmes', 'cervecero', '400', NULL),
-(13, 'nombre', 'puestoResponsable', 'precio', NULL),
 (14, 'Spaghetti ', 'cocinero', '1250', NULL),
 (15, 'canelones', 'cocinero', '1475', NULL),
 (16, 'Lasagna', 'cocinero', '1525', NULL),
@@ -59,7 +58,23 @@ INSERT INTO `producto` (`id`, `nombre`, `puestoResponsable`, `precio`, `fechaBaj
 (18, 'Margarita', 'bartender', '850', NULL),
 (19, 'Piña Colada', 'bartender', '925', NULL),
 (20, 'Mojito', 'bartender', '900', NULL),
-(21, 'Daiquiri', 'bartender', '875', NULL);
+(21, 'Daiquiri', 'bartender', '875', NULL),
+(22, 'Tiramisú', 'cocinero', '650', NULL),
+(23, 'Cheesecake de Frutos', 'cocinero', '725', NULL),
+(24, 'Brownie con Helado', 'cocinero', '575', NULL),
+(25, 'Tarta de Manzana', 'cocinero', '625', NULL),
+(26, 'lemon pie', 'cocinero', '595', NULL),
+(27, 'milanesa a caballo', 'cocinero', '1500', NULL),
+(28, 'hamburguesas de garb', 'cocinero', '1200', NULL),
+(29, 'corona', 'cervecero', '500', NULL),
+(30, 'hamburguesa de garba', 'cocinero', '1200', NULL),
+(31, 'corona', 'cervecero', '500', NULL),
+(32, 'hamburguesa de garba', 'cocinero', '1200', NULL),
+(33, 'corona', 'cervecero', '500', NULL),
+(34, 'hamburguesa de garba', 'cocinero', '1200', NULL),
+(35, 'corona', 'cervecero', '500', NULL),
+(36, 'hamburguesa', 'cocinero', '1200', NULL),
+(37, 'corona', 'cervecero', '500', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -79,7 +94,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

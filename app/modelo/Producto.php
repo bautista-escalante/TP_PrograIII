@@ -66,12 +66,12 @@ class Producto {
     }
     public static function obtenerProducto($id){
         $db = AccesoDatos::obtenerInstancia();
-        $select = $db->prepararConsulta("SELECT * FROM producto WHERE fechaBaja IS NULL and id = :id");
-        $select->bindValue(":id",$id);
+        $select = $db->prepararConsulta("SELECT nombre, precio FROM producto WHERE fechaBaja IS NULL and id = :id");
+        $select->bindValue(":id",$id, PDO::PARAM_INT);
         $select->execute();
         return $select->fetch(PDO::FETCH_ASSOC);
     }
-    public static function buscarProducto($productoNombre) {
+    public static function buscarProducto($productoNombre){
         $productos = Producto::mostrarProductos();
         $encontrado = false;
         foreach($productos as $producto){

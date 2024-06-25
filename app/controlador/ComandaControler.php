@@ -7,6 +7,7 @@ use \Firebase\JWT\Key;
 include_once "modelo/Empleado.php";
 include_once "modelo/Pedido.php";
 include_once "modelo/Mesa.php";
+
 class ComandaControler{
     public function atenderCliente(Request $request, Response $response){
         try{
@@ -36,7 +37,7 @@ class ComandaControler{
             throw new Exception('Excepción al decodificar el token JWT: ' . $e->getMessage());
         }
     }
-
+    
     public function cerrarMesa(Request $request, Response $response, $args){
         try {
             parse_str(file_get_contents('php://input'), $params);
@@ -59,6 +60,22 @@ class ComandaControler{
             $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
             return $response->withStatus(500);
         }
+    }
+
+    public function cancelarPedido(Request $request, Response $response, $args){
+        try {
+            parse_str(file_get_contents('php://input'), $params);
+            $alfa = $params['CodigoAlfa'];
+            if (isset($alfa) && !empty($alfa)) {
+                $estado = Pedido::cancelarPedido($alfa);
+                $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+            }else{
+                $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
+            }
+        } catch (PDOException $e) {
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
+        }
+return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function cobrar(Request $request, Response $response, $args){
@@ -88,7 +105,6 @@ class ComandaControler{
         }
     }
 
-/* 11- El cliente ingresa el código de mesa y el del pedido junto con los datos de la encuesta.  */
     public function puntuar(Request $request, Response $response){
         try {
             parse_str(file_get_contents('php://input'), $params);
@@ -109,7 +125,7 @@ class ComandaControler{
                     $idMozo  = $pedido["idMozo"];
 
                     $mesa = Mesa::MostarMesa($idMesa);
-                    if($mesa['estado'] === "con cliente pagando"){
+                    if(!empty($mesa) && $mesa['estado'] === "cerrada"){
                         Pedido::guardarPuntuacion($calificacionMozo, $comentarioMozo, $calificacionCocinero, $comentarioCocinero, $calificacionMesa, $comentarioMesa);
                         Mesa::CalificarMesa($idMesa,$calificacionMesa);
                         Empleado::calificarEmpleado($idMozo, $calificacionMozo, "mozo");
@@ -127,6 +143,9 @@ class ComandaControler{
             }
         } catch (PDOException $e) {
             $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
+            return $response->withStatus(500);
+        }catch(ParseError) {
+            $response->getBody()->write("Error  las calificaciones deben ser de tipo numerico <br>");
             return $response->withStatus(500);
         }
     }

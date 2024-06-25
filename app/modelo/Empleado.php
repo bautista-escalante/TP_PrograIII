@@ -51,6 +51,7 @@ class Empleado{
         $select->bindValue(":id", $idEmpleado, PDO::PARAM_INT);
         $select->execute();
         $usuario = $select->fetch(PDO::FETCH_ASSOC);
+
         $nombre = $usuario["usuario"];
 
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
@@ -103,6 +104,7 @@ class Empleado{
                 $idPedido = $encargo->guardar();
                 Pedido::actualizarPedido($idPedido, $numPedido, $dataProducto["id"], $mesa, $idMozo, $idEncargado, false);
                 $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
+                return $nombreEncargado;
             } else {
                 throw new Exception("no hay mozos disponible");       
             }
@@ -176,6 +178,18 @@ class Empleado{
         }
         else{
             echo "error no tenemos esa comida en nuestro menu";
+        }
+    }
+    public static function ObtenerEmpleado($id){
+        try {
+            $bd = AccesoDatos::obtenerInstancia();
+            $query = "SELECT * FROM empleados WHERE id = :id AND deleted_at IS NULL";
+            $select = $bd->prepararConsulta($query);
+            $select->bindParam(':id', $id, PDO::PARAM_STR);
+            $select->execute();
+            return $select->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }

@@ -15,8 +15,9 @@ class MozoControler{
                         $cantidad = intval($param["cantidad"]);
                         for($i = 0; $i < $cantidad; $i++){
                             $alfa = Pedido::generarCodigo();
-                            Empleado::atenderCliente($param["nombreProducto"], $mesa, $alfa);
-                            $response->getBody()->write(json_encode(["NOMBRE"=>$param["nombreProducto"], 
+                            $encargado = Empleado::atenderCliente($param["nombreProducto"], $mesa, $alfa);
+                            $response->getBody()->write(json_encode(["NOMBRE"=>$param["nombreProducto"],
+                                                                    "A CARGO DE "=>$encargado, 
                                                                     "CODIGO ALFANUMERICO"=>$alfa,
                                                                     "MESA"=>$mesa]));
                         }
@@ -41,11 +42,16 @@ class MozoControler{
             $nombre = $param['codigoAlfa'] . "_" . date("Y-m-d") . ".jpg";
             $ruta =  "imagenes/" . $nombre;
             $log = new registrador();
-            if (Pedido::VerificarCodigoAlfa($param['codigoAlfa']) && 
-            move_uploaded_file($files['foto']->getStream()->getMetadata('uri'), $ruta)) {
-                $response->getBody()->write("Foto subida exitosamente.");
-                $log->registarActividad("el mozo vinculó el pedido con una foto");
-                return $response->withStatus(200);
+            if (move_uploaded_file($files['foto']->getStream()->getMetadata('uri'), $ruta)) {
+                if(Pedido::VerificarCodigoAlfa($param['codigoAlfa'])){
+
+                    $response->getBody()->write("Foto subida exitosamente.");
+                    $log->registarActividad("el mozo vinculó el pedido con una foto");
+                    return $response->withStatus(200);
+                }else{
+                    $response->getBody()->write("codigo invalido.");
+                    return $response->withStatus(500);
+                }
             } else {
                 $response->getBody()->write("Error al mover el archivo subido.");
                 $log->registrarError("Error al mover el archivo subido");
@@ -69,7 +75,7 @@ class MozoControler{
             
             if(!empty($pedidosListos)){
                 foreach ($pedidosListos as $pedido){
-                    if(!Pedido::verificarPedidosEntregados($param["idMesa"])){
+                    if(!Pedido::verificarPedidosEntregados($param["mesa"])){
                         
                         // Actualizar el estado de la mesa asociada al pedido a "el cliente está comiendo"
                         Mesa::ActualizarEstadoMesa($pedido["idMesa"],"el cliente esta comiendo");

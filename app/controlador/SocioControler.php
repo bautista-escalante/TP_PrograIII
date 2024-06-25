@@ -72,24 +72,48 @@ class SocioControler {
         return $response->withHeader('Content-Type', 'application/json');
     }
     public function verPedidos(Request $request, Response $response, $args){
-        $params = $request->getParsedBody();
+        $params = $request->getQueryParams();
         if(!empty($params["id"])){
-            $estado = Socio::verEstadoPedido($params["id"]);
+            $estado = Socio::verTiempoPedido($params["id"]);
             if(!empty($estado)){
-                $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+                if($estado !== null){
+                    $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+                }else{
+                    $response->getBody()->write(json_encode(["ESTADO"=>"el empleado todabia no le asigno tiempo"]));
+                }
             }else{
                 $response->getBody()->write(json_encode(["ERROR"=>"id invalido"]));
             }
         }else{
+
             $pedidos = Socio::verPedido();
-            foreach($pedidos as $pedido){
-                $producto = Producto::obtenerProducto($pedido["id"]);
-                $response->getBody()->write(json_encode(["id"=>$pedido["id"],
-                                                        "comida"=>$producto["nombre"],
-                                                        "PRECIO"=>$producto["precio"]]));
+            if(!empty($pedidos)){
+                foreach($pedidos as $pedido){
+                    $producto = Producto::obtenerProducto(intval($pedido["idProducto"]));
+                    if(!empty($producto)){
+
+                        $response->getBody()->write(json_encode(["id"=>$pedido["id"],
+                                                                "COMIDA"=>$producto["nombre"],
+                                                                "PRECIO"=>$producto["precio"]]));
+                    }else{
+                        $response->getBody()->write(json_encode(["ERROR"=>"ese producto esta eliminado"]));
+                    }
+                }
+            }else{
+                $response->getBody()->write(json_encode(["ERROR"=>"no hay pedidos"]));
+
             }
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
-
+    public function verMejorcomentario(Request $request, Response $response){
+        $resultado = Pedido::verMejorcomentario();
+        $response->getBody()->write(json_encode(["Mejores Comentarios"=>($resultado)]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+    public function VerCancelados(Request $request, Response $response){
+        $resultado = Socio::VerCancelados();
+        $response->getBody()->write(json_encode(["PEDIDOS CANCELADOS"=>($resultado)]));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }

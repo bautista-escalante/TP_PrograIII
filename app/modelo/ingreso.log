@@ -355,3 +355,67 @@
 [2024-06-25 04:11:28]  [ERROR] El empleado no tiene permiso para realizar esta acción
 [2024-06-25 04:12:16]  [ERROR] El empleado no tiene permiso para realizar esta acción
 [2024-06-25 04:12:31]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 14:23:04]  [INFO] el cliente cancelo el pedidoFOCcQ
+[2024-06-25 15:17:01]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 15:17:15]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 15:34:07]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 18:38:33]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 19:06:25]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 19:06:38]  [INFO] eduardo atiende a los clientes
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 19:06:38]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo atiende a los clientes
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 19:06:38]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo atiende a los clientes
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 19:06:38]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo atiende a los clientes
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 19:06:38]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo atiende a los clientes
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 19:06:38]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 19:06:38]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 19:06:57]  [INFO] pablo inicio sesion como cocinero
+[2024-06-25 19:07:10]  [INFO] pablo esta preparando el pedido
+[2024-06-25 19:07:10]  [INFO] pablo ya termino el pedido
+[2024-06-25 19:07:10]  [INFO] pablo esta preparando el pedido
+[2024-06-25 19:07:10]  [INFO] pablo ya termino el pedido
+[2024-06-25 19:07:10]  [INFO] pablo esta preparando el pedido
+[2024-06-25 19:07:10]  [INFO] pablo ya termino el pedido
+[2024-06-25 19:07:10]  [INFO] pablo esta preparando el pedido
+[2024-06-25 19:07:10]  [INFO] pablo ya termino el pedido
+[2024-06-25 19:07:10]  [INFO] pablo esta preparando el pedido
+[2024-06-25 19:07:10]  [INFO] pablo ya termino el pedido
+[2024-06-25 19:07:51]  [INFO] ricardo inicio sesion como cervecero
+[2024-06-25 19:08:11]  [INFO] ricardo esta preparando el pedido
+[2024-06-25 19:08:11]  [INFO] ricardo ya termino el pedido
+[2024-06-25 19:08:11]  [INFO] ricardo esta preparando el pedido
+[2024-06-25 19:08:11]  [INFO] ricardo ya termino el pedido
+[2024-06-25 19:08:37]  [INFO] ana inicio sesion como bartender
+[2024-06-25 19:12:35]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 19:12:47]  [INFO] ana inicio sesion como bartender
+[2024-06-25 19:18:51]  [INFO] micaela inicio sesion como bartender
+[2024-06-25 19:19:02]  [INFO] micaela esta preparando el pedido
+[2024-06-25 19:19:02]  [INFO] micaela ya termino el pedido
+[2024-06-25 19:19:02]  [INFO] micaela esta preparando el pedido
+[2024-06-25 19:19:02]  [INFO] micaela ya termino el pedido
+[2024-06-25 19:20:11]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 19:20:21]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-25 19:22:16]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 19:22:48]  [INFO] el mozo cobra la suma de $ 5525 de la mesa 2
+[2024-06-25 19:32:24]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 19:32:35]  [ERROR] Error al mover el archivo subido
+[2024-06-25 19:36:35]  [INFO] el mozo vinculó el pedido con una foto
+[2024-06-25 19:37:29]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 19:41:06]  [INFO] pablo inicio sesion como cocinero
+[2024-06-25 19:42:28]  [INFO] ricardo inicio sesion como cervecero
+[2024-06-25 19:43:54]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 19:44:02]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-25 19:44:58]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 19:45:25]  [INFO] el mozo cobra la suma de $ 5525 de la mesa 1

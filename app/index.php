@@ -54,12 +54,19 @@ $app->group("/laComanda",function (RouteCollectorProxy $grupo){
     $grupo->post("/cocinar", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("cocinero"));
     $grupo->post("/prepararTrago", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("bartender"));
     $grupo->post("/servirCerveza", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("cervecero"));
-    $grupo->put("/cerrarMesa", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
     $grupo->put("/cobrarMesa", ComandaControler::class.":cobrar")->add(new AuthMiddleware("socio"));
+    $grupo->put("/cerrarMesa", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
     $grupo->post("/verMesaMasUsada", ComandaControler::class.":verMesaMasUsada")->add(new AuthMiddleware("socio"));
     $grupo->put("/puntuar", ComandaControler::class.":puntuar");
     $grupo->get("/estadisticas", ComandaControler::class.":verEstadisticas");
     $grupo->post("/verTiempoDemora", ComandaControler::class.":verTiempoDemora");
+    $grupo->get("/verMejorcomentario", SocioControler::class.":verMejorcomentario")->add(new AuthMiddleware("socio"));
+    $grupo->get("/verPedidos", SocioControler::class.":verPedidos")->add(new AuthMiddleware("socio"));
+});
+
+$app->group("/extras",function (RouteCollectorProxy $grupo){
+    $grupo->put("/cancelarPedido", ComandaControler::class.":cancelarPedido");
+    $grupo->get("/VerCancelados", SocioControler::class.":VerCancelados");
 });
 
 $app->run();

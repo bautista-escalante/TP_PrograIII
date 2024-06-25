@@ -2,10 +2,10 @@
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
 use Slim\Psr7\Response;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
 include_once "modelo/Registador.php";
 
 class AuthMiddleware
@@ -50,8 +50,10 @@ class AuthMiddleware
             }
         } catch (ExpiredException $e) {
             return "tu sesion ya caduco, por favor vuelve a ingresar.";
+        }catch (SignatureInvalidException $e) {
+            return "Firma del token no válida.";
         } catch (Exception $e) {
-            return "Error en el token".$e->getMessage();
+            return "Error en el token ".$e->getMessage();
         }
         return "no tenes permiso, debe ser realizado por un " . $this->sectorRequerido;
     }

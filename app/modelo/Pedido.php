@@ -86,11 +86,25 @@ class Pedido{
         $update->bindValue(":cancelado",$cancelado,PDO::PARAM_BOOL);
         $update->execute();
     }
-    public static function cancelarPedido($id){
-        $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE pedidos SET cancelado = :cancelado WHERE id = :id");
-        $update->bindValue(":id",$id,PDO::PARAM_INT);
-        $update->bindValue(":cancelado",true,PDO::PARAM_BOOL);
+    public static function cancelarPedido($CodigoAlfa){
+        if(Pedido::VerificarCodigoAlfa($CodigoAlfa)){
+
+            $bd = AccesoDatos::obtenerInstancia();
+            $update = $bd->prepararConsulta("UPDATE pedidos SET cancelado = :cancelado, estado = 'cancelado' WHERE codigoAlfa = :codigo");
+            $update->bindValue(":codigo",$CodigoAlfa,PDO::PARAM_INT);
+            $update->bindValue(":cancelado",true,PDO::PARAM_BOOL);
+            $update->execute();
+
+            if ($update->rowCount() > 0) {
+                $log = new Registrador();
+                $log->registarActividad("el cliente cancelo el pedido".$CodigoAlfa);
+                return "pedido eliminado.";
+            } else {
+                return "pedido no encontrado o ya eliminado.";
+            }
+        }else{
+            return "el codigo alfa no existe";
+        }
     }
     public static function obtenerPrecio($idMesa){
         // obtener pedidos de la misma mesa
@@ -220,7 +234,38 @@ class Pedido{
                 return false;
             }
     }
-            
+    public static function verMejorcomentario(){
+        $archivoComentarios = file_get_contents("modelo/comentarios.json");
+        $comentarios = json_decode($archivoComentarios, true);
+        if(!empty($comentarios)){
+
+            $puntacionMozoAlta = 0;
+            $puntacionMesaAlta = 0;
+        $puntacionCocineroAlta = 0;
+        $comentarioMozoAlto = "";
+        $comentarioMesaAlto = "";
+        $comentarioCocineroAlto = "";
+
+        foreach($comentarios as $comentario){
+            if(intval($comentario["puntuacionMozo"]) > $puntacionMozoAlta){
+                $puntacionMozoAlta = intval($comentario["puntuacionMozo"]);
+                $comentarioMozoAlto = $comentario["comentarioMozo"];
+            }
+            if(intval($comentario["calificacionMesa"]) > $puntacionMesaAlta){
+                $puntacionMesaAlta = intval($comentario["calificacionMesa"]);
+                $comentarioMesaAlto = $comentario["comentarioMesa"];
+            }
+            if(intval($comentario["puntuacionCocinero"]) > $puntacionCocineroAlta){
+
+                $puntacionCocineroAlta = intval($comentario["puntuacionCocinero"]);
+                $comentarioCocineroAlto = $comentario["comentarioCocinero"];
+            }
+        }
+        return array("mozo" => $comentarioMozoAlto,"mesa" => $comentarioMesaAlto,"cocinero" => $comentarioCocineroAlto);
+        }else{
+            return "todabia no hay comentarios";
+        }
+    }
     public static function verMesaMasUsada(){
         $db = AccesoDatos::obtenerInstancia();
         $select = $db->prepararConsulta("SELECT idMesa, COUNT(*) AS cantidad FROM pedidos GROUP BY idMesa ORDER BY cantidad DESC LIMIT 1;");
