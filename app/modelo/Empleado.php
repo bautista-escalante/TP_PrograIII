@@ -34,32 +34,80 @@ class Empleado{
         $select->bindValue(":id", $id, PDO::PARAM_INT);
         $select->execute();
         $pedidos = $select->fetchAll(PDO::FETCH_ASSOC);
-        foreach($pedidos as $pedido){
-            Pedido::calcularTiempo($pedido["id"]);
+
+        if(!empty($pedidos)){
+            foreach($pedidos as $pedido){
+                Pedido::calcularTiempo($pedido["id"]);
+            }
+            return $pedidos;
+        }else{
+            throw new Exception("no hay pedidos que preparar");
         }
-        return $pedidos;
     }
     public static function atenderPedidos($idEmpleado){
+        // obtengo el usuario que esta haciendo la operacion en base al jwt 
         $bd = AccesoDatos::obtenerInstancia();
-        $select = $bd->prepararConsulta("SELECT usuario FROM usuarios WHERE id = :id");
+        $select = $bd->prepararConsulta("SELECT * FROM usuarios WHERE id = :id");
         $select->bindValue(":id", $idEmpleado, PDO::PARAM_INT);
         $select->execute();
-        $nombre = $select->fetchAll(PDO::FETCH_ASSOC);
+        $usuario = $select->fetch(PDO::FETCH_ASSOC);
+        $nombre = $usuario["usuario"];
 
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
+        //obtengo los pedidos pendientes
         $pedidos = Empleado::obtenerPedidos($idEmpleado);
+
         if(!empty($pedidos) && !empty($nombre)){
             $log = new registrador();
             foreach($pedidos as $pedido){
-                $log->registarActividad("{$nombre} esta preparando el pedido");
+                // el empleado le asiga el tiempo
+                Pedido::calcularTiempo($pedido["id"]);
                 Pedido::ActualizarEstadoPedido("listo para servir",$pedido["id"]);
+
+                $log->registarActividad("{$nombre} esta preparando el pedido");
                 $log->registarActividad("{$nombre} ya termino el pedido");
+
                 Pedido::actualizarFechaEntrega($pedido["id"]);
             }
             Empleado::actualizarEstadoEmpleado(false, $idEmpleado);
+            return "{$nombre} ya termino los pedidos pendientes";
+        } else{
+            throw new Exception("no hay pedidos pendientes");
         }
-        else{
-            echo "no hay pedidos pendientes";
+    }
+    public static function atenderCliente($pedido, $mesa, $numPedido){
+        // Consigo el puesto según la comida, ej: "fernet con coca -> bartender"
+        $encargado = self::obtenerEncargado($pedido);                
+        $log = new registrador();
+        // Obtengo todos los empleados que pueden ejecutar el pedido
+        $empleadosEncontrados = self::obtenerEmpleadosPorPuesto($encargado);    
+
+        if (count($empleadosEncontrados) > 0) {
+            $i = array_rand($empleadosEncontrados);
+            $dataProducto = Producto::buscarProducto($pedido);
+            $mozos = self::obtenerEmpleadosPorPuesto("mozo");
+            if (count($mozos) > 0){
+                $i = array_rand($mozos);
+                $idMozo = $mozos[$i]["id"];
+                $nombreMozo = $mozos[$i]["nombre"];
+
+                // bartender, cerbecero o cocinero
+                $idEncargado = $empleadosEncontrados[$i]["id"];
+                $nombreEncargado = $empleadosEncontrados[$i]["nombre"];
+                    
+                $log->registarActividad("{$nombreMozo} atiende a los clientes");
+                $log->registarActividad("{$nombreMozo} le asigno la mesa {$mesa}");
+                $log->registarActividad("{$nombreMozo} le asigno el pedido a {$nombreEncargado}");
+                    
+                $encargo = new Pedido();
+                $idPedido = $encargo->guardar();
+                Pedido::actualizarPedido($idPedido, $numPedido, $dataProducto["id"], $mesa, $idMozo, $idEncargado, false);
+                $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
+            } else {
+                throw new Exception("no hay mozos disponible");       
+            }
+        } else {
+            throw new Exception("No hay empleados que puedan realizar el pedido");
         }
     }
     public static function calificarEmpleado($idEmpleado, $calificacion, $tipo) {
@@ -108,44 +156,6 @@ class Empleado{
         $consulta->bindValue(':tipo', $nuevoPuesto, PDO::PARAM_STR);
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
         $consulta->execute();
-    }
-    public static function atenderCliente($pedido,$nombre,$foto=null){
-        // Consigo el puesto según la comida, ej: "fernet con coca -> bartender"
-        $encargado = self::obtenerEncargado($pedido);                
-        $log = new registrador();
-        // Obtengo todos los empleados que pueden ejecutar el pedido
-        $empleadosEncontrados = self::obtenerEmpleadosPorPuesto($encargado);        
-        if (count($empleadosEncontrados) > 0) {
-            $i = array_rand($empleadosEncontrados);
-            $dataProducto = Producto::obtenerProducto($pedido);
-            $mozos = self::obtenerEmpleadosPorPuesto("mozo");                    
-            if (count($mozos) > 0){
-                $mesa = Mesa::AsignarMesa();
-                if($mesa != null){
-                    $i = array_rand($mozos);
-                    $nombreMozo = $mozos[$i]["nombre"];
-                    $nombreEncargado = $empleadosEncontrados[$i]["nombre"];
-                    echo ("Mi nombre es " . $nombreMozo . " y seré su mozo esta noche<br>");
-
-                    $log->registarActividad("{$nombreMozo} atiende a los clientes");
-                    $log->registarActividad("{$nombreMozo} le asigno la mesa {$mesa}");
-                    Mesa::ActualizarEstadoMesa($mesa, "con cliente esperando pedido");
-                    echo($nombreMozo . " le asigna la mesa " . $mesa . " al cliente " . $nombre . "<br>");
-                    echo("El pedido está a cargo de " . $nombreEncargado . "<br>");                        
-                    $encargo = new Pedido();
-                    $encargo->guardar();
-                    // idProducto, idMesa, idMozo, idCocinero, cancelado, foto
-                    Pedido::actualizarPedido($encargo->id, $dataProducto["id"], $mesa, $mozos[$i]["id"], $nombreEncargado[$i]["id"], false, $foto);
-                    $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
-                }else{
-                    echo "no hay mesa disponible<br>";
-                }
-            } else {
-                echo "No hay mozos disponibles<br>";                
-            }
-        } else {
-            echo "No hay empleados que puedan realizar el pedido<br>";
-        }
     }
     public static function obtenerEmpleadosPorPuesto($puesto){
             try {

@@ -64,7 +64,8 @@ class ProductoControler {
     }
     
     public function borrarProducto(Request $request, Response $response, $args){
-        $id = $args['id'];
+        $params = $request->getQueryParams();
+        $id = $params['id'];
         if (!empty($id)) {
             Producto::eliminarProducto($id);
             $response->getBody()->write("Producto borrado correctamente.<br>");
@@ -76,8 +77,9 @@ class ProductoControler {
     }
     public function modificarProducto(Request $request, Response $response, $args) {
         try {
-            $id = $args['id'];
-            $precio = $args['precio'];
+            parse_str(file_get_contents('php://input'), $params);
+            $id = $params['id'];
+            $precio = $params['precio'];
             if (isset($id) && !empty($id) && isset($precio) && !empty($precio)) {
                 Producto::modificarPrecioProducto($id, $precio);
                 $response->getBody()->write("Precio actualizado.<br>");

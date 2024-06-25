@@ -9,38 +9,42 @@ class SocioControler {
         if(isset($parametros["nombre"],$parametros["puesto"],$parametros["clave"]) && !empty($parametros["nombre"]) && !empty($parametros["puesto"])){
             Socio::contratarEmpleado($parametros["nombre"], $parametros["puesto"]);
             $nuevoUsuario = new Usuario($parametros["nombre"], $parametros["puesto"], $parametros["clave"]);
-            $nuevoUsuario->crearUsuario();
-        } else {
-            $response->getBody()->write("Error: coloca los parámetros para contratar empleados.<br>");
+            $mensaje = $nuevoUsuario->crearUsuario();
+            $response->getBody()->write(json_encode(["ESTADO"=>$mensaje]));
+        }else{
+            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public function despedir(Request $request, Response $response, $args) {
-        $id = $args['id'];
+        $params = $request->getQueryParams();
+        $id = $params['id'];
         if (!empty($id)) {
-            Socio::despedirEmpleado($id);
-            $response->getBody()->write("Empleado despedido correctamente.<br>");
-        } else {
-            $response->getBody()->write("Error: coloca los parámetros para despedir al empleado.<br>");
+            $mensaje = Socio::despedirEmpleado($id);
+            $response->getBody()->write(json_encode(["ESTADO"=>$mensaje]));
+        }else{
+            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public function suspender(Request $request, Response $response, $args) {
         try {
-            $id = $args['id'];
+            parse_str(file_get_contents('php://input'), $params);
+            $id = $params['id'];
             if (isset($id) && !empty($id)) {
                 Socio::suspenderEmpleado(intval($id));
                 $response->getBody()->write("Empleado suspendido.<br>");
-            } else {
-                $response->getBody()->write("Error: coloca los parámetros para suspender al empleado.<br>");
+            }else{
+                $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
             }
         } catch (PDOException $e) {
-            $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
+            $response->getBody()->write(json_encode(["ERROR"=> $e->getMessage()]));
         }
-        return $response;
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public function listarEmpleados(Request $request, Response $response, $args) {
-        $puesto = $args["puesto"];
+        $params = $request->getParsedBody();
+        $puesto = $params["puesto"];
         $empleados = Empleado::obtenerEmpleadosPorPuesto($puesto);
         $csv = fopen('php://temp', 'w+');
         fputcsv($csv, ['Nombre', 'tipo', 'puntuacion']);
@@ -55,11 +59,37 @@ class SocioControler {
     }
     public function rotar(Request $request, Response $response, $args){
         try{
-            Empleado::rotarPersonal($args["id"], $args["nuevoPuesto"]);
-            return $response->withStatus(200);
+            parse_str(file_get_contents('php://input'), $params);
+            if(isset($params["id"], $params["nuevoPuesto"]) && !empty($params["id"] && !empty($params["nuevoPuesto"]))){
+                Empleado::rotarPersonal($params["id"], $params["nuevoPuesto"]);
+                $response->getBody()->write(json_encode(["MENSAJE"=>"el personal ha rotado"]));
+            }else{
+                $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
+            }
         } catch(Exception $e){
-            return $response->withStatus(400);
+            $response->getBody()->write(json_encode(["ERROR"=>"al rotar el personal"]));
         }
+        return $response->withHeader('Content-Type', 'application/json');
     }
-}
+    public function verPedidos(Request $request, Response $response, $args){
+        $params = $request->getParsedBody();
+        if(!empty($params["id"])){
+            $estado = Socio::verEstadoPedido($params["id"]);
+            if(!empty($estado)){
+                $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+            }else{
+                $response->getBody()->write(json_encode(["ERROR"=>"id invalido"]));
+            }
+        }else{
+            $pedidos = Socio::verPedido();
+            foreach($pedidos as $pedido){
+                $producto = Producto::obtenerProducto($pedido["id"]);
+                $response->getBody()->write(json_encode(["id"=>$pedido["id"],
+                                                        "comida"=>$producto["nombre"],
+                                                        "PRECIO"=>$producto["precio"]]));
+            }
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 
+}

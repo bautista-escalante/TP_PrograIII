@@ -4,49 +4,55 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Firebase\JWT\ExpiredException;
 use Slim\Psr7\Response;
 use Firebase\JWT\JWT;
-use \Firebase\JWT\Key;
+use Firebase\JWT\Key;
+
 include_once "modelo/Registador.php";
+
 class AuthMiddleware
 {
     private $sectorRequerido;
+
     public function __construct(string $sectorRequerido)
     {
         $this->sectorRequerido = $sectorRequerido;
     }
+
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        if ($this->verificarToken($request)) {
+        $verificacion = $this->verificarToken($request);
+        
+        if ($verificacion === true) {
             $response = $handler->handle($request);
         } else {
             $response = new Response();
-            $payload = json_encode(array("mensaje" => "no tenes permiso, debe ser realizado por un ".$this->sectorRequerido));
-            if($this->sectorRequerido == "socio"){
+            $payload = json_encode(array("mensaje" => $verificacion));
+            if ($this->sectorRequerido == "socio") {
                 $log = new registrador();
-                $log->registrarError("el empleado no tiene permiso de realizar esta accion");
+                $log->registrarError("El empleado no tiene permiso para realizar esta acción");
             }
-                $response->getBody()->write($payload);
+            $response->getBody()->write($payload);
+            $response = $response->withHeader('Content-Type', 'application/json');
+            if ($verificacion === "tu sesion ya caduco, por favor vuelve a ingresar.") {
+                return $response->withStatus(401);
+            }
         }
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
-    private function verificarToken(Request $request){
+    private function verificarToken(Request $request)
+    {
         $authHeader = $request->getHeaderLine('Authorization');
         $token = str_replace('Bearer ', '', $authHeader);
         try {
             $jwt = JWT::decode($token, new Key($_ENV["secretKey"], 'HS256'));
             $data = (array) $jwt;
-            if (isset($data['sector'])){
-                if ($this->sectorRequerido === $data['sector']){
-                    return true;
-                }
+            if (isset($data['sector']) && $this->sectorRequerido === $data['sector']) {
+                return true;
             }
-        }catch (ExpiredException) {
-            $response = new Response();
-            $payload = json_encode(array("mensaje" => "tu sesion ya caduco, por favor vuelve a ingresar."));
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json')->withStatus(401);
+        } catch (ExpiredException $e) {
+            return "tu sesion ya caduco, por favor vuelve a ingresar.";
         } catch (Exception $e) {
-            error_log('Excepción al decodificar el token JWT: ' . $e->getMessage());
+            return "Error en el token".$e->getMessage();
         }
-        return false;
+        return "no tenes permiso, debe ser realizado por un " . $this->sectorRequerido;
     }
 }

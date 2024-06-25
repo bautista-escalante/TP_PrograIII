@@ -1,46 +1,23 @@
 <?php
-/*
--> agreagarPersonal
--> suspenderPersonal
--> despedir
--> ver estado del pedido
--> cerrarMesa
--> VerProductoMasVendido
--> VerProductoMenosVendido
--> verCancelados
-metodos
-        -> verMesaMasUsada()
-        -> verMesaMenosUsada()
-        -> vermajorFactura()
-        -> vermenorFactura()->resultados finales
-        -> verMajorImporte()
-        -> vermenorImporte()
-        -> facturacionEntreFechas()
-        -> verMejorComentario()
-        -> verpeorComentario()
-        -> verHorariosEmpleados
-        -> VerPedidosFueraHorario
-        -> verOperaciones()
-        -> OperacionPorEmpleado
-
-hoy deberia terminar esta clase y empezar con controlador 
-
-*/
 include_once "db\AccesoDatos.php";
 include_once "Empleado.php";
 include_once "Pedido.php";
 class Socio{
-        public static function VerEstadoPedido($id){
+        public static function verPedido(){
                 $db = AccesoDatos::obtenerInstancia();
-                $consulta = $db->prepararConsulta("SELECT estado FROM pedido WHERE id = :id");
-                $consulta->bindValue(":id",$id, PDO::PARAM_INT);
+                $consulta = $db->prepararConsulta("SELECT * FROM pedidos");
                 $consulta->execute();
+                return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+        public static function verEstadoPedido($id){
+                $db = AccesoDatos::obtenerInstancia();
+                $consulta = $db->prepararConsulta("SELECT estado FROM pedidos WHERE id = :id");
+                $consulta->bindValue(":id", $id);
+                $consulta->execute();
+                return $consulta->fetch(PDO::FETCH_ASSOC);
         }
         public static function cerrarMesa($id){
                 Mesa::ActualizarEstadoMesa($id,"cerrada");
-        }
-        public static function VerHorariosEmpleados(){
-                
         }
         public static function verOperaciones($tipo){
                 $archivo = file_get_contents("modelo/Operaciones.json");
@@ -59,7 +36,7 @@ class Socio{
         }
         public static function VerProductoMasVendido(){
                 $db = AccesoDatos::obtenerInstancia();
-                $consulta = $db->prepararConsulta("SELECT nombreCliente, SUM(Cantidad) as cantidadTotal FROM pedido GROUP BY nombreCliente");
+                $consulta = $db->prepararConsulta("SELECT nombreCliente, SUM(Cantidad) as cantidadTotal FROM pedidos GROUP BY nombreCliente");
                 $consulta->execute();
                 $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
@@ -73,7 +50,7 @@ class Socio{
         }
         public static function VerProductoMenosVendido(){
                 $db = AccesoDatos::obtenerInstancia();
-                $consulta = $db->prepararConsulta("SELECT nombreCliente, SUM(Cantidad) as cantidadTotal FROM pedido GROUP BY nombreCliente");
+                $consulta = $db->prepararConsulta("SELECT nombreCliente, SUM(Cantidad) as cantidadTotal FROM pedidos GROUP BY nombreCliente");
                 $consulta->execute();
                 $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
                 $cantidades = [];
@@ -84,12 +61,9 @@ class Socio{
                 $productoMenosVendido = array_keys($cantidades, min($cantidades))[0];
                 echo "El producto menos vendido es: {$productoMenosVendido} con una cantidad de: {$cantidades[$productoMenosVendido]}<br>";              
         }
-        public static function VerPedidosFueraHorario(){
-
-        }
         public static function VerCancelados(){
                 $db = AccesoDatos::obtenerInstancia();
-                $consulta = $db->prepararConsulta("SELECT * FROM pedido WHERE cancelado = :cancelado");
+                $consulta = $db->prepararConsulta("SELECT * FROM pedidos WHERE cancelado = :cancelado");
                 $consulta->bindValue(":cancelado",true,PDO::PARAM_BOOL);
                 $consulta->execute();
                 $pedidos = $consulta->fetchAll(PDO::FETCH_CLASS, "Pedido");
@@ -124,16 +98,15 @@ class Socio{
                                 $update->bindValue(":id", $id, PDO::PARAM_INT);
                                 $update->execute();                        
                                 if ($update->rowCount() > 0) {
-                                        echo "Empleado eliminado.";
+                                        return "Empleado eliminado.";
                                 } else {
-                                        echo "Empleado no encontrado o ya eliminado.";
+                                        return "Empleado no encontrado o ya eliminado.";
                                 }
-                                echo "Empleado despedido.<br>";
                         } else {
-                                echo "Error: El ID del empleado no es válido.<br>";
+                                return "Error: El ID del empleado no es válido.<br>";
                         } 
                 } catch (PDOException $e) {
-                        echo "Error en la base de datos";
+                        return "Error en la base de datos";
                 }
         }
 }

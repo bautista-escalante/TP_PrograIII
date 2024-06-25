@@ -1,0 +1,18 @@
+[
+    {
+        "puntuacionMozo": 5,
+        "comentarioMozo": "Muy amable",
+        "puntuacionCocinero": 5,
+        "comentarioCocinero": "Buena comida",
+        "calificacionMesa": 4,
+        "comentarioMesa": "Mesa limpia"
+    },
+    {
+        "puntuacionMozo": 5,
+        "comentarioMozo": "un capo el mozo",
+        "puntuacionCocinero": 5,
+        "comentarioCocinero": "la comida esta muy rica",
+        "calificacionMesa": 5,
+        "comentarioMesa": "la mesa  estaba en buuen estado "
+    }
+]

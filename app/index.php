@@ -15,49 +15,51 @@ include_once "middleware/AuthMiddleware.php";
 $app = AppFactory::create();
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-$app->addBodyParsingMiddleware();
 
 $app->group("/abmEmpleado", function (RouteCollectorProxy $grupo) {
     $grupo->post("/contratar", SocioControler::class . ":contratar")->add(new AuthMiddleware("socio" ));
-    $grupo->delete("/despedir/{id}", SocioControler::class . ":despedir")->add(new AuthMiddleware("socio"));
-    $grupo->put("/suspender/{id}", SocioControler::class . ":suspender")->add(new AuthMiddleware("socio"));
+    $grupo->delete("/despedir", SocioControler::class . ":despedir")->add(new AuthMiddleware("socio"));
+    $grupo->put("/suspender", SocioControler::class . ":suspender")->add(new AuthMiddleware("socio"));
     $grupo->put("/rotarPersonal/{id}/{nuevoPuesto}", SocioControler::class . ":rotar")->add(new AuthMiddleware("socio"));
-    $grupo->get("/listarEmpleados/{puesto}", SocioControler::class . ":listarEmpleados");
+    $grupo->get("/listarEmpleados", SocioControler::class . ":listarEmpleados");
 });
 
 $app->group("/abmUsuario", function (RouteCollectorProxy $grupo) {
     $grupo->post("/crearCuenta", UsuarioControler::class . ":crearCuenta")->add(new AuthMiddleware("socio"));
-    $grupo->delete("/eliminarUsuario/{id}", UsuarioControler::class . ":eliminarUsuario")->add(new AuthMiddleware("socio"));
-    $grupo->put("/modificarUsuario/{id}/{nombre}/{clave}", UsuarioControler::class . ":modificarUsuario")->add(new AuthMiddleware("socio"));
+    $grupo->delete("/eliminarUsuario", UsuarioControler::class . ":eliminarUsuario")->add(new AuthMiddleware("socio"));
+    $grupo->put("/modificarUsuario", UsuarioControler::class . ":modificarUsuario")->add(new AuthMiddleware("socio"));
     $grupo->post("/ingresar", UsuarioControler::class.":ingresar");
     $grupo->get("/listarUsuarios", UsuarioControler::class . ":listarUsuarios");
 });
 
 $app->group("/abmMesa", function (RouteCollectorProxy $grupo) {
     $grupo->post("/agregarMesa", MesaControler::class . ":agregarMesa")->add(new AuthMiddleware("socio"));
-    $grupo->delete("/borrarMesa/{id}", MesaControler::class . ":borrarMesa")->add(new AuthMiddleware("socio"));
-    $grupo->put("/modificarMesa/{id}/{puntos}", MesaControler::class . ":modificarMesa")->add(new AuthMiddleware("socio"));
+    $grupo->delete("/borrarMesa", MesaControler::class . ":borrarMesa")->add(new AuthMiddleware("socio"));
+    $grupo->put("/modificarMesa", MesaControler::class . ":modificarMesa")->add(new AuthMiddleware("socio"));
     $grupo->get("/listarMesas", MesaControler::class . ":listarMesas");
 });
 
 $app->group("/abmProducto", function (RouteCollectorProxy $grupo) {
     $grupo->post("/agregarProducto", ProductoControler::class . ":agregarProducto")->add(new AuthMiddleware("socio"));
     $grupo->post("/agregarProductos", ProductoControler::class . ":agregarProductos")->add(new AuthMiddleware("socio"));
-    $grupo->delete("/borrarProducto/{id}", ProductoControler::class . ":borrarProducto")->add(new AuthMiddleware("socio"));
-    $grupo->put("/modificarProducto/{id}/{precio}", ProductoControler::class . ":modificarProducto")->add(new AuthMiddleware("socio"));
+    $grupo->delete("/borrarProducto", ProductoControler::class . ":borrarProducto")->add(new AuthMiddleware("socio"));
+    $grupo->put("/modificarProducto", ProductoControler::class . ":modificarProducto")->add(new AuthMiddleware("socio"));
     $grupo->get("/listarProductos", ProductoControler::class . ":listarProductos");
 });
 
 $app->group("/laComanda",function (RouteCollectorProxy $grupo){
-    $grupo->post("/atender", MozoControler::class.":atender")->add(new AuthMiddleware("mozo"));
+    $grupo->post("/atender", MozoControler::class.":atender")->add(new AuthMiddleware("mozo"))->add(new \Slim\Middleware\BodyParsingMiddleware());
     $grupo->post("/servir", MozoControler::class.":servir")->add(new AuthMiddleware("mozo"));
-    $grupo->post("/cocinar", ComandaControler::class.":Cocinar")->add(new AuthMiddleware("cocinero"));
-    $grupo->post("/prepararTrago", ComandaControler::class.":prepararTrago")->add(new AuthMiddleware("bartender"));
-    $grupo->post("/servirCerveza", ComandaControler::class.":servirCerveza")->add(new AuthMiddleware("cervecero"));
-    $grupo->put("/cerrarMesa/{id}", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
-    $grupo->put("/cobrarMesa/{id}", ComandaControler::class.":cobrar")->add(new AuthMiddleware("socio"));
+    $grupo->post("/vincularFoto", MozoControler::class.":vincularFoto")->add(new AuthMiddleware("mozo"));
+    $grupo->post("/cocinar", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("cocinero"));
+    $grupo->post("/prepararTrago", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("bartender"));
+    $grupo->post("/servirCerveza", ComandaControler::class.":atenderCliente")->add(new AuthMiddleware("cervecero"));
+    $grupo->put("/cerrarMesa", ComandaControler::class.":cerrarMesa")->add(new AuthMiddleware("socio"));
+    $grupo->put("/cobrarMesa", ComandaControler::class.":cobrar")->add(new AuthMiddleware("socio"));
+    $grupo->post("/verMesaMasUsada", ComandaControler::class.":verMesaMasUsada")->add(new AuthMiddleware("socio"));
     $grupo->put("/puntuar", ComandaControler::class.":puntuar");
     $grupo->get("/estadisticas", ComandaControler::class.":verEstadisticas");
+    $grupo->post("/verTiempoDemora", ComandaControler::class.":verTiempoDemora");
 });
 
 $app->run();

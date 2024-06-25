@@ -13,30 +13,30 @@ class UsuarioControler {
         if (isset($param["nombre"], $param["puesto"], $param["clave"]) && 
             !empty($param["nombre"]) && !empty($param["puesto"]) && !empty($param["clave"])) {
             $nuevoUsuario = new Usuario($param["nombre"], $param["puesto"], $param["clave"]);
-            $nuevoUsuario->crearUsuario();
-            $response->getBody()->write("Alta de usuario exitosa.<br>");
-            return $response->withStatus(201);
-        } else {
-            $response->getBody()->write("Error: coloca los parámetros para crear una cuenta.<br>");
-            return $response->withStatus(400);
+            $mensaje = $nuevoUsuario->crearUsuario();
+            $response->getBody()->write(json_encode(["ESTADO"=>$mensaje]));
+        }else{
+            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
         }
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public function eliminarUsuario(Request $request, Response $response, $args) {
-        $id = $args['id'];
+        $params = $request->getQueryParams();
+        $id = $params['id'];
         if (!empty($id)) {
             Usuario::borrarUsuario($id);
-            $response->getBody()->write("Usuario borrado correctamente.<br>");
-            return $response->withStatus(200);
-        } else {
-            $response->getBody()->write("Error: coloca los parámetros para eliminar la cuenta.<br>");
-            return $response->withStatus(400); 
+            $response->getBody()->write(json_encode(["ERROR"=>"Usuario borrado correctamente"]));
+        }else{
+            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
         }
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public function modificarUsuario(Request $request, Response $response, $args) {
         try {
-            $id = $args['id'];
-            $nombre = $args['nombre'];
-            $clave = $args['clave'];
+            parse_str(file_get_contents('php://input'), $params);
+            $id = $params['id'];
+            $nombre = $params['nombre'];
+            $clave = $params['clave'];
             if (!empty($id) && !empty($nombre) && !empty($clave)) {
                 Usuario::modificarUsuario($id, $clave, $nombre);
                 $response->getBody()->write("Usuario modificado correctamente.<br>");
@@ -96,7 +96,7 @@ class UsuarioControler {
                 }
                 $payload = [
                     'iat' => time(), 
-                    'exp' => time() + 1800, // 30 min
+                    'exp' => time() + 9000, // 15 min
                     'sector' => $puesto,
                     'idEmpleado'=> $usuario["id"]];
                 return JWT::encode($payload, $_ENV["secretKey"], 'HS256');

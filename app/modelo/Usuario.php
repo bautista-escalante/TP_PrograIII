@@ -15,15 +15,19 @@ class Usuario
     }
     public function crearUsuario()
     {
-        // retorna el id 
-        $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
-        $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave, puesto) VALUES (:usuario, :clave, :puesto)");
-        $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
-        $consulta->bindValue(':clave', $claveHash);
-        $consulta->bindValue(':puesto', $this->puesto);
-        $consulta->execute();
-        return $this->id =  $objAccesoDatos->obtenerUltimoId();
+        try{
+            $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
+            $objAccesoDatos = AccesoDatos::obtenerInstancia();
+            $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuarios (usuario, clave, puesto) VALUES (:usuario, :clave, :puesto)");
+            $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
+            $consulta->bindValue(':clave', $claveHash);
+            $consulta->bindValue(':puesto', $this->puesto);
+            $consulta->execute();
+            $this->id =  $objAccesoDatos->obtenerUltimoId();
+            return "usuario creado con exito";
+        }catch(PDOException){
+            return "error al crear el usuario";
+        }
     }
     public static function obtenerTodos()
     {

@@ -64,23 +64,28 @@ class Producto {
         $select->execute();
         return $select->fetchAll(PDO::FETCH_ASSOC);
     }
-    public static function obtenerProducto($comida){
-        $producto = Producto::buscarProducto($comida);
-        if($producto!=false){
+    public static function obtenerProducto($id){
+        $db = AccesoDatos::obtenerInstancia();
+        $select = $db->prepararConsulta("SELECT * FROM producto WHERE fechaBaja IS NULL and id = :id");
+        $select->bindValue(":id",$id);
+        $select->execute();
+        return $select->fetch(PDO::FETCH_ASSOC);
+    }
+    public static function buscarProducto($productoNombre) {
+        $productos = Producto::mostrarProductos();
+        $encontrado = false;
+        foreach($productos as $producto){
+            if($producto["nombre"] == $productoNombre){
+                $encontrado = true;
+                return $producto;
+            }
+        }
+        if($encontrado){
             return $producto;
         }
         else{
             echo "error no tenemos esa comida en nuestro menu";
         }
-    }
-    public static function buscarProducto($productoNombre) {
-        $productos = Producto::mostrarProductos();
-        foreach($productos as $producto){
-            if($producto["nombre"] == $productoNombre){
-                return $producto;
-            }
-        }
-        return false;
     }
     public static function generarEstadisticaProductos($productoNombre) {
         // la probabilidad de que se venda 	Caipirinha  es de ... %

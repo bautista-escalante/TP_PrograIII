@@ -1,17 +1,357 @@
 [2024-06-20 22:17:49]  [INFO] eduardo inicio sesion como mozo
 [2024-06-20 22:18:23]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:45:38]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:46:28]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:46:41]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:47:32]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:49:57]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:50:14]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:51:43]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:51:57]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 02:52:52]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:01:50]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:03:47]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:03:52]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:06:00]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:06:52]  [ERROR] el empleado no tiene permiso de realizar esta accion
-[2024-06-21 03:09:37]  [ERROR] el empleado no tiene permiso de realizar esta accion
+[2024-06-21 04:36:38]  [INFO] eduardo inicio sesion como mozo
+[2024-06-21 04:47:28]  [ERROR] Error al mover el archivo subido
+[2024-06-21 04:49:42]  [INFO] el mozo vinculó el pedido con una foto
+[2024-06-21 05:48:52]  [INFO] eduardo atiende a los clientes
+[2024-06-21 05:48:52]  [INFO] eduardo le asigno la mesa 1
+[2024-06-21 05:57:42]  [INFO] eduardo atiende a los clientes
+[2024-06-21 05:57:42]  [INFO] eduardo le asigno la mesa 4
+[2024-06-21 06:05:31]  [INFO] eduardo atiende a los clientes
+[2024-06-21 06:05:31]  [INFO] eduardo le asigno la mesa 4
+[2024-06-21 06:11:59]  [INFO] eduardo atiende a los clientes
+[2024-06-21 06:11:59]  [INFO] eduardo le asigno la mesa 8
+[2024-06-21 06:11:59]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-21 06:14:41]  [INFO] eduardo atiende a los clientes
+[2024-06-21 06:14:41]  [INFO] eduardo le asigno la mesa 7
+[2024-06-21 06:14:41]  [INFO] eduardo dio de alta el pedido de la mesa 7
+[2024-06-21 06:17:03]  [INFO] eduardo atiende a los clientes
+[2024-06-21 06:17:03]  [INFO] eduardo le asigno la mesa 6
+[2024-06-21 06:17:03]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-21 17:39:17]  [INFO] eduardo inicio sesion como mozo
+[2024-06-21 17:39:27]  [INFO] eduardo atiende a los clientes
+[2024-06-21 17:39:27]  [INFO] eduardo le asigno la mesa 7
+[2024-06-21 17:39:27]  [INFO] eduardo dio de alta el pedido de la mesa 7
+[2024-06-21 19:12:41]  [ERROR] el empleado no tiene permiso de realizar esta accion
+[2024-06-22 00:47:13]  [INFO] eduardo inicio sesion como mozo
+[2024-06-22 00:47:44]  [ERROR] el empleado no tiene permiso de realizar esta accion
+[2024-06-23 14:59:57]  [INFO] eduardo inicio sesion como mozo
+[2024-06-23 15:00:08]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:00:08]  [INFO] eduardo le asigno la mesa 2
+[2024-06-23 15:00:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:00:08]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-23 15:28:23]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:28:23]  [INFO] eduardo le asigno la mesa 5
+[2024-06-23 15:28:23]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:28:23]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-23 15:28:23]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:28:23]  [INFO] eduardo le asigno la mesa 4
+[2024-06-23 15:28:23]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:28:23]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-23 15:34:04]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:34:04]  [INFO] eduardo le asigno la mesa 8
+[2024-06-23 15:34:04]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:34:04]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-23 15:34:04]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:34:04]  [INFO] eduardo le asigno la mesa 3
+[2024-06-23 15:34:04]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:34:04]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-23 15:35:34]  [INFO] eduardo atiende a los clientes
+[2024-06-23 15:35:34]  [INFO] eduardo le asigno la mesa 1
+[2024-06-23 15:35:34]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-23 15:35:34]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-23 16:18:04]  [INFO] eduardo inicio sesion como mozo
+[2024-06-23 16:19:22]  [INFO] eduardo inicio sesion como mozo
+[2024-06-23 16:19:29]  [INFO] eduardo inicio sesion como mozo
+[2024-06-23 16:21:34]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 01:30:10]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo atiende a los clientes
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno la mesa 
+[2024-06-24 01:35:13]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 01:35:13]  [INFO] eduardo dio de alta el pedido de la mesa 
+[2024-06-24 02:00:43]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno la mesa 1
+[2024-06-24 02:03:18]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:03:18]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-24 02:09:50]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:09:50]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:09:50]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:08]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:08]  [INFO] eduardo le asigno la mesa 3
+[2024-06-24 02:10:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:08]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:08]  [INFO] eduardo le asigno la mesa 3
+[2024-06-24 02:10:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno la mesa 8
+[2024-06-24 02:10:42]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:10:42]  [INFO] eduardo dio de alta el pedido de la mesa 8
+[2024-06-24 02:17:02]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:17:02]  [INFO] eduardo le asigno la mesa 2
+[2024-06-24 02:17:02]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:17:02]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-24 02:17:25]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:17:25]  [INFO] eduardo le asigno la mesa 3
+[2024-06-24 02:17:25]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:17:25]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-24 02:21:57]  [INFO] eduardo atiende a los clientes
+[2024-06-24 02:21:57]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 02:21:57]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 02:21:57]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 02:49:08]  [INFO] pablo inicio sesion como cocinero
+[2024-06-24 02:52:59]  [INFO] pablo inicio sesion como cocinero
+[2024-06-24 02:53:27]  [INFO] Array esta preparando el pedido
+[2024-06-24 02:53:27]  [INFO] Array ya termino el pedido
+[2024-06-24 02:53:27]  [INFO] Array esta preparando el pedido
+[2024-06-24 02:53:27]  [INFO] Array ya termino el pedido
+[2024-06-24 02:57:58]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 03:00:47]  [INFO] eduardo atiende a los clientes
+[2024-06-24 03:00:47]  [INFO] eduardo le asigno la mesa 7
+[2024-06-24 03:00:47]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 03:00:47]  [INFO] eduardo dio de alta el pedido de la mesa 7
+[2024-06-24 03:03:01]  [INFO] pablo inicio sesion como cocinero
+[2024-06-24 03:03:11]  [INFO] pablo esta preparando el pedido
+[2024-06-24 03:03:11]  [INFO] pablo ya termino el pedido
+[2024-06-24 03:03:54]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 03:15:12]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-24 03:15:12]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-24 03:15:12]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-24 03:21:42]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-24 03:23:28]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-24 03:24:01]  [INFO] el mozo cobra la suma de $ 3250 de la mesa 6
+[2024-06-24 23:05:02]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 23:05:12]  [INFO] eduardo atiende a los clientes
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 23:05:12]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo atiende a los clientes
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-24 23:05:12]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo atiende a los clientes
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 23:05:12]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo atiende a los clientes
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-24 23:05:12]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo atiende a los clientes
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno la mesa 6
+[2024-06-24 23:05:12]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-24 23:05:12]  [INFO] eduardo dio de alta el pedido de la mesa 6
+[2024-06-24 23:05:35]  [INFO] pablo inicio sesion como cocinero
+[2024-06-24 23:05:47]  [INFO] pablo esta preparando el pedido
+[2024-06-24 23:05:47]  [INFO] pablo ya termino el pedido
+[2024-06-24 23:05:47]  [INFO] pablo esta preparando el pedido
+[2024-06-24 23:05:47]  [INFO] pablo ya termino el pedido
+[2024-06-24 23:05:47]  [INFO] pablo esta preparando el pedido
+[2024-06-24 23:05:47]  [INFO] pablo ya termino el pedido
+[2024-06-24 23:06:40]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 23:06:53]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-24 23:12:07]  [INFO] ricardo inicio sesion como cervecero
+[2024-06-24 23:12:31]  [INFO] ricardo esta preparando el pedido
+[2024-06-24 23:12:31]  [INFO] ricardo ya termino el pedido
+[2024-06-24 23:13:13]  [INFO] eduardo inicio sesion como mozo
+[2024-06-24 23:13:25]  [INFO]  el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'
+[2024-06-25 01:43:54]  [INFO] eduardo inicio sesion como mozo
+[2024-06-25 01:44:06]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:44:06]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:44:06]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:44:06]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:44:06]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno la mesa 5
+[2024-06-25 01:44:06]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:44:06]  [INFO] eduardo dio de alta el pedido de la mesa 5
+[2024-06-25 01:48:08]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:48:08]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:48:08]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:48:08]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:48:08]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno la mesa 4
+[2024-06-25 01:48:08]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:48:08]  [INFO] eduardo dio de alta el pedido de la mesa 4
+[2024-06-25 01:50:12]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:50:12]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:50:12]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:50:12]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:50:12]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:50:12]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:50:12]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:51:59]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:51:59]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:51:59]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:51:59]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno la mesa 3
+[2024-06-25 01:51:59]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:51:59]  [INFO] eduardo dio de alta el pedido de la mesa 3
+[2024-06-25 01:55:34]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:55:34]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:55:34]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:55:34]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:55:34]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno la mesa 2
+[2024-06-25 01:55:34]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:55:34]  [INFO] eduardo dio de alta el pedido de la mesa 2
+[2024-06-25 01:58:24]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:58:24]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 01:58:24]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:58:24]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 01:58:24]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo atiende a los clientes
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 01:58:24]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 01:58:24]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo atiende a los clientes
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 02:01:17]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo atiende a los clientes
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno el pedido a ricardo
+[2024-06-25 02:01:17]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo atiende a los clientes
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 02:01:17]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo atiende a los clientes
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno el pedido a pablo
+[2024-06-25 02:01:17]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo atiende a los clientes
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno la mesa 1
+[2024-06-25 02:01:17]  [INFO] eduardo le asigno el pedido a ana
+[2024-06-25 02:01:17]  [INFO] eduardo dio de alta el pedido de la mesa 1
+[2024-06-25 04:04:26]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:04:59]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:08:52]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:08:59]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:09:45]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:11:17]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:11:28]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:12:16]  [ERROR] El empleado no tiene permiso para realizar esta acción
+[2024-06-25 04:12:31]  [ERROR] El empleado no tiene permiso para realizar esta acción

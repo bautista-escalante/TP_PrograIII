@@ -30,11 +30,9 @@ class Mesa{
                 $mesa = $resultado[rand(0,count($resultado)-1)];
                 return $mesa["id"];
             } else {
-                echo "no hay mesas disponibles";
                 return null;
             }
         } catch (PDOException) {
-            error_log("Error al asignar mesa" );
             return null;
         }
     }
@@ -105,4 +103,5 @@ class Mesa{
         $select->execute();
         return $select->fetch(PDO::FETCH_ASSOC);
     }
+
 }

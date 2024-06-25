@@ -8,18 +8,16 @@ include_once "modelo/Empleado.php";
 include_once "modelo/Pedido.php";
 include_once "modelo/Mesa.php";
 class ComandaControler{
-    public function cocinar(Request $request, Response $response){
-        Empleado::atenderPedidos($this->obtenerId($request));
-        return $response;
+    public function atenderCliente(Request $request, Response $response){
+        try{
+            $estado = Empleado::atenderPedidos($this->obtenerId($request));
+            $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
     }
-    public function prepararTrago(Request $request, Response $response){
-        Empleado::atenderPedidos($this->obtenerId($request));
-        return $response;
-    }
-    public function servirCerveza(Request $request, Response $response){
-        Empleado::atenderPedidos($this->obtenerId($request));
-        return $response;
-    }
+
     private function obtenerId(Request $request){
         $authHeader = $request->getHeaderLine('Authorization');
         $token = str_replace('Bearer ', '', $authHeader);
@@ -30,19 +28,19 @@ class ComandaControler{
                 return $data['idEmpleado'];
             }
             else{
-                echo "error <br>";
+                echo "error";
             }
         }catch (ExpiredException) {
-            $response = new Response();
-            $response->getBody()->write("tu sesion ya caduco, por favor vuelve a ingresar.");
-            return $response;
+            throw new Exception("tu sesion ya caduco, por favor vuelve a ingresar.");
         } catch (Exception $e) {
-            error_log('Excepción al decodificar el token JWT: ' . $e->getMessage());
+            throw new Exception('Excepción al decodificar el token JWT: ' . $e->getMessage());
         }
     }
+
     public function cerrarMesa(Request $request, Response $response, $args){
         try {
-            $id = $args['id'];
+            parse_str(file_get_contents('php://input'), $params);
+            $id = $params['id'];
             if (isset($id) && !empty($id)) {
                 $mesa = Mesa::MostarMesa($id);
                 if($mesa['estado'] === "con cliente pagando"){
@@ -62,13 +60,15 @@ class ComandaControler{
             return $response->withStatus(500);
         }
     }
+
     public function cobrar(Request $request, Response $response, $args){
         try {
-            $id = $args['id'];
+            parse_str(file_get_contents('php://input'), $params);
+            $id = $params["id"];
             if (isset($id) && !empty($id)){
                 $mesa = Mesa::MostarMesa($id);
                 if($mesa['estado'] === "el cliente esta comiendo"){
-                    $precio = Pedido::VerPrecio($id);
+                    $precio = Pedido::obtenerPrecio($id);
                     $log = new registrador();
                     $log->registarActividad("el mozo cobra la suma de $ {$precio} de la mesa {$id}");
                     Mesa::ActualizarEstadoMesa($id, "con cliente pagando");
@@ -87,31 +87,41 @@ class ComandaControler{
             return $response->withStatus(500);
         }
     }
+
+/* 11- El cliente ingresa el código de mesa y el del pedido junto con los datos de la encuesta.  */
     public function puntuar(Request $request, Response $response){
         try {
-            $params = $request->getParsedBody();
+            parse_str(file_get_contents('php://input'), $params);
             $idMesa = $params['idMesa'];
-            $pedidos = Pedido::obtenerPedido($idMesa);
+            $codigoAlfa = $params["codigoAlfa"];
+
+            $pedidos = Pedido::obtenerPedido($codigoAlfa);
             foreach($pedidos as $pedido){
-                $calificacionMozo = $params['calificacionMozo'];
-                $calificacionMesa = $params['calificacionMesa'];
-                $calificacionCocinero = $params['calificacionCocinero'];
-                $idCocinero = $pedido["idCocinero"];
-                $idMozo  = $pedido["idMozo"];
-                if (isset($idMesa, $idCocinero, $idMozo) && !empty($idMesa)&& !empty($idMozo)&& !empty($idCocinero)) {
+                if (isset($idMesa, $pedido["idCocinero"], $pedido["idMozo"]) && !empty($idMesa)&& !empty($pedido["idMozo"])&& !empty($pedido["idCocinero"])) {
+
+                    $calificacionMozo = intval($params['calificacionMozo']);
+                    $calificacionMesa = intval($params['calificacionMesa']);
+                    $calificacionCocinero = intval($params['calificacionCocinero']);
+                    $comentarioMozo = $params['comentarioMozo'];
+                    $comentarioMesa = $params['comentarioMesa'];
+                    $comentarioCocinero = $params['comentarioCocinero'];
+                    $idCocinero = $pedido["idCocinero"];
+                    $idMozo  = $pedido["idMozo"];
+
                     $mesa = Mesa::MostarMesa($idMesa);
                     if($mesa['estado'] === "con cliente pagando"){
+                        Pedido::guardarPuntuacion($calificacionMozo, $comentarioMozo, $calificacionCocinero, $comentarioCocinero, $calificacionMesa, $comentarioMesa);
                         Mesa::CalificarMesa($idMesa,$calificacionMesa);
                         Empleado::calificarEmpleado($idMozo, $calificacionMozo, "mozo");
                         Empleado::calificarEmpleado($idCocinero, $calificacionCocinero, "cocinero");
                         $response->getBody()->write("su calificacion fue enviada.<br>");
                         return $response->withStatus(200);
                     }else{
-                        $response->getBody()->write("Error: para puntuar el pedido ebe estar pagado.<br>");
+                        $response->getBody()->write("Error: para puntuar el pedido debe estar pagado.<br>");
                         return $response->withStatus(400);
                     }
                 } else {
-                    $response->getBody()->write("Error: coloca los parámetros para cobrar el pedido.<br>");
+                    $response->getBody()->write("Error: coloca los parámetros para puntuar.<br>");
                     return $response->withStatus(400);
                 }
             }
@@ -120,6 +130,7 @@ class ComandaControler{
             return $response->withStatus(500);
         }
     }
+
     public function verEstadisticas(Request $request, Response $response){
         //generar estadisticas para mesas, proucto mas vendidos
         $params = $request->getQueryParams();
@@ -139,5 +150,26 @@ class ComandaControler{
         $response = $response->withHeader('Content-Type', 'application/pdf')
         ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"');
         return $response;
+    }
+
+    public function verTiempoDemora(Request $request, Response $response){
+        $param = $request->getParsedBody();
+        if(!empty($param["codigoPedido"]) && !empty($param["mesa"]) && isset($param["codigoPedido"], $param["mesa"])){
+            $tiempo = Pedido::tiempoDemora($param["codigoPedido"], $param["mesa"]);
+            $response->getBody()->write(json_encode(["ESTADO"=>$tiempo]));
+        }else{
+            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    public function verMesaMasUsada(Request $request, Response $response){
+        try{
+            $mesa = Pedido::verMesaMasUsada();
+            $response->getBody()->write(json_encode(["MESA"=>$mesa["idMesa"]]));
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
+        }
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
