@@ -1,7 +1,5 @@
 <?php
-/*
-    una vez intanciado recojer el id para darselo al cliente
-*/
+
 include_once "db/AccesoDatos.php";
 class Pedido{
     public $id; 
@@ -112,9 +110,9 @@ class Pedido{
             return "el codigo alfa no existe";
         }
     }
+    // aca la forigin key ayudaria
     public static function obtenerPrecio($idMesa){
         // obtener pedidos de la misma mesa
-        // mejorar esto para que no solo tome en cuenta laa mesa sino el pedido
         $bd = AccesoDatos::obtenerInstancia();
         $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos WHERE idMesa = :idMesa");
         $select->bindValue(":idMesa",$idMesa, PDO::PARAM_INT);

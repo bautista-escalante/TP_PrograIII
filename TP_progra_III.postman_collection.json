@@ -206,15 +206,6 @@
 						"url": "http://localhost:100/abmMesa/modificarMesa"
 					},
 					"response": []
-				},
-				{
-					"name": "listarMesas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "http://localhost:100/abmMesa/listarMesas"
-					},
-					"response": []
 				}
 			]
 		},
@@ -571,7 +562,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"nombreProducto\": \"milanesa\",\r\n        \"cantidad\": 1\r\n    },\r\n    {\r\n        \"nombreProducto\": \"cerveza roja\",\r\n        \"cantidad\": 1\r\n    },\r\n    {\r\n        \"nombreProducto\": \"milanesa a caballo\",\r\n        \"cantidad\": 2\r\n    },\r\n    {\r\n        \"nombreProducto\": \"Daiquiri\",\r\n        \"cantidad\": 1\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"nombreProducto\": \"corona\",\r\n        \"cantidad\" :  3\r\n    },\r\n    {\r\n        \"nombreProducto\": \"milanesa\",\r\n        \"cantidad\" :  3\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -593,6 +584,16 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "codigoPedido",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
 						"url": "http://localhost:100/laComanda/cocinar"
 					},
 					"response": []
@@ -616,7 +617,13 @@
 						],
 						"body": {
 							"mode": "formdata",
-							"formdata": []
+							"formdata": [
+								{
+									"key": "codigoPedido",
+									"value": "",
+									"type": "text"
+								}
+							]
 						},
 						"url": "http://localhost:100/laComanda/prepararTrago"
 					},
@@ -645,6 +652,16 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "codigoPedido",
+									"value": "o7KfM",
+									"type": "text"
+								}
+							]
+						},
 						"url": "http://localhost:100/laComanda/servirCerveza"
 					},
 					"response": []
@@ -671,11 +688,76 @@
 								{
 									"key": "foto",
 									"type": "file",
-									"src": "/C:/Users/B4U71S74/Pictures/naylon.png"
+									"src": "/C:/Users/B4U71S74/Pictures/petg.png"
 								}
 							]
 						},
 						"url": "http://localhost:100/laComanda/vincularFoto"
+					},
+					"response": []
+				},
+				{
+					"name": "ver Tiempo       de Demora",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mesa",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "codigoPedido",
+									"value": "Wp8RL",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:100/laComanda/verTiempoDemora"
+					},
+					"response": []
+				},
+				{
+					"name": "verPedidos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:100/laComanda/verPedidos?id=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "100",
+							"path": [
+								"laComanda",
+								"verPedidos"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarMesas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/abmMesa/listarMesas"
 					},
 					"response": []
 				},
@@ -695,7 +777,7 @@
 							"formdata": [
 								{
 									"key": "mesa",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								}
 							]
@@ -720,7 +802,7 @@
 							"urlencoded": [
 								{
 									"key": "id",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								}
 							]
@@ -745,7 +827,7 @@
 							"urlencoded": [
 								{
 									"key": "id",
-									"value": "1",
+									"value": "4",
 									"type": "text"
 								}
 							]
@@ -767,12 +849,12 @@
 							"urlencoded": [
 								{
 									"key": "idMesa",
-									"value": "5",
+									"value": "7",
 									"type": "text"
 								},
 								{
 									"key": "codigoAlfa",
-									"value": "Zu7gS",
+									"value": "su3PM",
 									"type": "text"
 								},
 								{
@@ -782,12 +864,12 @@
 								},
 								{
 									"key": "comentarioMozo",
-									"value": "un capo el mozo",
+									"value": "el mozo fue amable",
 									"type": "text"
 								},
 								{
 									"key": "calificacionCocinero",
-									"value": "5",
+									"value": "4",
 									"type": "text"
 								},
 								{
@@ -802,12 +884,37 @@
 								},
 								{
 									"key": "comentarioMesa",
-									"value": "la mesa  estaba en buuen estado ",
+									"value": "la mesa  estaba en buen estado ",
+									"type": "text"
+								},
+								{
+									"key": "calificacionRestaurante",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "comentarioRestaurante",
+									"value": "el ambiente es agradable",
 									"type": "text"
 								}
 							]
 						},
 						"url": "http://localhost:100/laComanda/puntuar"
+					},
+					"response": []
+				},
+				{
+					"name": "mejor comentario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:100/laComanda/verMejorcomentario"
 					},
 					"response": []
 				},
@@ -845,30 +952,6 @@
 					"response": []
 				},
 				{
-					"name": "ver Tiempo       de Demora",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "mesa",
-									"value": "2",
-									"type": "text"
-								},
-								{
-									"key": "codigoPedido",
-									"value": "sxWUJ",
-									"type": "text"
-								}
-							]
-						},
-						"url": "http://localhost:100/laComanda/verTiempoDemora"
-					},
-					"response": []
-				},
-				{
 					"name": "verMesaMasUsada",
 					"request": {
 						"auth": {
@@ -880,53 +963,6 @@
 						"method": "POST",
 						"header": [],
 						"url": "http://localhost:100/laComanda/verMesaMasUsada"
-					},
-					"response": []
-				},
-				{
-					"name": "mejor comentario",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"url": "http://localhost:100/laComanda/verMejorcomentario"
-					},
-					"response": []
-				},
-				{
-					"name": "verPedidos",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{token}}"
-							}
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:100/laComanda/verPedidos?id=",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "100",
-							"path": [
-								"laComanda",
-								"verPedidos"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": ""
-								}
-							]
-						}
 					},
 					"response": []
 				}
