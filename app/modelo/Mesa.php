@@ -71,19 +71,35 @@ class Mesa{
         $consulta->bindValue(':id', $id, PDO::PARAM_STR);
         $consulta->execute();
     }
+    /*
+    
+        $puntuaciones = [];
+        if(!empty($result)){
+            foreach($result as $punto){
+                $puntuaciones[] = intval($punto);
+            }
+        }
+        $puntuaciones[] = $calificacion;
+        $promedio = array_sum($puntuaciones) / count($puntuaciones);
+        $update = $bd->prepararConsulta("UPDATE empleados SET puntuacion = :puntuacion WHERE id = :id AND tipo = :tipo");
+        $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR); 
+        $update->bindParam(':id', $idEmpleado, PDO::PARAM_INT);
+        $update->bindParam(':tipo', $tipo, PDO::PARAM_STR);
+        $update->execute(); */
     public static function CalificarMesa($idmesa, $calificacion){
         $bd = AccesoDatos::obtenerInstancia();
         $consulta = $bd->prepararConsulta("SELECT puntuacion FROM mesas WHERE id = :id AND estado = 'cerrada'");
         $consulta->bindParam(':id', $idmesa, PDO::PARAM_STR);
         $consulta->execute();
-        $result = $consulta->fetch(PDO::FETCH_ASSOC);
-        if ($result && !empty($result['puntuacion'])) {
-            $puntuaciones = json_decode($result['puntuacion'], true);
-            $puntuaciones[] = $calificacion;
+        $puntuaciones = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        if ($puntuaciones && !empty($puntuaciones['puntuacion'])) {
+            $puntuaciones [] = $calificacion;
             $promedio = array_sum($puntuaciones) / count($puntuaciones);
         } else {
-            $promedio = $calificacion;    
+            $promedio = $calificacion;
         }
+
         $bd = AccesoDatos::obtenerInstancia();            
         $update = $bd->prepararConsulta("UPDATE mesas SET puntuacion = :puntuacion WHERE id = :id");
         $update->bindParam(':puntuacion', $promedio, PDO::PARAM_STR);

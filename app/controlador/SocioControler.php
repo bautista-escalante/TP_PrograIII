@@ -107,13 +107,24 @@ class SocioControler {
         return $response->withHeader('Content-Type', 'application/json');
     }
     public function verMejorcomentario(Request $request, Response $response){
-        $resultado = Pedido::verMejorcomentario();
-        $response->getBody()->write(json_encode(["Mejores Comentarios"=>($resultado)]));
+        try{
+            $resultado = Pedido::verMejorcomentario();
+            $response->getBody()->write(json_encode(["Mejores Comentarios"=>$resultado]));
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));    
+        }
         return $response->withHeader('Content-Type', 'application/json');
     }
     public function VerCancelados(Request $request, Response $response){
-        $resultado = Socio::VerCancelados();
-        $response->getBody()->write(json_encode(["PEDIDOS CANCELADOS"=>($resultado)]));
+        try{
+            $resultados = Socio::VerCancelados();
+            
+            foreach($resultados as $resultado){
+                $response->getBody()->write(json_encode(["PEDIDOS CANCELADOS"=>($resultado)]));
+            }
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
+        }
         return $response->withHeader('Content-Type', 'application/json');
     }
 }

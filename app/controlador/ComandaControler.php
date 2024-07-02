@@ -4,15 +4,24 @@ use Firebase\JWT\ExpiredException;
 use Slim\Psr7\Response;
 use Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
+
 include_once "modelo/Empleado.php";
+include_once "modelo/Cliente.php";
 include_once "modelo/Pedido.php";
 include_once "modelo/Mesa.php";
 
 class ComandaControler{
     public function atenderCliente(Request $request, Response $response){
+        $param = $request->getParsedBody();
         try{
-            $estado = Empleado::atenderPedidos($this->obtenerId($request));
-            $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+            if(!empty($param["codigoPedido"]) && isset($param["codigoPedido"])){
+                Pedido::actualizarEncargado($param["codigoPedido"], $this->obtenerId($request));
+                $estado = Empleado::atenderPedido($this->obtenerId($request), $param["codigoPedido"]);
+                $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+            }else{
+                $producto = Pedido::listarPedidosPendientes($this->obtenerId($request));
+                $response->getBody()->write(json_encode(["PENDIENTES"=>$producto]));
+            }
         }catch(Exception $e){
             $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
         }
@@ -27,9 +36,6 @@ class ComandaControler{
             $data = (array) $jwt;
             if (isset($data['idEmpleado'])){
                 return $data['idEmpleado'];
-            }
-            else{
-                echo "error";
             }
         }catch (ExpiredException) {
             throw new Exception("tu sesion ya caduco, por favor vuelve a ingresar.");
@@ -75,7 +81,7 @@ class ComandaControler{
         } catch (PDOException $e) {
             $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
         }
-return $response->withHeader('Content-Type', 'application/json');
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function cobrar(Request $request, Response $response, $args){
@@ -104,73 +110,67 @@ return $response->withHeader('Content-Type', 'application/json');
             return $response->withStatus(500);
         }
     }
-
     public function puntuar(Request $request, Response $response){
-        try {
-            parse_str(file_get_contents('php://input'), $params);
-            $idMesa = $params['idMesa'];
-            $codigoAlfa = $params["codigoAlfa"];
+        parse_str(file_get_contents('php://input'), $params);
+        try{
+            if (isset($params['idMesa'], $params["codigoAlfa"], $params["calificacionMozo"], 
+            $params["comentarioMozo"], $params["calificacionCocinero"], $params["comentarioCocinero"], 
+            $params["calificacionMesa"], $params["comentarioMesa"], $params["calificacionRestaurante"], 
+            $params["comentarioRestaurante"]) && !empty($params['idMesa']) && !empty($params["codigoAlfa"]) && 
+            !empty($params["calificacionMozo"]) && !empty($params["comentarioMozo"]) && 
+            !empty($params["calificacionCocinero"]) && !empty($params["comentarioCocinero"]) && 
+            !empty($params["calificacionMesa"]) && !empty($params["comentarioMesa"]) && 
+            !empty($params["calificacionRestaurante"]) && !empty($params["comentarioRestaurante"])) {
 
-            $pedidos = Pedido::obtenerPedido($codigoAlfa);
-            foreach($pedidos as $pedido){
-                if (isset($idMesa, $pedido["idCocinero"], $pedido["idMozo"]) && !empty($idMesa)&& !empty($pedido["idMozo"])&& !empty($pedido["idCocinero"])) {
+                    $pedido = Pedido::obtenerPedido($params["codigoAlfa"]);
+                    if(!empty($pedido)){
+                        Cliente::calificar($pedido["idMesa"], $pedido["idCocinero"], $pedido["idMozo"], 
+                        $params["codigoAlfa"],$params["calificacionMesa"], $params["comentarioMesa"], 
+                        $params["calificacionCocinero"],$params["comentarioCocinero"],
+                        $params["calificacionMozo"], $params["comentarioMozo"],$params["calificacionRestaurante"],
+                        $params["comentarioRestaurante"]);
 
-                    $calificacionMozo = intval($params['calificacionMozo']);
-                    $calificacionMesa = intval($params['calificacionMesa']);
-                    $calificacionCocinero = intval($params['calificacionCocinero']);
-                    $comentarioMozo = $params['comentarioMozo'];
-                    $comentarioMesa = $params['comentarioMesa'];
-                    $comentarioCocinero = $params['comentarioCocinero'];
-                    $idCocinero = $pedido["idCocinero"];
-                    $idMozo  = $pedido["idMozo"];
-
-                    $mesa = Mesa::MostarMesa($idMesa);
-                    if(!empty($mesa) && $mesa['estado'] === "cerrada"){
-                        Pedido::guardarPuntuacion($calificacionMozo, $comentarioMozo, $calificacionCocinero, $comentarioCocinero, $calificacionMesa, $comentarioMesa);
-                        Mesa::CalificarMesa($idMesa,$calificacionMesa);
-                        Empleado::calificarEmpleado($idMozo, $calificacionMozo, "mozo");
-                        Empleado::calificarEmpleado($idCocinero, $calificacionCocinero, "cocinero");
-                        $response->getBody()->write("su calificacion fue enviada.<br>");
-                        return $response->withStatus(200);
-                    }else{
-                        $response->getBody()->write("Error: para puntuar el pedido debe estar pagado.<br>");
-                        return $response->withStatus(400);
+                        $response->getBody()->write(json_encode(["ESTADO"=>"los comentarios fueron guardados"]));
+                        
+                    }else {
+                        throw new Exception("no se encontro el pedido");
                     }
-                } else {
-                    $response->getBody()->write("Error: coloca los parámetros para puntuar.<br>");
-                    return $response->withStatus(400);
-                }
+            }else{
+                throw new Exception("faltan parametros");
             }
-        } catch (PDOException $e) {
-            $response->getBody()->write("Error: " . $e->getMessage() . "<br>");
-            return $response->withStatus(500);
-        }catch(ParseError) {
-            $response->getBody()->write("Error  las calificaciones deben ser de tipo numerico <br>");
-            return $response->withStatus(500);
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
         }
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function verEstadisticas(Request $request, Response $response){
         //generar estadisticas para mesas, proucto mas vendidos
-        $params = $request->getQueryParams();
-        $probabilidad = Producto::generarEstadisticaProductos($params["producto"]);
-        $probabilidadTiempo = Pedido::GenerarEstadisticasPedido();
         $pdf = new FPDF();
         $pdf->AddPage();
+        $pdf->Image("imagenes/LaComanda.png", 70, 40, 60);
         $pdf->SetFont('Arial', 'B', 16);
-        $pdf->Cell(0, 10, 'La probabilidad de que el pedido se entrege a tiempo es de ' . number_format($probabilidadTiempo * 100, 2) . '%', 0, 1);
-        if($probabilidad != -1){
-            $pdf->Cell(0, 10, 'La probabilidad de que se venda '.$params["producto"].' es de ' . number_format($probabilidad * 100, 2) . '%', 0, 1);
-        }
-        else{
-            $pdf->Cell(0, 10, "Error: el producto no esta dentro del menu");
-        }
-        $pdf->Output('F', 'php://output');
-        $response = $response->withHeader('Content-Type', 'application/pdf')
-        ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"');
-        return $response;
-    }
+       try{
+            $params = $request->getQueryParams();
+            $probabilidad = Producto::generarEstadisticaProductos($params["producto"]);
+            $probabilidadTiempo = Pedido::GenerarEstadisticasPedido();
 
+            $pdf->Cell(0, 10, 'La probabilidad de que el pedido se entrege a tiempo es de ' . number_format($probabilidadTiempo * 100, 2) . '%', 0, 1);
+            $pdf->Cell(0, 10, 'La probabilidad de que se venda '.$params["producto"].' es de ' . number_format($probabilidad * 100, 2) . '%', 0, 1);
+
+        }catch(Exception $e){
+            $pdf->Cell(0, 10, $e->getMessage());
+
+        }
+        $pdfOutput = $pdf->Output('S');
+
+        $body = new \Slim\Psr7\Stream(fopen('php://memory', 'r+'));
+        $body->write($pdfOutput);
+        $body->rewind();
+        return $response->withHeader('Content-Type', 'application/pdf')
+        ->withHeader('Content-Disposition', 'attachment; filename="estadisticas.pdf"')
+        ->withBody($body);
+    }
     public function verTiempoDemora(Request $request, Response $response){
         $param = $request->getParsedBody();
         if(!empty($param["codigoPedido"]) && !empty($param["mesa"]) && isset($param["codigoPedido"], $param["mesa"])){

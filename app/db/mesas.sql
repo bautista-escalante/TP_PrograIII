@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2024 a las 19:48:14
+-- Tiempo de generación: 02-07-2024 a las 15:00:48
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -46,7 +46,7 @@ INSERT INTO `mesas` (`id`, `estado`, `puntuacion`, `codigoMesa`, `fechaBaja`) VA
 (4, 'cerrada', 3, '5y7qd', NULL),
 (5, 'cerrada', NULL, 'bFo1r', NULL),
 (6, 'cerrada', NULL, '14YLH', NULL),
-(7, 'cerrada', NULL, 'sb48S', NULL),
+(7, 'cerrada', 5, 'sb48S', NULL),
 (8, 'cerrada', NULL, 'fJzZV', NULL);
 
 --

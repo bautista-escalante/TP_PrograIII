@@ -15,9 +15,8 @@ class MozoControler{
                         $cantidad = intval($param["cantidad"]);
                         for($i = 0; $i < $cantidad; $i++){
                             $alfa = Pedido::generarCodigo();
-                            $encargado = Empleado::atenderCliente($param["nombreProducto"], $mesa, $alfa);
-                            $response->getBody()->write(json_encode(["NOMBRE"=>$param["nombreProducto"],
-                                                                    "A CARGO DE "=>$encargado, 
+                            Empleado::atenderCliente($param["nombreProducto"], $mesa, $alfa);
+                            $response->getBody()->write(json_encode(["NOMBRE"=>$param["nombreProducto"],                       
                                                                     "CODIGO ALFANUMERICO"=>$alfa,
                                                                     "MESA"=>$mesa]));
                         }
@@ -64,35 +63,37 @@ class MozoControler{
     }
     public function servir(Request $request, Response $response){
         $param = $request->getParsedBody();
-
-        if(!empty($param["mesa"]) && isset($param["mesa"])){
-            //entregar pedido cuando el estado sea listo para servir
-            $bd = AccesoDatos::obtenerInstancia();
-            $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'listo para servir' AND idMesa = :idMesa");
-            $consulta->bindValue(":idMesa", $param["mesa"], PDO::PARAM_STR);
-            $consulta->execute();
-            $pedidosListos = $consulta->fetchAll(PDO::FETCH_ASSOC);
-            
-            if(!empty($pedidosListos)){
-                foreach ($pedidosListos as $pedido){
-                    if(!Pedido::verificarPedidosEntregados($param["mesa"])){
-                        
-                        // Actualizar el estado de la mesa asociada al pedido a "el cliente está comiendo"
-                        Mesa::ActualizarEstadoMesa($pedido["idMesa"],"el cliente esta comiendo");
-                        $estado = Pedido::ActualizarEstadoPedido("entregado",$pedido["id"]);
-                        $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
-                    }else{
-                        $response->getBody()->write(json_encode(["ERROR"=>"todos los pedidos de la mesa deben esta listos para ser entregados"]));
-                        break;
+        try{
+            if(!empty($param["mesa"]) && isset($param["mesa"])){
+                //entregar pedido cuando el estado sea listo para servir
+                $bd = AccesoDatos::obtenerInstancia();
+                $consulta = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'listo para servir' AND idMesa = :idMesa");
+                $consulta->bindValue(":idMesa", $param["mesa"], PDO::PARAM_STR);
+                $consulta->execute();
+                $pedidosListos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+                
+                if(!empty($pedidosListos)){
+                    foreach ($pedidosListos as $pedido){
+                        if(!Pedido::verificarPedidosEntregados($param["mesa"])){
+                            
+                            // Actualizar el estado de la mesa asociada al pedido a "el cliente está comiendo"
+                            Mesa::ActualizarEstadoMesa($pedido["idMesa"],"el cliente esta comiendo");
+                            $estado = Pedido::ActualizarEstadoPedido("entregado",$pedido["codigoAlfa"]);
+                            $response->getBody()->write(json_encode(["ESTADO"=>$estado]));
+                        }else{
+                            throw new Exception("todos los pedidos de la mesa deben esta listos para ser entregados");
+                        }
                     }
+                    $log = new registrador();
+                    $log->registarActividad(" el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'"); 
+                }else{
+                    throw new Exception("no hay pedidos que entregar");
                 }
-                $log = new registrador();
-                $log->registarActividad(" el mozo entrega el pedido y cambia el estado de la mesa a 'el cliente esta comiendo'"); 
             }else{
-                $response->getBody()->write(json_encode(["ERROR"=>"no hay pedidos que entregar"]));
+                throw new Exception("faltan parametros");
             }
-        }else{
-            $response->getBody()->write(json_encode(["ERROR"=>"faltan parametros"]));
+        }catch(Exception $e){
+            $response->getBody()->write(json_encode(["ERROR"=>$e->getMessage()]));
         }
         return $response->withHeader('Content-Type', 'application/json');
     }

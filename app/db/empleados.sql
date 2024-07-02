@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2024 a las 19:48:07
+-- Tiempo de generación: 02-07-2024 a las 15:00:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,13 +42,13 @@ CREATE TABLE `empleados` (
 
 INSERT INTO `empleados` (`id`, `nombre`, `tipo`, `ocupado`, `puntuacion`, `deleted_at`) VALUES
 (1, 'pepe', 'mozo', 1, NULL, '2024-06-04'),
-(4, 'eduardo', 'mozo', 1, 4.5, NULL),
-(5, 'ricardo', 'cervecero', 1, NULL, NULL),
+(4, 'eduardo', 'mozo', 0, 4.5, NULL),
+(5, 'ricardo', 'cervecero', 0, NULL, NULL),
 (7, 'luis', 'socio', 0, NULL, NULL),
 (8, 'alejandro', 'socio', 0, NULL, NULL),
 (9, 'isabel', 'socio', 0, NULL, NULL),
-(10, 'pablo', 'cocinero', 1, 4, NULL),
-(11, 'tomas', 'cocinero', 1, 4.5, NULL),
+(10, 'pablo', 'cocinero', 0, 4, NULL),
+(11, 'tomas', 'cocinero', 0, 4.5, NULL),
 (13, 'ana', 'bartender', 0, NULL, NULL),
 (14, 'micaela', 'bartender', 0, NULL, NULL),
 (16, 'matin', 'cocinero', 0, NULL, NULL);

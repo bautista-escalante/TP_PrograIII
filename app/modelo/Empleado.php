@@ -28,24 +28,22 @@ class Empleado{
         $this->tipo = $tipo;
         $this->ocupado = false;
     }
-    private static function obtenerPedidos($id){
+    public static function obtenerPedidos($id){
         $bd = AccesoDatos::obtenerInstancia();
-        $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE idCocinero = :id AND estado = 'en preparacion'");
+        $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE  AND estado = 'en preparacion'");
         $select->bindValue(":id", $id, PDO::PARAM_INT);
         $select->execute();
         $pedidos = $select->fetchAll(PDO::FETCH_ASSOC);
 
         if(!empty($pedidos)){
-            foreach($pedidos as $pedido){
-                Pedido::calcularTiempo($pedido["id"]);
-            }
             return $pedidos;
         }else{
             throw new Exception("no hay pedidos que preparar");
         }
     }
-    public static function atenderPedidos($idEmpleado){
-        // obtengo el usuario que esta haciendo la operacion en base al jwt 
+    public static function atenderPedido($idEmpleado, $pedido){
+        $log = new registrador();
+        
         $bd = AccesoDatos::obtenerInstancia();
         $select = $bd->prepararConsulta("SELECT * FROM usuarios WHERE id = :id");
         $select->bindValue(":id", $idEmpleado, PDO::PARAM_INT);
@@ -55,61 +53,39 @@ class Empleado{
         $nombre = $usuario["usuario"];
 
         Empleado::actualizarEstadoEmpleado(true,$idEmpleado);
-        //obtengo los pedidos pendientes
-        $pedidos = Empleado::obtenerPedidos($idEmpleado);
 
-        if(!empty($pedidos) && !empty($nombre)){
-            $log = new registrador();
-            foreach($pedidos as $pedido){
-                // el empleado le asiga el tiempo
-                Pedido::calcularTiempo($pedido["id"]);
-                Pedido::ActualizarEstadoPedido("listo para servir",$pedido["id"]);
+        // el empleado le asiga el tiempo
+        Pedido::calcularTiempo($pedido);
+        Pedido::ActualizarEstadoPedido("listo para servir",$pedido);
 
-                $log->registarActividad("{$nombre} esta preparando el pedido");
-                $log->registarActividad("{$nombre} ya termino el pedido");
+        $log->registarActividad("{$nombre} esta preparando el pedido");
+        $log->registarActividad("{$nombre} ya termino el pedido");
 
-                Pedido::actualizarFechaEntrega($pedido["id"]);
-            }
-            Empleado::actualizarEstadoEmpleado(false, $idEmpleado);
-            return "{$nombre} ya termino los pedidos pendientes";
-        } else{
-            throw new Exception("no hay pedidos pendientes");
-        }
+        Pedido::actualizarFechaEntrega($pedido);
+        Empleado::actualizarEstadoEmpleado(false, $idEmpleado);
+        return "{$nombre} ya termino el pedido pendiente";
     }
+
     public static function atenderCliente($pedido, $mesa, $numPedido){
-        // Consigo el puesto según la comida, ej: "fernet con coca -> bartender"
-        $encargado = self::obtenerEncargado($pedido);                
-        $log = new registrador();
-        // Obtengo todos los empleados que pueden ejecutar el pedido
-        $empleadosEncontrados = self::obtenerEmpleadosPorPuesto($encargado);    
+              
+        $log = new registrador();  
 
-        if (count($empleadosEncontrados) > 0) {
-            $i = array_rand($empleadosEncontrados);
-            $dataProducto = Producto::buscarProducto($pedido);
-            $mozos = self::obtenerEmpleadosPorPuesto("mozo");
-            if (count($mozos) > 0){
-                $i = array_rand($mozos);
-                $idMozo = $mozos[$i]["id"];
-                $nombreMozo = $mozos[$i]["nombre"];
-
-                // bartender, cerbecero o cocinero
-                $idEncargado = $empleadosEncontrados[$i]["id"];
-                $nombreEncargado = $empleadosEncontrados[$i]["nombre"];
+        $dataProducto = Producto::buscarProducto($pedido);
+        $mozos = Empleado::obtenerEmpleadosPorPuesto("mozo");
+        if (count($mozos) > 0){
+            $i = array_rand($mozos);
+            $idMozo = $mozos[$i]["id"];
+            $nombreMozo = $mozos[$i]["nombre"];
                     
-                $log->registarActividad("{$nombreMozo} atiende a los clientes");
-                $log->registarActividad("{$nombreMozo} le asigno la mesa {$mesa}");
-                $log->registarActividad("{$nombreMozo} le asigno el pedido a {$nombreEncargado}");
+            $log->registarActividad("{$nombreMozo} atiende a los clientes");
+            $log->registarActividad("{$nombreMozo} le asigno la mesa {$mesa}");
                     
-                $encargo = new Pedido();
-                $idPedido = $encargo->guardar();
-                Pedido::actualizarPedido($idPedido, $numPedido, $dataProducto["id"], $mesa, $idMozo, $idEncargado, false);
-                $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
-                return $nombreEncargado;
-            } else {
-                throw new Exception("no hay mozos disponible");       
-            }
+            $encargo = new Pedido();
+            $idPedido = $encargo->guardar();
+            Pedido::actualizarPedido($idPedido, $numPedido, $dataProducto["id"], $mesa, $idMozo, false);
+            $log->registarActividad("{$nombreMozo} dio de alta el pedido de la mesa {$mesa}");
         } else {
-            throw new Exception("No hay empleados que puedan realizar el pedido");
+            throw new Exception("no hay mozos disponibles");       
         }
     }
     public static function calificarEmpleado($idEmpleado, $calificacion, $tipo) {
@@ -160,24 +136,15 @@ class Empleado{
         $consulta->execute();
     }
     public static function obtenerEmpleadosPorPuesto($puesto){
-            try {
-                $bd = AccesoDatos::obtenerInstancia();
-                $query = "SELECT * FROM empleados WHERE tipo = :puesto AND deleted_at IS NULL";
-                $select = $bd->prepararConsulta($query);
-                $select->bindParam(':puesto', $puesto, PDO::PARAM_STR);
-                $select->execute();
-                return $select->fetchAll(PDO::FETCH_ASSOC);
-            } catch (PDOException $e) {
-                echo "Error: " . $e->getMessage();
-            }
-    }
-    private static function obtenerEncargado($producto){
-        $producto = Producto::buscarProducto($producto);
-        if($producto != false){
-            return $producto["puestoResponsable"];
-        }
-        else{
-            echo "error no tenemos esa comida en nuestro menu";
+        try {
+            $bd = AccesoDatos::obtenerInstancia();
+            $query = "SELECT * FROM empleados WHERE tipo = :puesto AND deleted_at IS NULL";
+            $select = $bd->prepararConsulta($query);
+            $select->bindParam(':puesto', $puesto, PDO::PARAM_STR);
+            $select->execute();
+            return $select->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
     public static function ObtenerEmpleado($id){

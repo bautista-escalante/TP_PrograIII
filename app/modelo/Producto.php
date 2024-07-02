@@ -66,29 +66,22 @@ class Producto {
     }
     public static function obtenerProducto($id){
         $db = AccesoDatos::obtenerInstancia();
-        $select = $db->prepararConsulta("SELECT nombre, precio FROM producto WHERE fechaBaja IS NULL and id = :id");
+        $select = $db->prepararConsulta("SELECT * FROM producto WHERE fechaBaja IS NULL and id = :id");
         $select->bindValue(":id",$id, PDO::PARAM_INT);
         $select->execute();
         return $select->fetch(PDO::FETCH_ASSOC);
     }
-    public static function buscarProducto($productoNombre){
+    public static function buscarProducto($nombreProducto){
         $productos = Producto::mostrarProductos();
-        $encontrado = false;
+        
         foreach($productos as $producto){
-            if($producto["nombre"] == $productoNombre){
-                $encontrado = true;
+            if($producto["nombre"] == $nombreProducto){
                 return $producto;
             }
         }
-        if($encontrado){
-            return $producto;
-        }
-        else{
-            echo "error no tenemos esa comida en nuestro menu";
-        }
+        throw new Exception("no tenemos este producto en nuestro menu");
     }
     public static function generarEstadisticaProductos($productoNombre) {
-        // la probabilidad de que se venda 	Caipirinha  es de ... %
         $bd = AccesoDatos::obtenerInstancia();
         $fecha30DiasAtras = date("Y-m-d H:i:s", strtotime("-30 days"));
         $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos WHERE fechaInicio > :fecha");
@@ -109,9 +102,8 @@ class Producto {
             $probabilidad = ($totalProductos > 0) ? ($p / $totalProductos) : 0;
     
             return $probabilidad;
-        } else {
-            return ;
-        }
+        } 
+        throw new Exception("Error: el producto no esta dentro del menu");
     }
 
 }

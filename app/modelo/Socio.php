@@ -49,14 +49,16 @@ class Socio{
                 $consulta->bindValue(":cancelado",true,PDO::PARAM_BOOL);
                 $consulta->execute();
                 $pedidos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+                
                 if(count($pedidos) > 0){
+                        $retorno = [];
                         foreach($pedidos as $pedido){
-                                $empleado = Empleado::ObtenerEmpleado($pedido["idCocinero"]);
-                                return "pedido de mesa ". $pedido["idMesa"].
-                                " a cargo de: ". $empleado["nombre"];
+                                $producto = Producto::obtenerProducto($pedido["idProducto"]);
+                                $retorno[] = ["comida"=>$producto["nombre"],"mesa"=>$pedido["idMesa"]];
                         }
+                        return $retorno;
                 }else{
-                        return "no hay pedidos cancelados";
+                        throw new Exception("no hay pedidos cancelados");
                 }
         }
         public static function contratarEmpleado($nombre, $tipo) {

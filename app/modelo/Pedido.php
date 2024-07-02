@@ -29,21 +29,21 @@ class Pedido{
         $this->tiempo = null;
         $this->fechaEntrega = null;
     }
-    public static function calcularTiempo($id){
-        $tiempo = rand(1, 59); //segundos
+    public static function calcularTiempo($codigoAlfa){
+        $tiempo = rand(60, 120); //segundos
         $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE pedidos SET tiempo = :tiempo WHERE id = :id");
-        $update->bindValue(":id", $id, PDO::PARAM_INT);
+        $update = $bd->prepararConsulta("UPDATE pedidos SET tiempo = :tiempo WHERE codigoAlfa = :codigo");
+        $update->bindValue(":codigo", $codigoAlfa, PDO::PARAM_INT);
         $update->bindValue(":tiempo", $tiempo, PDO::PARAM_STR);
         $update->execute();
     }
     public static function generarCodigo() {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
     }
-    public static function ActualizarEstadoPedido($nuevoEstado, $id){
+    public static function ActualizarEstadoPedido($nuevoEstado, $codigoAlfa){
         $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE pedidos SET estado = :estado WHERE id = :id");
-        $update->bindValue(":id", $id, PDO::PARAM_INT);
+        $update = $bd->prepararConsulta("UPDATE pedidos SET estado = :estado WHERE codigoAlfa = :codigoAlfa");
+        $update->bindValue(":codigoAlfa", $codigoAlfa, PDO::PARAM_INT);
         $update->bindValue(":estado", $nuevoEstado, PDO::PARAM_STR);
         $update->execute();
         return "su pedido esta ".$nuevoEstado;
@@ -67,22 +67,28 @@ class Pedido{
         $this->id = $bd->obtenerUltimoId();
         return $this->id;
     }
-    public static function actualizarFechaEntrega($idPedido){
+    public static function actualizarFechaEntrega($codigoAlfa){
         $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE pedidos SET fechaEntrega = :fechaEntrega WHERE id = :id");
-        $update->bindValue(':id', $idPedido, PDO::PARAM_INT);
+        $update = $bd->prepararConsulta("UPDATE pedidos SET fechaEntrega = :fechaEntrega WHERE codigoAlfa = :codigoAlfa");
+        $update->bindValue(':codigoAlfa', $codigoAlfa, PDO::PARAM_INT);
         $update->bindValue(":fechaEntrega", date("Y/m/d H:i:s"),PDO::PARAM_STR);
         $update->execute();
     }
-    public static function actualizarPedido($id, $codigoAlfa, $idProducto=null, $idMesa=null, $idMozo=null, $idCocinero=null, $cancelado=false){
+    public static function actualizarEncargado($codigoAlfa, $idEncargado){
         $bd = AccesoDatos::obtenerInstancia();
-        $update = $bd->prepararConsulta("UPDATE pedidos SET idProducto = :idProducto, codigoAlfa=:codigoAlfa, idMesa = :idMesa, idMozo = :idMozo, idCocinero = :idCocinero, cancelado = :cancelado WHERE id = :id");
+        $update = $bd->prepararConsulta("UPDATE pedidos SET idCocinero = :encargado WHERE codigoAlfa = :codigoAlfa");
+        $update->bindValue(':codigoAlfa', $codigoAlfa, PDO::PARAM_INT);
+        $update->bindValue(":encargado", $idEncargado,PDO::PARAM_STR);
+        $update->execute();
+    }
+    public static function actualizarPedido($id, $codigoAlfa, $idProducto=null, $idMesa=null, $idMozo=null, $cancelado=false){
+        $bd = AccesoDatos::obtenerInstancia();
+        $update = $bd->prepararConsulta("UPDATE pedidos SET idProducto = :idProducto, codigoAlfa=:codigoAlfa, idMesa = :idMesa, idMozo = :idMozo, cancelado = :cancelado WHERE id = :id");
         $update->bindValue(":id",$id,PDO::PARAM_INT);
         $update->bindValue(":idProducto",$idProducto,PDO::PARAM_INT);
         $update->bindValue(":codigoAlfa",$codigoAlfa, PDO::PARAM_STR);
         $update->bindValue(":idMesa",$idMesa,PDO::PARAM_INT);
         $update->bindValue(":idMozo",$idMozo,PDO::PARAM_INT);
-        $update->bindValue(":idCocinero",$idCocinero,PDO::PARAM_INT);
         $update->bindValue(":cancelado",$cancelado,PDO::PARAM_BOOL);
         $update->execute();
     }
@@ -130,9 +136,9 @@ class Pedido{
         if(!empty($alfa)){
             $bd = AccesoDatos::obtenerInstancia();
             $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE codigoAlfa = :codigo");
-            $select->bindValue(":codigo",$alfa, PDO::PARAM_INT);
+            $select->bindValue(":codigo",$alfa, PDO::PARAM_STR);
             $select->execute();
-            return $select->fetchAll(PDO::FETCH_ASSOC);
+            return $select->fetch(PDO::FETCH_ASSOC);
         }
     }
     public static function estaATiempo($idPedido) {
@@ -213,57 +219,48 @@ class Pedido{
             return "pedido no encontrado";
         }
     }
-    public static function guardarPuntuacion($puntuacionMozo=null, $comentarioMozo=null, $puntuacionCocinero=null, $comentarioCocinero=null, $calificacionMesa=null, $comentarioMesa=null){
-        $archivoComentarios = file_get_contents("modelo/comentarios.json");
-        $comentarios = json_decode($archivoComentarios, true);
-        $nuevaPuntuacion = [
-            "puntuacionMozo" => $puntuacionMozo,
-            "comentarioMozo" => $comentarioMozo,
-            "puntuacionCocinero" => $puntuacionCocinero,
-            "comentarioCocinero" => $comentarioCocinero,
-            "calificacionMesa" => $calificacionMesa,
-            "comentarioMesa" => $comentarioMesa
-        ];
-        $comentarios[] = $nuevaPuntuacion;  
-            if(file_put_contents("modelo/comentarios.json", json_encode($comentarios,JSON_PRETTY_PRINT))){
-                echo "El archivo fue escrito exitosamente.<br>";
-                return true;
-            }
-            else{
-                echo "error";
-                return false;
-            }
+    public static function guardarPuntuacion($puntuacionMozo, $comentarioMozo, $puntuacionCocinero, $comentarioCocinero, $calificacionMesa, $comentarioMesa) {
+            $db = AccesoDatos::obtenerInstancia();
+            $consulta = "INSERT INTO comentarios (puntuacionMozo, comentarioMozo, puntuacionCocinero, comentarioCocinero, puntuacionMesa, comentarioMesa) 
+                    VALUES (:puntuacionMozo, :comentarioMozo, :puntuacionCocinero, :comentarioCocinero, :puntuacionMesa, :comentarioMesa)";
+            
+            $insert = $db->prepararConsulta($consulta);
+            $insert->bindValue(':puntuacionMozo', $puntuacionMozo, PDO::PARAM_INT);
+            $insert->bindValue(':comentarioMozo', $comentarioMozo, PDO::PARAM_STR);
+            $insert->bindValue(':puntuacionCocinero', $puntuacionCocinero, PDO::PARAM_INT);
+            $insert->bindValue(':comentarioCocinero', $comentarioCocinero, PDO::PARAM_STR);
+            $insert->bindValue(':puntuacionMesa', $calificacionMesa, PDO::PARAM_INT);
+            $insert->bindValue(':comentarioMesa', $comentarioMesa, PDO::PARAM_STR);
+            $insert->execute();
     }
     public static function verMejorcomentario(){
-        $archivoComentarios = file_get_contents("modelo/comentarios.json");
-        $comentarios = json_decode($archivoComentarios, true);
-        if(!empty($comentarios)){
+        $db = AccesoDatos::obtenerInstancia();
+        $selectMozo = $db->prepararConsulta("SELECT comentarioMozo FROM comentarios ORDER BY puntuacionMozo DESC LIMIT 1");
+        $selectMozo->execute();
+        $comentarioMozoAlto = $selectMozo->fetch(PDO::FETCH_ASSOC);
 
-            $puntacionMozoAlta = 0;
-            $puntacionMesaAlta = 0;
-        $puntacionCocineroAlta = 0;
-        $comentarioMozoAlto = "";
-        $comentarioMesaAlto = "";
-        $comentarioCocineroAlto = "";
+        $db = AccesoDatos::obtenerInstancia();
+        $selectMesa = $db->prepararConsulta("SELECT comentarioMesa FROM comentarios ORDER BY puntuacionMozo DESC LIMIT 1");
+        $selectMesa->execute();
+        $comentarioMesaAlto = $selectMesa->fetch(PDO::FETCH_ASSOC);
+        
+        $db = AccesoDatos::obtenerInstancia();
+        $selectCocinero = $db->prepararConsulta("SELECT comentarioCocinero FROM comentarios ORDER BY puntuacionMozo DESC LIMIT 1");
+        $selectCocinero->execute();
+        $comentarioCocineroAlto = $selectCocinero->fetch(PDO::FETCH_ASSOC);
 
-        foreach($comentarios as $comentario){
-            if(intval($comentario["puntuacionMozo"]) > $puntacionMozoAlta){
-                $puntacionMozoAlta = intval($comentario["puntuacionMozo"]);
-                $comentarioMozoAlto = $comentario["comentarioMozo"];
-            }
-            if(intval($comentario["calificacionMesa"]) > $puntacionMesaAlta){
-                $puntacionMesaAlta = intval($comentario["calificacionMesa"]);
-                $comentarioMesaAlto = $comentario["comentarioMesa"];
-            }
-            if(intval($comentario["puntuacionCocinero"]) > $puntacionCocineroAlta){
+        $db = AccesoDatos::obtenerInstancia();
+        $selectCocinero = $db->prepararConsulta("SELECT comentarioResto FROM comentarios ORDER BY puntuacionResto DESC LIMIT 1");
+        $selectCocinero->execute();
+        $comentarioRestoAlto = $selectCocinero->fetch(PDO::FETCH_ASSOC);
 
-                $puntacionCocineroAlta = intval($comentario["puntuacionCocinero"]);
-                $comentarioCocineroAlto = $comentario["comentarioCocinero"];
-            }
-        }
-        return array("mozo" => $comentarioMozoAlto,"mesa" => $comentarioMesaAlto,"cocinero" => $comentarioCocineroAlto);
-        }else{
-            return "todabia no hay comentarios";
+        if ($comentarioMozoAlto["comentarioMozo"] && $comentarioMesaAlto["comentarioMesa"] && $comentarioCocineroAlto["comentarioCocinero"]) {
+            return array("mozo" => $comentarioMozoAlto["comentarioMozo"],
+                    "mesa" => $comentarioMesaAlto["comentarioMesa"],
+                    "cocinero" => $comentarioCocineroAlto["comentarioCocinero"],
+                    "la comanda"=>$comentarioRestoAlto["comentarioResto"]);
+        } else {
+            throw new Exception("no hay comentarios");
         }
     }
     public static function verMesaMasUsada(){
@@ -277,5 +274,27 @@ class Pedido{
         } else {
             throw new Exception("No se encontraron resultados.");
         }
+    }
+    public static function listarPedidosPendientes($idEmpleado){
+
+        $empleado = Empleado::ObtenerEmpleado($idEmpleado);
+        $bd = AccesoDatos::obtenerInstancia();
+        $select = $bd->prepararConsulta("SELECT * FROM pedidos WHERE estado = 'en preparacion'");
+        $select->execute();
+        $pedidos = $select->fetchAll(PDO::FETCH_ASSOC);
+
+        if($pedidos){
+            $pendientes = [];
+            foreach($pedidos as $pedido){
+                $producto = Producto::obtenerProducto($pedido["idProducto"]);
+                if($producto["puestoResponsable"] === $empleado["tipo"]){
+                    $pendientes [] = $pedido["codigoAlfa"];
+                }
+            }
+        }
+        if(!empty($pendientes)){
+            return $pendientes;
+        }
+        throw new Exception("no hay pedidos pendientes");
     }
 }
