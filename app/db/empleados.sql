@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2024 a las 15:00:58
+-- Tiempo de generación: 30-07-2024 a las 13:50:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,6 +31,7 @@ CREATE TABLE `empleados` (
   `id` int(11) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `tipo` varchar(20) NOT NULL,
+  `clave` varchar(255) NOT NULL,
   `ocupado` tinyint(1) NOT NULL,
   `puntuacion` float DEFAULT NULL,
   `deleted_at` date DEFAULT NULL
@@ -40,18 +41,18 @@ CREATE TABLE `empleados` (
 -- Volcado de datos para la tabla `empleados`
 --
 
-INSERT INTO `empleados` (`id`, `nombre`, `tipo`, `ocupado`, `puntuacion`, `deleted_at`) VALUES
-(1, 'pepe', 'mozo', 1, NULL, '2024-06-04'),
-(4, 'eduardo', 'mozo', 0, 4.5, NULL),
-(5, 'ricardo', 'cervecero', 0, NULL, NULL),
-(7, 'luis', 'socio', 0, NULL, NULL),
-(8, 'alejandro', 'socio', 0, NULL, NULL),
-(9, 'isabel', 'socio', 0, NULL, NULL),
-(10, 'pablo', 'cocinero', 0, 4, NULL),
-(11, 'tomas', 'cocinero', 0, 4.5, NULL),
-(13, 'ana', 'bartender', 0, NULL, NULL),
-(14, 'micaela', 'bartender', 0, NULL, NULL),
-(16, 'matin', 'cocinero', 0, NULL, NULL);
+INSERT INTO `empleados` (`id`, `nombre`, `tipo`, `clave`, `ocupado`, `puntuacion`, `deleted_at`) VALUES
+(1, 'pepe', 'mozo', '$2y$10$23yGbk5mVTgGHP.CXSkJ4OVNnuUiamwA9M2l92.sEvnAji9QVIil6', 1, NULL, '2024-06-04'),
+(4, 'eduardo', 'mozo', '$2y$10$ckyPSKyjzsQbBOnZU6NqhuwADy2yPuC.BnGpzDQL.F5B0oNBybKzu', 0, 4, NULL),
+(5, 'ricardo', 'cervecero', '$2y$10$/BwVpcq.Kg22nttvtNlbOuX33d.KPqCAYllPM7yEffSgzkZN1gdvm', 0, NULL, NULL),
+(7, 'luis', 'socio', '$2y$10$X5fABN/OOCPX0gmfTmfsted2PcQ3VRtN2Onf6MVGXQzzQ7kkEIQ1m', 0, NULL, NULL),
+(8, 'alejandro', 'socio', '$2y$10$opfqIWKSgVNDsttJazZDc.lqhJGvHWNee8k/DwBfCXJjf8h/m6Bfm', 0, NULL, NULL),
+(9, 'isabel', 'socio', '$2y$10$2awV4yEkHTB1q52b6giKq.I9wDXxrecYvbzynGuXjuBtFVRpT7r8S', 0, NULL, NULL),
+(10, 'pablo', 'cocinero', '$2y$10$b2OVUz8X5IVyJGb5UP64AuZ4DoDemztr15To4AcViH.59HVUxNmr.', 0, 4, NULL),
+(11, 'tomas', 'cocinero', '$2y$10$yJGMxvkSbzwTWtXm7KRqj.GVxRZZ/uspcO6KXGCzuQPXJtmvUu3ge', 0, 4.5, NULL),
+(13, 'ana', 'bartender', '$2y$10$mPaYRbnjotUkih/PWNC59uIvFBVQ.z/s4c/s5nBdaAZUjMKZhcu0O', 0, NULL, NULL),
+(14, 'micaela', 'bartender', '$2y$10$jpgvjG4cT43xvH5S0UyPEuXFIs/lQdrANzu/7LEwrnerLSUk61rme', 0, NULL, NULL),
+(16, 'matin', 'cocinero', '$2y$10$h2e/vwl2Hi.3KLvlyVzIuunllSAFUOCD1tfgyu428qwqb8/9FAvY.', 0, 5, NULL);
 
 --
 -- Índices para tablas volcadas

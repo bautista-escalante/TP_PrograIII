@@ -2,7 +2,7 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 include_once "modelo/Producto.php";
-class ProductoControler {
+class ProductoController {
     public function agregarProducto(Request $request, Response $response, $args) {
         $param = $request->getParsedBody();
         if (isset($param["nombre"], $param["puesto"], $param["precio"]) && 

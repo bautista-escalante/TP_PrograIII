@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2024 a las 15:00:48
+-- Tiempo de generación: 30-07-2024 a las 13:50:50
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -45,9 +45,9 @@ INSERT INTO `mesas` (`id`, `estado`, `puntuacion`, `codigoMesa`, `fechaBaja`) VA
 (3, 'cerrada', 5, '34rtg', NULL),
 (4, 'cerrada', 3, '5y7qd', NULL),
 (5, 'cerrada', NULL, 'bFo1r', NULL),
-(6, 'cerrada', NULL, '14YLH', NULL),
+(6, 'cerrada', 5, '14YLH', NULL),
 (7, 'cerrada', 5, 'sb48S', NULL),
-(8, 'cerrada', NULL, 'fJzZV', NULL);
+(8, 'cerrada', 5, 'fJzZV', NULL);
 
 --
 -- Índices para tablas volcadas

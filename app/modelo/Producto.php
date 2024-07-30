@@ -81,29 +81,5 @@ class Producto {
         }
         throw new Exception("no tenemos este producto en nuestro menu");
     }
-    public static function generarEstadisticaProductos($productoNombre) {
-        $bd = AccesoDatos::obtenerInstancia();
-        $fecha30DiasAtras = date("Y-m-d H:i:s", strtotime("-30 days"));
-        $select = $bd->prepararConsulta("SELECT idProducto FROM pedidos WHERE fechaInicio > :fecha");
-        $select->bindValue(":fecha", $fecha30DiasAtras, PDO::PARAM_STR);
-        $select->execute();
-        $productos = $select->fetchAll(PDO::FETCH_ASSOC);
-    
-        $dataProducto = Producto::buscarProducto($productoNombre);
-        if (!empty($dataProducto)) {
-            $p = 0;
-            foreach ($productos as $producto) {
-                if (intval($producto["idProducto"]) === $dataProducto["id"]) {
-                    $p++;
-                }
-            }
-    
-            $totalProductos = count($productos);
-            $probabilidad = ($totalProductos > 0) ? ($p / $totalProductos) : 0;
-    
-            return $probabilidad;
-        } 
-        throw new Exception("Error: el producto no esta dentro del menu");
-    }
 
 }

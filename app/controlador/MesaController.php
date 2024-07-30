@@ -3,7 +3,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 include_once "modelo/Mesa.php";
 
-class MesaControler {
+class MesaController {
     public function agregarMesa(Request $request, Response $response, $args) {
         $mesa = new Mesa();
         $mesa->guardar();
